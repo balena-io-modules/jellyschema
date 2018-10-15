@@ -8,10 +8,10 @@ cache: cargo
 install:
   - rustup component add clippy-preview
   - rustup component add rustfmt-preview
-  - pip install --user yamllint
+  - pip install --user -r requirements.txt
 
 script:
-  - find . -name *.yml -exec yamllint {} \;
+  - find tests -name *.yml -exec yamllint {} +
   - cargo test
   - cargo fmt -- --check
   - cargo clippy
