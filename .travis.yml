@@ -5,14 +5,10 @@ rust:
 
 cache: cargo
 
-addons:
-  apt:
-    packages:
-      - yamllint
-
 install:
   - rustup component add clippy-preview
   - rustup component add rustfmt-preview
+  - pip install yamllint
 
 script:
   - find . -name *.yml -exec yamllint {} \;
