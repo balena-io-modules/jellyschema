@@ -3,8 +3,8 @@ title: Array validation
 definitions:
   wifiNetwork: &WIFI_NETWORK
     properties:
-            - ssid:
-                type: string
+      - ssid:
+          type: string
       - passphrase:
           type: password
   cellularNetwork: &CELL_NETWORK
