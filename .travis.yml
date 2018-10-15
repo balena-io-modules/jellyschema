@@ -5,11 +5,17 @@ rust:
 
 cache: cargo
 
+addons:
+  apt:
+    packages:
+      - yamllint
+
 install:
   - rustup component add clippy-preview
   - rustup component add rustfmt-preview
 
 script:
+  - find . -name *.yml -exec yamllint {} \;
   - cargo test
   - cargo fmt -- --check
   - cargo clippy
