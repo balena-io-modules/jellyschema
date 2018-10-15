@@ -8,7 +8,7 @@ cache: cargo
 install:
   - rustup component add clippy-preview
   - rustup component add rustfmt-preview
-  - pip install yamllint
+  - pip install --user yamllint
 
 script:
   - find . -name *.yml -exec yamllint {} \;
