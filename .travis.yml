@@ -10,10 +10,10 @@ install:
   - rustup component add rustfmt-preview
 
 script:
-  cargo test
-  cargo fmt -- --check
-  cargo clippy
-  cargo package
+  - cargo test
+  - cargo fmt -- --check
+  - cargo clippy
+  - cargo package
 
 notifications:
   email:
