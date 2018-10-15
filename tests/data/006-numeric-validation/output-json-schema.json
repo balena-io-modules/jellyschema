@@ -1,0 +1,10 @@
+{
+    "properties": {
+        "multiplesOfTen": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 100,
+            "exclusiveMaximum": true
+        }
+    }
+}

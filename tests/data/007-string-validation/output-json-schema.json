@@ -1,0 +1,14 @@
+{
+    "properties": {
+        "ssid": {
+            "type": "string",
+            "pattern": "^[a-zA-Z]{1,}$"
+        },
+        "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 32,
+            "writeOnly": true
+        }
+    }
+}

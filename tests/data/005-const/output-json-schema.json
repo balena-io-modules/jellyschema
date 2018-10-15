@@ -1,0 +1,20 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "$$order": [
+        "constant"
+    ],
+    "required": [
+        "constant"
+    ],
+    "title": "Const test",
+    "properties": {
+        "constant": {
+            "type": "string",
+            "enum": [
+                "fincm3"
+            ]
+        }
+    }
+}

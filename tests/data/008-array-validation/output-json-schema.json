@@ -1,0 +1,122 @@
+{
+    "properties": {
+        "wifiNetworks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "ssid": {
+                        "type": "string"
+                    },
+                    "passphrase": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                }
+            },
+            "minItems": 1,
+            "maxItems": 2
+        },
+        "mixedNetworks": {
+            "type": "array",
+            "items": [{
+                    "type": "object",
+                    "properties": {
+                        "ssid": {
+                            "type": "string"
+                        },
+                        "passphrase": {
+                            "type": "string",
+                            "writeOnly": true
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ],
+            "minItems": 1,
+            "maxItems": 2
+        },
+        "mixedNetworksUnlimitedWifi": {
+            "type": "array",
+            "items": [{
+                    "type": "object",
+                    "properties": {
+                        "ssid": {
+                            "type": "string"
+                        },
+                        "passphrase": {
+                            "type": "string",
+                            "writeOnly": true
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ],
+            "minItems": 1,
+            "additionalItems": {
+                "type": "object",
+                "properties": {
+                    "ssid": {
+                        "type": "string"
+                    },
+                    "passphrase": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                }
+            }
+        },
+        "uniqueWifiNetworks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "ssid": {
+                        "type": "string"
+                    },
+                    "passphrase": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                }
+            },
+            "minItems": 1,
+            "maxItems": 2,
+            "uniqueItems": true
+        },
+        "uniqueSsidWifiNetworks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "ssid": {
+                        "type": "string"
+                    },
+                    "passphrase": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                }
+            },
+            "minItems": 1,
+            "maxItems": 2,
+            "$$uniqueItemProperties": [
+                "ssid"
+            ]
+        }
+    }
+}

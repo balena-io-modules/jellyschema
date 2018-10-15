@@ -1,0 +1,20 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "$$order": [
+        "hostname"
+    ],
+    "required": [
+        "hostname"
+    ],
+    "title": "Hostname configuration",
+    "properties": {
+        "hostname": {
+            "type": "string",
+            "format": "hostname",
+            "title": "Hostname",
+            "default": "hostname"
+        }
+    }
+}
