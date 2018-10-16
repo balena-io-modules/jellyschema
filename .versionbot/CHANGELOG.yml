@@ -1,4 +1,14 @@
 - commits:
+    - subject: Add rust version specification for the tooling
+      hash: dbbbc5e9a609e876dbdba4250a383a4d92f6ce0a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.1.1
+  date: 2018-10-16T14:44:59.017Z
+- commits:
     - subject: Add versionbot support
       hash: 221c5b24d7d3ba9d053116505205661e95c7e177
       body: ''
