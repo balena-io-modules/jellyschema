@@ -1,1 +1,21 @@
-[]
+- commits:
+    - subject: Add versionbot support
+      hash: 221c5b24d7d3ba9d053116505205661e95c7e177
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Giovanni Garufi <giovanni@resin.io>
+        signed-off-by: Giovanni Garufi <giovanni@resin.io>
+      author: Giovanni Garufi
+    - subject: Add library skeleton
+      hash: 57ef1317d190768b1ec8deec70dedeb34436776e
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Robert Vojta <robert@resin.io>
+        signed-off-by: Robert Vojta <robert@resin.io>
+      author: Robert Vojta
+  version: 0.1.0
+  date: 2018-10-16T13:46:58.932Z
