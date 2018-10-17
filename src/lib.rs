@@ -1,7 +1,15 @@
+use serde_derive::Deserialize;
+
+#[derive(Deserialize)]
+pub struct Schema {
+    version: u64,
+    title: String
+}
+
 pub struct Compiler;
 
 impl Compiler {
-    pub fn new(schema_text: &str) -> Self {
+    pub fn new(schema: Schema) -> Self {
         Compiler{}
     }
 
