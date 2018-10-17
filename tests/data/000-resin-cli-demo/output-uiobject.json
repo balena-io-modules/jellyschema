@@ -1,0 +1,8 @@
+{
+    "network": {
+        "ui:collapsible": false
+    },
+    "advanced": {
+        "ui:collapsed": true
+    }
+}
