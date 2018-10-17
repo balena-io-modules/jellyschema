@@ -14,6 +14,7 @@ impl Generator {
         let mut schema = Map::new();
         schema.insert("$$version".to_string(), 1.into());
         schema.insert("type".to_string(), "object".into());
+        schema.insert("$schema".to_string(), "http://json-schema.org/draft-04/schema#".into());
 
         (serde_json::Value::Object(schema), serde_json::Value::Object(Map::new()))
     }
@@ -43,6 +44,16 @@ mod generated_json_schema {
             let (json_schema, _) = generator.generate();
 
             assert_eq!(json_schema["type"], "object");
+        }
+
+        #[test]
+        fn have_a_schema_url() {
+            let schema = CompiledSchema::empty();
+            let generator = Generator::new(schema);
+
+            let (json_schema, _) = generator.generate();
+
+            assert_eq!(json_schema["$schema"], "http://json-schema.org/draft-04/schema#");
         }
     }
 }
