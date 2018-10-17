@@ -2,7 +2,7 @@ use balena_configuration_dsl::dsl_schema::Compiler;
 use balena_configuration_dsl::ui_config::Generator;
 
 #[test]
-fn support_version() {
+fn empty_schema() {
     let compiler = Compiler::new(input_schema());
     let compiled_schema = compiler.compile();
     let generator = Generator::new(compiled_schema);
@@ -14,13 +14,13 @@ fn support_version() {
 }
 
 fn input_schema() -> serde_yaml::Value {
-    serde_yaml::from_str(include_str!("data/001-version/input-schema.yml")).unwrap()
+    serde_yaml::from_str(include_str!("data/001-empty-schema/input-schema.yml")).unwrap()
 }
 
 fn expected_json_schema() -> serde_json::Value {
-    serde_json::from_str(include_str!("data/001-version/output-json-schema.json")).unwrap()
+    serde_json::from_str(include_str!("data/001-empty-schema/output-json-schema.json")).unwrap()
 }
 
 fn expected_ui_object() -> serde_json::Value {
-    serde_json::from_str(include_str!("data/001-version/output-uiobject.json")).unwrap()
+    serde_json::from_str(include_str!("data/001-empty-schema/output-uiobject.json")).unwrap()
 }
