@@ -1,4 +1,16 @@
 - commits:
+    - subject: Add resin-cli demo test
+      hash: 9acfddab2550538088c473391d077d7b8db9ec6e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.1.4
+  date: 2018-10-17T10:14:44.238Z
+- commits:
     - subject: Add basic README with a TODO list
       hash: dd22499c1c904917d7380bb7a00c5efea0e2b01e
       body: ''
