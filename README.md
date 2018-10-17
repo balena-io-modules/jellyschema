@@ -4,11 +4,11 @@ This library serves as an entry point to the reconfiguration ecosystem.
 
 For the main usecase the API surface needs to be similar to (work in progress):
 
-* [ ] Compiler (parse & validate YAML schema)
+* [ ] Schema compiler (parse & validate YAML schema)
   * Input - YAML schema
   * Output - compiled schema + some internal caching structures probably - temporary named as `XYZ` type
 
-* [ ] Generator
+* [ ] UI descriptions generator
   * Input - XYZ
   * Output - XYZ, JSON Schema & uiObject
 
