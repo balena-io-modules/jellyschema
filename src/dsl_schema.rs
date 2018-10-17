@@ -17,13 +17,15 @@ impl Compiler {
     }
 
     pub fn compile(self) -> CompiledSchema {
-        CompiledSchema::new()
+        CompiledSchema::empty()
     }
 }
 
 pub struct CompiledSchema;
 impl CompiledSchema {
-    pub fn new() -> Self {
+    pub fn empty() -> Self {
         CompiledSchema {}
     }
 }
+
+// TODO: add test for unsupported version number
