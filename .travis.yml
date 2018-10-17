@@ -3,21 +3,14 @@ language: rust
 cache: cargo
 
 install:
-  - rustup default `cat rust-toolchain`
-  - rustup component add clippy-preview
-  - rustup component add rustfmt-preview
-  - pip install --user -r requirements.txt
+  - ci/install.sh
 
 script:
-  - find tests -name *.yml -exec yamllint {} +
-  - cargo test
-  - cargo fmt -- --check
-  - cargo clippy
-  - cargo package
+  - ci/test.sh
 
 notifications:
   email:
-    - robert@resin.io
-    - cyryl@resin.io
+    - robert@balena.io
+    - cyryl@balena.io
   on_success: change
   on_failure: always
