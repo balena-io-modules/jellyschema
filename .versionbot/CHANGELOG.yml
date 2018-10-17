@@ -1,4 +1,14 @@
 - commits:
+    - subject: Add basic README with a TODO list
+      hash: dd22499c1c904917d7380bb7a00c5efea0e2b01e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.1.3
+  date: 2018-10-17T10:01:01.385Z
+- commits:
     - subject: Update email address
       hash: ee2a78d65bedf22071fd364ccb52829c82806893
       body: ''
