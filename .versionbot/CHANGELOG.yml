@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update email address
+      hash: ee2a78d65bedf22071fd364ccb52829c82806893
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.1.2
+  date: 2018-10-17T09:10:38.049Z
+- commits:
     - subject: Add rust version specification for the tooling
       hash: dbbbc5e9a609e876dbdba4250a383a4d92f6ce0a
       body: ''
