@@ -1,7 +1,7 @@
 [package]
 name = "balena-configuration-dsl"
 version = "0.1.1"
-authors = ["Robert Vojta <robert@resin.io>", "Cyryl Płotnicki <cyryl@resin.io>"]
+authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
 
 [dependencies]
