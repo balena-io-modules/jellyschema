@@ -16,7 +16,7 @@ impl<'a> Generator<'a> {
 
     pub fn generate(self) -> (JsonSchema, UIObject) {
         let schema = OutputJsonSchema {
-            version: 1,
+            version: self.compiled_schema.version(),
             type_spec: OutputObjectType::Object,
             schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
             title: self.compiled_schema.title().to_string(),
@@ -54,13 +54,13 @@ mod generated_json_schema {
         use crate::ui_config::Generator;
 
         #[test]
-        fn have_a_version() {
-            let schema = CompiledSchema::empty();
+        fn pass_version_through() {
+            let schema = CompiledSchema::with("", 21);
             let generator = Generator::new(&schema);
 
             let (json_schema, _) = generator.generate();
 
-            assert_eq!(json_schema["$$version"], 1);
+            assert_eq!(json_schema["$$version"], 21);
         }
 
         #[test]

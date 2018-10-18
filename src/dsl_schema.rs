@@ -52,26 +52,30 @@ pub mod compiler {
 
     pub struct CompiledSchema {
         title: String,
-        _version: u64,
+        version: u64,
     }
 
     impl CompiledSchema {
         pub fn empty() -> Self {
             CompiledSchema {
                 title: "".to_string(),
-                _version: 1,
+                version: 1,
             }
         }
 
         pub fn with(title: &str, version: u64) -> Self {
             CompiledSchema {
                 title: title.to_string(),
-                _version: version,
+                version,
             }
         }
 
         pub fn title(&self) -> &str {
             &self.title
+        }
+
+        pub fn version(&self) -> u64 {
+            self.version
         }
     }
 
