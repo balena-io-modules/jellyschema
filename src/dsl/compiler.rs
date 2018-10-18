@@ -2,7 +2,7 @@ use crate::dsl::validation;
 use serde_derive::Deserialize;
 
 pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, validation::Error> {
-    let schema : CompiledSchema = serde_yaml::from_value(schema)?;
+    let schema: CompiledSchema = serde_yaml::from_value(schema)?;
 
     if schema.version != 1 {
         return Err(validation::Error::invalid_version(schema.version));
@@ -34,18 +34,18 @@ mod tests {
     }
 
     #[test]
-    fn fail_on_missing_version() {
-        let mut schema = Mapping::new();
-        schema.insert("title".into(), SOME_TITLE.into());
-        let schema = serde_yaml::Value::Mapping(schema);
+    // TODO: morph into property, so that the actual unsupported version is rand
+    fn fail_on_unsupported_version() {
+        let schema = yaml_schema_with(SOME_TITLE, 13);
 
         assert!(compile(schema).is_err());
     }
 
     #[test]
-    // TODO: morph into property, so that the actual unsupported version is rand
-    fn fail_on_unsupported_version() {
-        let schema = yaml_schema_with(SOME_TITLE, 13);
+    fn fail_on_missing_version() {
+        let mut schema = Mapping::new();
+        schema.insert("title".into(), SOME_TITLE.into());
+        let schema = serde_yaml::Value::Mapping(schema);
 
         assert!(compile(schema).is_err());
     }

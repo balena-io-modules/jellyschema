@@ -1,20 +1,15 @@
-use crate::dsl::compiler::CompiledSchema;
-
-pub type UIObject = serde_json::Value;
-pub type JsonSchema = serde_json::Value;
-
-use serde_derive::Serialize;
 use crate::dsl::compiler::compile;
-use serde_json::Map;
+use crate::dsl::compiler::CompiledSchema;
 use crate::dsl::validation;
+use serde_derive::Serialize;
+use serde_json::Map;
 
 pub struct Generator {
     compiled_schema: CompiledSchema,
 }
 
 impl Generator {
-    pub fn with(yaml: serde_yaml::Value) -> Result<Self, validation::Error>
-    {
+    pub fn with(yaml: serde_yaml::Value) -> Result<Self, validation::Error> {
         Ok(Generator::new(compile(yaml)?))
     }
 
@@ -22,11 +17,11 @@ impl Generator {
         Generator { compiled_schema }
     }
 
-    pub fn generate(self) -> (JsonSchema, UIObject) {
-        let schema = OutputJsonSchema {
+    pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
+        let schema = JsonSchema {
             version: self.compiled_schema.version,
             title: self.compiled_schema.title.to_string(),
-            type_spec: OutputObjectType::Object,
+            type_spec: ObjectType::Object,
             schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
         };
 
@@ -38,17 +33,17 @@ impl Generator {
 }
 
 #[derive(Serialize)]
-enum OutputObjectType {
+enum ObjectType {
     #[serde(rename = "object")]
     Object,
 }
 
 #[derive(Serialize)]
-struct OutputJsonSchema {
+struct JsonSchema {
     #[serde(rename = "$$version")]
     version: u64,
     #[serde(rename = "type")]
-    type_spec: OutputObjectType,
+    type_spec: ObjectType,
     #[serde(rename = "$schema")]
     schema_url: String,
     #[serde(rename = "title")]
@@ -57,7 +52,7 @@ struct OutputJsonSchema {
 
 #[cfg(test)]
 mod tests {
-use super::*;
+    use super::*;
 
     #[test]
     fn hardcode_a_type() {
@@ -125,7 +120,8 @@ use super::*;
 
         fn with(title: &str, version: u64) -> Self {
             CompiledSchema {
-                title: title.to_string(), version
+                title: title.to_string(),
+                version,
             }
         }
     }

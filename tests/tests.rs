@@ -1,8 +1,8 @@
-use balena_configuration_dsl::ui_configuration::generator::Generator;
 use balena_configuration_dsl::dsl::validation;
+use balena_configuration_dsl::ui_configuration::generator::Generator;
 
 #[test]
-fn empty_schema() -> Result<(), validation::Error>{
+fn empty_schema() -> Result<(), validation::Error> {
     let (json_schema, ui_object) = Generator::with(input_schema())?.generate();
 
     assert_eq!(ui_object, expected_ui_object());
