@@ -1,4 +1,5 @@
 use crate::dsl_schema::compiler::CompiledSchema;
+use serde_derive::Serialize;
 use serde_json::map::Map;
 
 pub struct Generator {
@@ -11,16 +12,36 @@ impl Generator {
     }
 
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
-        // FIXME: add a type
-        let mut schema = Map::new();
-        schema.insert("$$version".to_string(), 1.into());
-        schema.insert("type".to_string(), "object".into());
-        schema.insert("$schema".to_string(), "http://json-schema.org/draft-04/schema#".into());
+        let schema = JsonSchema {
+            version: 1,
+            type_spec: ObjectType::Object,
+            schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
+            title: self.compiled_schema.title().to_string(),
+        };
 
-        schema.insert("title".to_string(), self.compiled_schema.title().into());
-
-        (serde_json::Value::Object(schema), serde_json::Value::Object(Map::new()))
+        (
+            serde_json::to_value(schema).unwrap(),
+            serde_json::Value::Object(Map::new()),
+        )
     }
+}
+
+#[derive(Serialize)]
+enum ObjectType {
+    #[serde(rename = "object")]
+    Object,
+}
+
+#[derive(Serialize)]
+struct JsonSchema {
+    #[serde(rename = "$$version")]
+    version: u64,
+    #[serde(rename = "type")]
+    type_spec: ObjectType,
+    #[serde(rename = "$schema")]
+    schema_url: String,
+    #[serde(rename = "title")]
+    title: String,
 }
 
 #[cfg(test)]
