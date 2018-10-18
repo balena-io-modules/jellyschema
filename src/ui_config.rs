@@ -20,9 +20,9 @@ pub mod generator {
         pub fn generate(self) -> (JsonSchema, UIObject) {
             let schema = OutputJsonSchema {
                 version: self.compiled_schema.version(),
+                title: self.compiled_schema.title().to_string(),
                 type_spec: OutputObjectType::Object,
                 schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
-                title: self.compiled_schema.title().to_string(),
             };
 
             (
