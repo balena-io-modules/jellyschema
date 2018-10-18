@@ -2,6 +2,9 @@ use crate::dsl_schema::compiler::CompiledSchema;
 use serde_derive::Serialize;
 use serde_json::map::Map;
 
+pub type UIObject = serde_json::Value;
+pub type JsonSchema = serde_json::Value;
+
 pub struct Generator {
     compiled_schema: CompiledSchema,
 }
@@ -11,33 +14,33 @@ impl Generator {
         Generator { compiled_schema }
     }
 
-    pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
-        let schema = JsonSchema {
+    pub fn generate(self) -> (JsonSchema, UIObject) {
+        let schema = OutputJsonSchema {
             version: 1,
-            type_spec: ObjectType::Object,
+            type_spec: OutputObjectType::Object,
             schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
             title: self.compiled_schema.title().to_string(),
         };
 
         (
-            serde_json::to_value(schema).unwrap(),
+            serde_json::to_value(schema).expect("Internal error: inconsistent schema"),
             serde_json::Value::Object(Map::new()),
         )
     }
 }
 
 #[derive(Serialize)]
-enum ObjectType {
+enum OutputObjectType {
     #[serde(rename = "object")]
     Object,
 }
 
 #[derive(Serialize)]
-struct JsonSchema {
+struct OutputJsonSchema {
     #[serde(rename = "$$version")]
     version: u64,
     #[serde(rename = "type")]
-    type_spec: ObjectType,
+    type_spec: OutputObjectType,
     #[serde(rename = "$schema")]
     schema_url: String,
     #[serde(rename = "title")]

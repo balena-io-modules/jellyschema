@@ -1,5 +1,8 @@
 use balena_configuration_dsl::dsl_schema::compiler::Compiler;
+use balena_configuration_dsl::dsl_schema::Schema;
 use balena_configuration_dsl::ui_config::Generator;
+use balena_configuration_dsl::ui_config::JsonSchema;
+use balena_configuration_dsl::ui_config::UIObject;
 
 #[test]
 fn empty_schema() {
@@ -13,14 +16,14 @@ fn empty_schema() {
     assert_eq!(json_schema, expected_json_schema());
 }
 
-fn input_schema() -> serde_yaml::Value {
+fn input_schema() -> Schema {
     serde_yaml::from_str(include_str!("data/001-empty-schema/input-schema.yml")).unwrap()
 }
 
-fn expected_json_schema() -> serde_json::Value {
+fn expected_json_schema() -> JsonSchema {
     serde_json::from_str(include_str!("data/001-empty-schema/output-json-schema.json")).unwrap()
 }
 
-fn expected_ui_object() -> serde_json::Value {
+fn expected_ui_object() -> UIObject {
     serde_json::from_str(include_str!("data/001-empty-schema/output-uiobject.json")).unwrap()
 }

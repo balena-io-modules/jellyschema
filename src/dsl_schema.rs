@@ -1,5 +1,7 @@
 use serde_derive::Deserialize;
 
+pub type Schema = serde_yaml::Value;
+
 #[derive(Deserialize)]
 pub struct UIObject;
 
