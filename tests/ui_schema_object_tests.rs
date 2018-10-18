@@ -1,6 +1,6 @@
 use balena_configuration_dsl::dsl_schema::compiler::Compiler;
 use balena_configuration_dsl::dsl_schema::Schema;
-use balena_configuration_dsl::ui_config::Generator;
+use balena_configuration_dsl::ui_config::generator::Generator;
 use balena_configuration_dsl::ui_config::JsonSchema;
 use balena_configuration_dsl::ui_config::UIObject;
 
