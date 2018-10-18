@@ -1,20 +1,23 @@
-use crate::dsl_schema::CompiledSchema;
+use crate::dsl_schema::compiler::CompiledSchema;
 use serde_json::map::Map;
-use serde_json::Number;
-use serde_json::Value;
 
-pub struct Generator;
+pub struct Generator {
+    compiled_schema: CompiledSchema,
+}
 
 impl Generator {
     pub fn new(compiled_schema: CompiledSchema) -> Self {
-        Generator {}
+        Generator { compiled_schema }
     }
 
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
+        // FIXME: add a type
         let mut schema = Map::new();
         schema.insert("$$version".to_string(), 1.into());
         schema.insert("type".to_string(), "object".into());
         schema.insert("$schema".to_string(), "http://json-schema.org/draft-04/schema#".into());
+
+        schema.insert("title".to_string(), self.compiled_schema.title().into());
 
         (serde_json::Value::Object(schema), serde_json::Value::Object(Map::new()))
     }
@@ -23,8 +26,8 @@ impl Generator {
 #[cfg(test)]
 mod generated_json_schema {
     mod must {
-        use crate::dsl_schema::*;
-        use crate::ui_config::*;
+        use crate::dsl_schema::compiler::CompiledSchema;
+        use crate::ui_config::Generator;
 
         #[test]
         fn have_a_version() {
@@ -55,14 +58,24 @@ mod generated_json_schema {
 
             assert_eq!(json_schema["$schema"], "http://json-schema.org/draft-04/schema#");
         }
+
+        #[test]
+        fn pass_title_through() {
+            let schema = CompiledSchema::with_title("some title");
+            let generator = Generator::new(schema);
+
+            let (json_schema, _) = generator.generate();
+
+            assert_eq!(json_schema["title"], "some title");
+        }
     }
 }
 
 #[cfg(test)]
 mod generator {
     mod must {
-        use crate::dsl_schema::*;
-        use crate::ui_config::*;
+        use crate::dsl_schema::compiler::CompiledSchema;
+        use crate::ui_config::Generator;
 
         #[test]
         fn generate_ui_object() {

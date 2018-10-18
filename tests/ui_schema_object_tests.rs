@@ -1,10 +1,10 @@
-use balena_configuration_dsl::dsl_schema::Compiler;
+use balena_configuration_dsl::dsl_schema::compiler::Compiler;
 use balena_configuration_dsl::ui_config::Generator;
 
 #[test]
 fn empty_schema() {
     let compiler = Compiler::new(input_schema());
-    let compiled_schema = compiler.compile();
+    let compiled_schema = compiler.compile().unwrap();
     let generator = Generator::new(compiled_schema);
 
     let (json_schema, ui_object) = generator.generate();
