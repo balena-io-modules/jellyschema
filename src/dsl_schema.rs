@@ -12,31 +12,6 @@ pub mod compiler {
         schema: YamlValue,
     }
 
-    #[derive(Debug, PartialEq)]
-    pub struct CompilationError {
-        message: String,
-    }
-
-    impl CompilationError {
-        pub fn missing_title() -> Self {
-            CompilationError {
-                message: "Missing title".to_string(),
-            }
-        }
-
-        pub fn missing_version() -> Self {
-            CompilationError {
-                message: "Missing version".to_string(),
-            }
-        }
-
-        pub fn invalid_version(version: u64) -> Self {
-            CompilationError {
-                message: format!("Invalid version {}", version),
-            }
-        }
-    }
-
     impl Compiler {
         pub fn new(schema: YamlValue) -> Self {
             Compiler { schema }
@@ -88,6 +63,31 @@ pub mod compiler {
 
         pub fn version(&self) -> u64 {
             self.version
+        }
+    }
+
+    #[derive(Debug, PartialEq)]
+    pub struct CompilationError {
+        message: String,
+    }
+
+    impl CompilationError {
+        pub fn missing_title() -> Self {
+            CompilationError {
+                message: "Missing title".to_string(),
+            }
+        }
+
+        pub fn missing_version() -> Self {
+            CompilationError {
+                message: "Missing version".to_string(),
+            }
+        }
+
+        pub fn invalid_version(version: u64) -> Self {
+            CompilationError {
+                message: format!("Invalid version {}", version),
+            }
         }
     }
 
