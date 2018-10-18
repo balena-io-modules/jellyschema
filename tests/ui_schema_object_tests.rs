@@ -8,7 +8,7 @@ use balena_configuration_dsl::ui_config::UIObject;
 fn empty_schema() {
     let compiler = Compiler::new(input_schema());
     let compiled_schema = compiler.compile().unwrap();
-    let generator = Generator::new(compiled_schema);
+    let generator = Generator::new(&compiled_schema);
 
     let (json_schema, ui_object) = generator.generate();
 

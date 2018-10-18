@@ -5,12 +5,12 @@ use serde_json::map::Map;
 pub type UIObject = serde_json::Value;
 pub type JsonSchema = serde_json::Value;
 
-pub struct Generator {
-    compiled_schema: CompiledSchema,
+pub struct Generator<'a> {
+    compiled_schema: &'a CompiledSchema,
 }
 
-impl Generator {
-    pub fn new(compiled_schema: CompiledSchema) -> Self {
+impl<'a> Generator<'a> {
+    pub fn new(compiled_schema: &'a CompiledSchema) -> Self {
         Generator { compiled_schema }
     }
 
@@ -56,7 +56,7 @@ mod generated_json_schema {
         #[test]
         fn have_a_version() {
             let schema = CompiledSchema::empty();
-            let generator = Generator::new(schema);
+            let generator = Generator::new(&schema);
 
             let (json_schema, _) = generator.generate();
 
@@ -66,7 +66,7 @@ mod generated_json_schema {
         #[test]
         fn have_a_type() {
             let schema = CompiledSchema::empty();
-            let generator = Generator::new(schema);
+            let generator = Generator::new(&schema);
 
             let (json_schema, _) = generator.generate();
 
@@ -76,7 +76,7 @@ mod generated_json_schema {
         #[test]
         fn have_a_schema_url() {
             let schema = CompiledSchema::empty();
-            let generator = Generator::new(schema);
+            let generator = Generator::new(&schema);
 
             let (json_schema, _) = generator.generate();
 
@@ -85,8 +85,8 @@ mod generated_json_schema {
 
         #[test]
         fn pass_title_through() {
-            let schema = CompiledSchema::with_title("some title");
-            let generator = Generator::new(schema);
+            let schema = CompiledSchema::with("some title", 1);
+            let generator = Generator::new(&schema);
 
             let (json_schema, _) = generator.generate();
 
@@ -104,7 +104,7 @@ mod generator {
         #[test]
         fn generate_ui_object() {
             let schema = CompiledSchema::empty();
-            let generator = Generator::new(schema);
+            let generator = Generator::new(&schema);
 
             let (_, ui_object) = generator.generate();
 
@@ -114,7 +114,7 @@ mod generator {
         #[test]
         fn generate_json_schema() {
             let schema = CompiledSchema::empty();
-            let generator = Generator::new(schema);
+            let generator = Generator::new(&schema);
 
             let (json_schema, _) = generator.generate();
 
