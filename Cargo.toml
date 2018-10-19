@@ -3,6 +3,7 @@ name = "balena_configuration_dsl"
 version = "0.1.4"
 authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
+build = "build.rs"
 
 [dependencies]
 serde = "1.0"
