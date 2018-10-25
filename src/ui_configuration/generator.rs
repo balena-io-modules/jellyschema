@@ -1,12 +1,13 @@
 use crate::dsl::compiler::compile;
+use crate::dsl::compiler::ObjectType;
 use crate::dsl::compiler::PropertyList;
-use crate::dsl::compiler::SourceSchema;
 use crate::dsl::validation;
 use serde_derive::Serialize;
 use std::collections::HashMap;
+use crate::dsl::validation::ValidatedSchema;
 
 pub struct Generator {
-    compiled_schema: SourceSchema,
+    compiled_schema: ValidatedSchema,
 }
 
 impl Generator {
@@ -14,7 +15,7 @@ impl Generator {
         Ok(Generator::new(compile(yaml)?))
     }
 
-    fn new(compiled_schema: SourceSchema) -> Self {
+    fn new(compiled_schema: ValidatedSchema) -> Self {
         Generator { compiled_schema }
     }
 
@@ -50,7 +51,7 @@ struct JsonSchema {
     #[serde(rename = "$schema")]
     schema_url: String,
     #[serde(rename = "type")]
-    type_spec: crate::dsl::compiler::ObjectType,
+    type_spec: ObjectType,
     title: String,
     #[serde(
         rename = "properties",
@@ -80,68 +81,65 @@ struct UiObjectProperty {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::dsl::validation::validate;
+    use crate::dsl::compiler::SourceSchema;
 
     #[test]
-    fn hardcode_a_type() {
-        let generator = Generator::new(SourceSchema::empty());
+    fn hardcode_a_type() -> Result <(), validation::Error> {
+        let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (json_schema, _) = generator.generate();
 
         assert_eq!(json_schema["type"], "object");
+        Ok(())
     }
 
     #[test]
-    fn hardcode_a_schema_url() {
-        let generator = Generator::new(SourceSchema::empty());
+    fn hardcode_a_schema_url() -> Result <(), validation::Error> {
+        let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (json_schema, _) = generator.generate();
 
         assert_eq!(json_schema["$schema"], "http://json-schema.org/draft-04/schema#");
+        Ok(())
     }
 
     #[test]
-    fn pass_version_through() {
-        let schema = SourceSchema::with("", 21);
-        let generator = Generator::new(schema);
-
-        let (json_schema, _) = generator.generate();
-
-        assert_eq!(json_schema["$$version"], 21);
-    }
-
-    #[test]
-    fn pass_title_through() {
-        let schema = SourceSchema::with("some title", 1);
+    fn pass_title_through() -> Result <(), validation::Error> {
+        let schema = validate(SourceSchema::with("some title", 1))?;
         let generator = Generator::new(schema);
 
         let (json_schema, _) = generator.generate();
 
         assert_eq!(json_schema["title"], "some title");
+        Ok(())
     }
 
     #[test]
-    fn generate_ui_object() {
-        let generator = Generator::new(SourceSchema::empty());
+    fn generate_ui_object() -> Result <(), validation::Error> {
+        let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (_, ui_object) = generator.generate();
 
         assert!(ui_object.is_object());
+        Ok(())
     }
 
     #[test]
-    fn generate_json_schema() {
-        let generator = Generator::new(SourceSchema::empty());
+    fn generate_json_schema() -> Result <(), validation::Error> {
+        let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (json_schema, _) = generator.generate();
 
         assert!(json_schema.is_object());
+        Ok(())
     }
 
     impl SourceSchema {
         fn empty() -> Self {
             SourceSchema {
                 title: String::new(),
-                version: 0,
+                version: 1,
                 properties: None,
             }
         }

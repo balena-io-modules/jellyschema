@@ -1,22 +1,19 @@
 use crate::dsl::validation;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
+use crate::dsl::validation::ValidatedSchema;
+use crate::dsl::validation::validate;
 
-pub fn compile(schema: serde_yaml::Value) -> Result<SourceSchema, validation::Error> {
+pub fn compile(schema: serde_yaml::Value) -> Result<ValidatedSchema, validation::Error> {
     let schema: SourceSchema = serde_yaml::from_value(schema)?;
-
-    if schema.version != 1 {
-        return Err(validation::Error::invalid_version(schema.version));
-    }
-
-    Ok(schema)
+    let validated_schema = validate(schema)?;
+    Ok(validated_schema)
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "lowercase")]
 pub enum ObjectType {
-    #[serde(rename = "object")]
     Object,
-    #[serde(rename = "hostname")]
     Hostname,
 }
 
@@ -25,11 +22,8 @@ pub struct Property {
     #[serde(rename = "type")]
     pub type_spec: Option<ObjectType>,
     pub title: Option<String>,
-    #[serde(skip_serializing)]
     help: Option<String>,
-    #[serde(skip_serializing)]
     warning: Option<String>,
-    #[serde(skip_serializing)]
     description: Option<String>,
 }
 
@@ -56,6 +50,8 @@ pub struct SourceSchema {
     pub properties: Option<PropertyList>,
 }
 
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -69,23 +65,6 @@ mod tests {
 
         assert_eq!(compile(schema)?.title, SOME_TITLE);
         Ok(())
-    }
-
-    #[test]
-    // TODO: morph into property, so that the actual unsupported version is rand
-    fn fail_on_unsupported_version() {
-        let schema = yaml_schema_with(SOME_TITLE, 13);
-
-        assert!(compile(schema).is_err());
-    }
-
-    #[test]
-    fn fail_on_missing_version() {
-        let mut schema = Mapping::new();
-        schema.insert("title".into(), SOME_TITLE.into());
-        let schema = serde_yaml::Value::Mapping(schema);
-
-        assert!(compile(schema).is_err());
     }
 
     #[test]
