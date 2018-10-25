@@ -1,11 +1,8 @@
 use crate::dsl::compiler::compile;
-use crate::dsl::compiler::PropertyEntry;
 use crate::dsl::compiler::PropertyList;
 use crate::dsl::compiler::SourceSchema;
 use crate::dsl::validation;
-use serde::ser::{Serialize, SerializeMap, SerializeSeq, Serializer};
 use serde_derive::Serialize;
-use serde_json::Map;
 use std::collections::HashMap;
 
 pub struct Generator {
@@ -22,8 +19,6 @@ impl Generator {
     }
 
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
-        println!("start");
-
         let property_names = match self.compiled_schema.properties {
             Some(ref list) => Some(list.clone().property_names),
             None => None,
@@ -39,14 +34,11 @@ impl Generator {
             schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
         };
 
-        println!("mid");
-
         let ui_object = UiObject(HashMap::new());
 
         (
             serde_json::to_value(schema).expect("Internal error: inconsistent schema: json schema"),
-            //serde_json::to_value(ui_object).expect("Internal error: inconsistent schema: ui object"),
-            serde_json::Value::Object(Map::new()),
+            serde_json::to_value(ui_object).expect("Internal error: inconsistent schema: ui object"),
         )
     }
 }

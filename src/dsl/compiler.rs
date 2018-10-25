@@ -1,16 +1,10 @@
 use crate::dsl::validation;
-use serde::{Deserialize, Deserializer, Serializer};
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-use serde_json;
-
-use std::collections::HashMap;
 
 pub fn compile(schema: serde_yaml::Value) -> Result<SourceSchema, validation::Error> {
-    println!("compiler start");
     let schema: SourceSchema = serde_yaml::from_value(schema)?;
 
-    println!("compiler mid");
     if schema.version != 1 {
         return Err(validation::Error::invalid_version(schema.version));
     }
@@ -65,7 +59,6 @@ pub struct SourceSchema {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
     use serde_yaml::Mapping;
 

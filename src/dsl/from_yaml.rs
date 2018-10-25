@@ -1,6 +1,6 @@
 use crate::dsl::compiler::PropertyEntry;
 use crate::dsl::compiler::PropertyList;
-use serde::{Deserialize, Deserializer, Serializer};
+use serde::{Deserialize, Deserializer};
 
 pub fn deserialize_property_list<'de, D>(deserializer: D) -> Result<Option<PropertyList>, D::Error>
 where
@@ -18,7 +18,12 @@ where
                     };
                     let key: String = match serde_yaml::from_value(key.clone()) {
                         Ok(k) => k,
-                        Err(e) => return Err(serde::de::Error::custom("cannot deserialize the key")),
+                        Err(e) => {
+                            return Err(serde::de::Error::custom(format!(
+                                "cannot deserialize the key - {:?}",
+                                e
+                            )))
+                        }
                     };
                     let value = match serde_yaml::from_value(value.clone()) {
                         Ok(k) => k,
