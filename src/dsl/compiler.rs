@@ -22,7 +22,6 @@ pub enum ObjectType {
 
 #[derive(Clone, Default, Debug, Deserialize)]
 pub struct Property {
-    // TODO: move to 2 impls
     #[serde(rename = "type")]
     pub type_spec: Option<ObjectType>,
     pub title: Option<String>,
