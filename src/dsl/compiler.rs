@@ -26,15 +26,12 @@ pub enum ObjectType {
     Hostname,
 }
 
-#[derive(Clone, Default, Debug, Deserialize, Serialize)]
+#[derive(Clone, Default, Debug, Deserialize)]
 pub struct Property {
     // TODO: move to 2 impls
-    #[serde(
-        rename = "type",
-        serialize_with = "crate::ui_configuration::serialization::serialize_type"
-    )]
-    type_spec: Option<ObjectType>,
-    title: Option<String>,
+    #[serde(rename = "type")]
+    pub type_spec: Option<ObjectType>,
+    pub title: Option<String>,
     #[serde(skip_serializing)]
     help: Option<String>,
     #[serde(skip_serializing)]
@@ -43,10 +40,9 @@ pub struct Property {
     description: Option<String>,
 }
 
-#[derive(Clone, Default, Debug, Deserialize, Serialize)]
+#[derive(Clone, Default, Debug, Deserialize)]
 pub struct PropertyEntry {
     pub name: String,
-    #[serde(serialize_with = "crate::ui_configuration::serialization::serialize_property")]
     pub property: Property,
 }
 
@@ -62,7 +58,7 @@ pub struct SourceSchema {
     pub version: u64,
     #[serde(
         default,
-        deserialize_with = "crate::dsl::deserialization::deserialize_property_list"
+        deserialize_with = "crate::dsl::from_yaml::deserialize_property_list"
     )]
     pub properties: Option<PropertyList>,
 }

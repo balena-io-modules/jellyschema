@@ -12,7 +12,6 @@ fn main() {
         test_file,
         r#"use balena_configuration_dsl::dsl::validation;
 use balena_configuration_dsl::ui_configuration::generator::Generator;
-use pretty_assertions;
 use pretty_assertions::assert_eq;
 "#
     )

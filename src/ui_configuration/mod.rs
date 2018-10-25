@@ -1,3 +1,3 @@
 pub mod generator;
 // fixme
-pub mod serialization;
+pub mod to_json_schema;

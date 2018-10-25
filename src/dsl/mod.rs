@@ -1,3 +1,3 @@
 pub mod compiler;
-mod deserialization;
+mod from_yaml;
 pub mod validation;

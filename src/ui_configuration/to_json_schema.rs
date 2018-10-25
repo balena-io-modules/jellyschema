@@ -5,6 +5,31 @@ use crate::dsl::compiler::PropertyList;
 use serde::ser::{Serialize, SerializeMap, SerializeSeq, Serializer};
 use std::collections::HashMap;
 
+impl Serialize for Property {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: Serializer,
+    {
+        let mut map = serializer.serialize_map(None)?;
+        if self.title.is_some() {
+            map.serialize_entry("title", &self.title.clone().unwrap())?;
+        }
+
+        if self.type_spec.is_some() {
+            let type_spec = self.type_spec.clone().unwrap();
+            match type_spec {
+                ObjectType::Object => map.serialize_entry("type", "object")?,
+                ObjectType::Hostname => {
+                    map.serialize_entry("type", "string")?;
+                    map.serialize_entry("format", "hostname")?;
+                }
+            };
+        };
+
+        map.end()
+    }
+}
+
 pub fn serialize_type<S>(object_type: &Option<ObjectType>, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
@@ -34,9 +59,3 @@ where
     }
 }
 
-pub fn serialize_property<S>(property: &Property, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    serializer.serialize_none()
-}

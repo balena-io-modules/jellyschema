@@ -63,7 +63,7 @@ struct JsonSchema {
     #[serde(
         rename = "properties",
         skip_serializing_if = "Option::is_none",
-        serialize_with = "crate::ui_configuration::serialization::serialize_property_list"
+        serialize_with = "crate::ui_configuration::to_json_schema::serialize_property_list"
     )]
     properties: Option<PropertyList>,
     #[serde(rename = "$$order", skip_serializing_if = "Option::is_none")]
