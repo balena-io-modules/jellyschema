@@ -1,12 +1,12 @@
 use crate::dsl::compiler::compile;
+use crate::dsl::compiler::PropertyEntry;
 use crate::dsl::compiler::PropertyList;
 use crate::dsl::compiler::SourceSchema;
 use crate::dsl::validation;
+use serde::ser::{Serialize, SerializeMap, SerializeSeq, Serializer};
 use serde_derive::Serialize;
 use serde_json::Map;
 use std::collections::HashMap;
-use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeMap};
-use crate::dsl::compiler::PropertyEntry;
 
 pub struct Generator {
     compiled_schema: SourceSchema,
@@ -26,7 +26,7 @@ impl Generator {
 
         let property_names = match self.compiled_schema.properties {
             Some(ref list) => Some(list.clone().property_names),
-            None => None
+            None => None,
         };
 
         let schema = JsonSchema {
@@ -51,7 +51,6 @@ impl Generator {
     }
 }
 
-
 #[derive(Serialize)]
 struct JsonSchema {
     #[serde(rename = "$$version")]
@@ -61,12 +60,16 @@ struct JsonSchema {
     #[serde(rename = "type")]
     type_spec: crate::dsl::compiler::ObjectType,
     title: String,
-    #[serde(rename = "properties", skip_serializing_if = "Option::is_none", serialize_with="crate::ui_configuration::serialization::serialize_property_list")]
+    #[serde(
+        rename = "properties",
+        skip_serializing_if = "Option::is_none",
+        serialize_with = "crate::ui_configuration::serialization::serialize_property_list"
+    )]
     properties: Option<PropertyList>,
     #[serde(rename = "$$order", skip_serializing_if = "Option::is_none")]
     order: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    required: Option<Vec<String>>
+    required: Option<Vec<String>>,
 }
 
 #[derive(Serialize)]
@@ -147,7 +150,7 @@ mod tests {
             SourceSchema {
                 title: String::new(),
                 version: 0,
-                properties: None
+                properties: None,
             }
         }
 
@@ -155,7 +158,7 @@ mod tests {
             SourceSchema {
                 title: title.to_string(),
                 version,
-                properties: None
+                properties: None,
             }
         }
     }

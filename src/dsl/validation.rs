@@ -18,3 +18,11 @@ impl From<serde_yaml::Error> for Error {
         }
     }
 }
+
+impl From<serde_json::Error> for Error {
+    fn from(source: serde_json::Error) -> Self {
+        Error {
+            message: source.to_string(),
+        }
+    }
+}

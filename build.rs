@@ -12,6 +12,8 @@ fn main() {
         test_file,
         r#"use balena_configuration_dsl::dsl::validation;
 use balena_configuration_dsl::ui_configuration::generator::Generator;
+use pretty_assertions;
+use pretty_assertions::assert_eq;
 "#
     )
     .unwrap();
@@ -21,41 +23,9 @@ use balena_configuration_dsl::ui_configuration::generator::Generator;
         let path = directory.display();
         let name = format!("case_{}", directory.file_name().unwrap().to_string_lossy());
 
-        // TODO: add differ (treediff)
-
         write!(
             test_file,
-            r###"
-#[test]
-fn {name}() -> Result<(), validation::Error> {{
-    println!();
-    println!("starting test {name}");
-    let input_schema : serde_yaml::Value = serde_yaml::from_str(
-        include_str!("{path}/input-schema.yml")).
-        unwrap();
-    println!("loaded input schema: {{:?}}", input_schema);
-    println!();
-    let expected_json_schema : serde_json::Value = serde_json::from_str(
-        include_str!("{path}/output-json-schema.json")).
-        unwrap();
-    println!("loaded expected json schema: {{:?}}", expected_json_schema);
-    println!();
-    let expected_ui_object : serde_json::Value  = serde_json::from_str(
-        include_str!("{path}/output-uiobject.json")).
-        unwrap();
-    println!("loaded expected ui object: {{:?}}", expected_ui_object);
-    println!();
-
-    let (json_schema, ui_object) = Generator::with(input_schema)?.generate();
-
-    println!("comparing json schemas");
-    assert_eq!(json_schema, expected_json_schema, "Actual json schema different than expected");
-    println!("comparing ui objects");
-    assert_eq!(ui_object, expected_ui_object, "Actual ui object different than expected");
-
-    Ok(())
-}}
-"###,
+            include_str!("./tests/test_template"),
             name = name,
             path = path
         )

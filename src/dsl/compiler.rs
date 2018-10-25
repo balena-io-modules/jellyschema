@@ -20,17 +20,19 @@ pub fn compile(schema: serde_yaml::Value) -> Result<SourceSchema, validation::Er
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum ObjectType {
-    #[serde(rename = "string")]
-    String,
     #[serde(rename = "object")]
     Object,
     #[serde(rename = "hostname")]
-    Hostname
+    Hostname,
 }
 
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
 pub struct Property {
-    #[serde(rename = "type")]
+    // TODO: move to 2 impls
+    #[serde(
+        rename = "type",
+        serialize_with = "crate::ui_configuration::serialization::serialize_type"
+    )]
     type_spec: Option<ObjectType>,
     title: Option<String>,
     #[serde(skip_serializing)]
@@ -42,19 +44,26 @@ pub struct Property {
 }
 
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
-pub struct PropertyEntry(pub String, pub Property);
+pub struct PropertyEntry {
+    pub name: String,
+    #[serde(serialize_with = "crate::ui_configuration::serialization::serialize_property")]
+    pub property: Property,
+}
 
 #[derive(Clone, Debug)]
 pub struct PropertyList {
     pub property_names: Vec<String>,
-    pub entries: Vec<PropertyEntry>
+    pub entries: Vec<PropertyEntry>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct SourceSchema {
     pub title: String,
     pub version: u64,
-    #[serde( default, deserialize_with = "crate::dsl::deserialization::deserialize_property_list" )]
+    #[serde(
+        default,
+        deserialize_with = "crate::dsl::deserialization::deserialize_property_list"
+    )]
     pub properties: Option<PropertyList>,
 }
 

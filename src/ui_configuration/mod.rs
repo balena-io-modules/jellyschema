@@ -1,2 +1,3 @@
 pub mod generator;
-mod serialization;
+// fixme
+pub mod serialization;
