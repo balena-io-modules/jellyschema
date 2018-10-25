@@ -24,10 +24,17 @@ impl Generator {
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
         println!("start");
 
+        let property_names = match self.compiled_schema.properties {
+            Some(ref list) => Some(list.clone().property_names),
+            None => None
+        };
+
         let schema = JsonSchema {
             version: self.compiled_schema.version,
             title: self.compiled_schema.title.to_string(),
             properties: self.compiled_schema.properties,
+            required: property_names.clone(),
+            order: property_names.clone(),
             type_spec: crate::dsl::compiler::ObjectType::Object,
             schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
         };
@@ -44,21 +51,6 @@ impl Generator {
     }
 }
 
-fn serialize_property_list<S>(property_list: &Option<PropertyList>, serializer: S) -> Result<S::Ok, S::Error>
-where S: Serializer
-{
-    match property_list {
-        Some(list) => {
-            let map : HashMap<String, PropertyEntry>= HashMap::new();
-            let mut map = serializer.serialize_map(Some(map.iter().count()))?;
-            for entry in list.clone().0 {
-                map.serialize_entry(&entry.0, &entry.1);
-            }
-            map.end()
-        },
-        None => serializer.serialize_none()
-    }
-}
 
 #[derive(Serialize)]
 struct JsonSchema {
@@ -68,10 +60,13 @@ struct JsonSchema {
     schema_url: String,
     #[serde(rename = "type")]
     type_spec: crate::dsl::compiler::ObjectType,
-    #[serde(rename = "title")]
     title: String,
-    #[serde(rename = "properties", skip_serializing_if = "Option::is_none", serialize_with="serialize_property_list")]
+    #[serde(rename = "properties", skip_serializing_if = "Option::is_none", serialize_with="crate::ui_configuration::serialization::serialize_property_list")]
     properties: Option<PropertyList>,
+    #[serde(rename = "$$order", skip_serializing_if = "Option::is_none")]
+    order: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    required: Option<Vec<String>>
 }
 
 #[derive(Serialize)]

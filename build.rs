@@ -21,6 +21,8 @@ use balena_configuration_dsl::ui_configuration::generator::Generator;
         let path = directory.display();
         let name = format!("case_{}", directory.file_name().unwrap().to_string_lossy());
 
+        // TODO: add differ (treediff)
+
         write!(
             test_file,
             r###"

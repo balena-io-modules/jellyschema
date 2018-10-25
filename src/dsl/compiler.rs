@@ -20,6 +20,8 @@ pub fn compile(schema: serde_yaml::Value) -> Result<SourceSchema, validation::Er
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum ObjectType {
+    #[serde(rename = "string")]
+    String,
     #[serde(rename = "object")]
     Object,
     #[serde(rename = "hostname")]
@@ -31,61 +33,28 @@ pub struct Property {
     #[serde(rename = "type")]
     type_spec: Option<ObjectType>,
     title: Option<String>,
+    #[serde(skip_serializing)]
     help: Option<String>,
+    #[serde(skip_serializing)]
     warning: Option<String>,
+    #[serde(skip_serializing)]
     description: Option<String>,
 }
 
 #[derive(Clone, Default, Debug, Deserialize, Serialize)]
 pub struct PropertyEntry(pub String, pub Property);
 
-#[derive(Clone, Debug, Deserialize)]
-pub struct PropertyList(pub Vec<PropertyEntry>);
-
-fn deserialize_property_list<'de, D>(deserializer: D) -> Result<Option<PropertyList>, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let maybe_sequence : Option<serde_yaml::Sequence> = Option::deserialize(deserializer)?;
-    match maybe_sequence {
-        Some(sequence) =>  {
-            let list_of_maybe_entries =  sequence.iter().map( move |value| {
-                match value.as_mapping() {
-                    Some(mapping) => {
-
-                        let (key, value) = match mapping.into_iter().next() {
-                            Some(s) => s,
-                            None => return Err(serde::de::Error::custom("cannot get first element of the sequence"))
-                        };
-                        let key = match serde_yaml::from_value(key.clone()) {
-                            Ok(k) => k,
-                            Err(e) => return Err(serde::de::Error::custom("cannot deserialize the key"))
-                        };
-                        let value = match serde_yaml::from_value(value.clone()) {
-                            Ok(k) => k,
-                            Err(e) => return Err(serde::de::Error::custom(format!("cannot deserialize the value {:?}", e)))
-                        };
-
-                        Ok(PropertyEntry(key, value))
-                    },
-                    None => Err(serde::de::Error::custom(""))
-                }
-            } );
-
-            let list : Result<Vec<_>, D::Error> = list_of_maybe_entries.collect();
-            let list = list?;
-
-            Ok(Some(PropertyList(list)))
-        },
-        None => Ok(None)
-    }
+#[derive(Clone, Debug)]
+pub struct PropertyList {
+    pub property_names: Vec<String>,
+    pub entries: Vec<PropertyEntry>
 }
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct SourceSchema {
     pub title: String,
     pub version: u64,
-    #[serde( default, deserialize_with = "deserialize_property_list" )]
+    #[serde( default, deserialize_with = "crate::dsl::deserialization::deserialize_property_list" )]
     pub properties: Option<PropertyList>,
 }
 
