@@ -48,7 +48,7 @@ mod tests {
         let schema = SourceSchema {
             title: "some title".to_string(),
             version: 13,
-            properties: None
+            properties: None,
         };
 
         assert!(validate(schema).is_err());

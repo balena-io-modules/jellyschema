@@ -1,8 +1,8 @@
 use crate::dsl::validation;
+use crate::dsl::validation::validate;
+use crate::dsl::validation::ValidatedSchema;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
-use crate::dsl::validation::ValidatedSchema;
-use crate::dsl::validation::validate;
 
 pub fn compile(schema: serde_yaml::Value) -> Result<ValidatedSchema, validation::Error> {
     let schema: SourceSchema = serde_yaml::from_value(schema)?;
@@ -22,9 +22,9 @@ pub struct Property {
     #[serde(rename = "type")]
     pub type_spec: Option<ObjectType>,
     pub title: Option<String>,
-    help: Option<String>,
-    warning: Option<String>,
-    description: Option<String>,
+    pub help: Option<String>,
+    pub warning: Option<String>,
+    pub description: Option<String>,
 }
 
 #[derive(Clone, Default, Debug, Deserialize)]
@@ -49,8 +49,6 @@ pub struct SourceSchema {
     )]
     pub properties: Option<PropertyList>,
 }
-
-
 
 #[cfg(test)]
 mod tests {

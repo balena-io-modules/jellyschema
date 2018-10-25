@@ -2,9 +2,9 @@ use crate::dsl::compiler::compile;
 use crate::dsl::compiler::ObjectType;
 use crate::dsl::compiler::PropertyList;
 use crate::dsl::validation;
+use crate::dsl::validation::ValidatedSchema;
 use serde_derive::Serialize;
 use std::collections::HashMap;
-use crate::dsl::validation::ValidatedSchema;
 
 pub struct Generator {
     compiled_schema: ValidatedSchema,
@@ -20,7 +20,9 @@ impl Generator {
     }
 
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
-        let property_names = match self.compiled_schema.properties {
+        let properties = self.compiled_schema.properties;
+
+        let property_names = match properties {
             Some(ref list) => Some(list.clone().property_names),
             None => None,
         };
@@ -28,14 +30,28 @@ impl Generator {
         let schema = JsonSchema {
             version: self.compiled_schema.version,
             title: self.compiled_schema.title.to_string(),
-            properties: self.compiled_schema.properties,
+            properties: properties.clone(),
             required: property_names.clone(),
             order: property_names.clone(),
             type_spec: crate::dsl::compiler::ObjectType::Object,
             schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
         };
 
-        let ui_object = UiObject(HashMap::new());
+        let mut ui_object_entries = HashMap::new();
+
+        if properties.clone().is_some() {
+            for property_entry in properties.clone().unwrap().entries {
+                ui_object_entries.insert(
+                    property_entry.name.to_string(),
+                    UiObjectProperty {
+                        help: property_entry.property.help,
+                        warning: property_entry.property.warning,
+                        description: property_entry.property.description,
+                    },
+                );
+            }
+        }
+        let ui_object = UiObject(ui_object_entries);
 
         (
             serde_json::to_value(schema).expect("Internal error: inconsistent schema: json schema"),
@@ -71,21 +87,21 @@ struct UiObject(HashMap<String, UiObjectProperty>);
 #[derive(Serialize)]
 struct UiObjectProperty {
     #[serde(rename = "ui:help")]
-    help: String,
+    help: Option<String>,
     #[serde(rename = "ui:warning")]
-    warning: String,
+    warning: Option<String>,
     #[serde(rename = "ui:description")]
-    description: String,
+    description: Option<String>,
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::dsl::validation::validate;
     use crate::dsl::compiler::SourceSchema;
+    use crate::dsl::validation::validate;
 
     #[test]
-    fn hardcode_a_type() -> Result <(), validation::Error> {
+    fn hardcode_a_type() -> Result<(), validation::Error> {
         let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (json_schema, _) = generator.generate();
@@ -95,7 +111,7 @@ mod tests {
     }
 
     #[test]
-    fn hardcode_a_schema_url() -> Result <(), validation::Error> {
+    fn hardcode_a_schema_url() -> Result<(), validation::Error> {
         let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (json_schema, _) = generator.generate();
@@ -105,7 +121,7 @@ mod tests {
     }
 
     #[test]
-    fn pass_title_through() -> Result <(), validation::Error> {
+    fn pass_title_through() -> Result<(), validation::Error> {
         let schema = validate(SourceSchema::with("some title", 1))?;
         let generator = Generator::new(schema);
 
@@ -116,7 +132,7 @@ mod tests {
     }
 
     #[test]
-    fn generate_ui_object() -> Result <(), validation::Error> {
+    fn generate_ui_object() -> Result<(), validation::Error> {
         let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (_, ui_object) = generator.generate();
@@ -126,7 +142,7 @@ mod tests {
     }
 
     #[test]
-    fn generate_json_schema() -> Result <(), validation::Error> {
+    fn generate_json_schema() -> Result<(), validation::Error> {
         let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (json_schema, _) = generator.generate();
