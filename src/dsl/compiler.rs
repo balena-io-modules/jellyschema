@@ -1,3 +1,4 @@
+use crate::dsl::types::TypeSpec;
 use crate::dsl::validation;
 use crate::dsl::validation::validate;
 use crate::dsl::validation::ValidatedSchema;
@@ -9,26 +10,6 @@ pub fn compile(schema: serde_yaml::Value) -> Result<ValidatedSchema, validation:
     Ok(validated_schema)
 }
 
-#[derive(Clone, Debug)]
-pub enum ObjectType {
-    Object,
-    Hostname,
-}
-
-#[derive(Clone, Debug)]
-pub enum TypeSpec {
-    Required(ObjectType),
-    Optional(ObjectType),
-}
-
-impl TypeSpec {
-    pub fn unwrap(self) -> ObjectType {
-        match self {
-            TypeSpec::Optional(object_type) => object_type,
-            TypeSpec::Required(object_type) => object_type,
-        }
-    }
-}
 #[derive(Clone, Default, Debug, Deserialize)]
 pub struct Property {
     #[serde(default, rename = "type")]

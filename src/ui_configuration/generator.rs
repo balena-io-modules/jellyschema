@@ -1,7 +1,7 @@
 use crate::dsl::compiler::compile;
-use crate::dsl::compiler::ObjectType;
 use crate::dsl::compiler::PropertyList;
-use crate::dsl::compiler::TypeSpec;
+use crate::dsl::types::ObjectType;
+use crate::dsl::types::TypeSpec;
 use crate::dsl::validation;
 use crate::dsl::validation::ValidatedSchema;
 use serde_derive::Serialize;
