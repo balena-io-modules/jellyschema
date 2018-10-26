@@ -12,8 +12,8 @@ fn {name}() -> Result<(), validation::Error> {{
 
     let (json_schema, ui_object) = Generator::with(input_schema)?.generate();
 
-    assert_eq!(json_schema, expected_json_schema, "Actual(left) json schema different than expected (right)");
-    assert_eq!(ui_object, expected_ui_object, "Actual(left) ui object different than expected (right)");
+    assert_eq!(expected_json_schema, json_schema, "Actual(right) json schema different than expected (left)");
+    assert_eq!(expected_ui_object, ui_object, "Actual(right) ui object different than expected (left)");
 
     Ok(())
 }}

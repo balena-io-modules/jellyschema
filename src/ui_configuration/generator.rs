@@ -21,38 +21,8 @@ impl Generator {
     }
 
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
-        let properties = self.compiled_schema.properties;
-
-        let property_names = match properties {
-            Some(ref list) => Some(list.clone().property_names),
-            None => None,
-        };
-
-        let schema = JsonSchema {
-            version: self.compiled_schema.version,
-            title: self.compiled_schema.title.to_string(),
-            properties: properties.clone(),
-            required: property_names.clone(),
-            order: property_names.clone(),
-            type_spec: TypeSpec::Required(ObjectType::Object),
-            schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
-        };
-
-        let mut ui_object_entries = HashMap::new();
-
-        if properties.clone().is_some() {
-            for property_entry in properties.clone().unwrap().entries {
-                ui_object_entries.insert(
-                    property_entry.name.to_string(),
-                    UiObjectProperty {
-                        help: property_entry.property.help,
-                        warning: property_entry.property.warning,
-                        description: property_entry.property.description,
-                    },
-                );
-            }
-        }
-        let ui_object = UiObject(ui_object_entries);
+        let schema = JsonSchema::from(&self.compiled_schema);
+        let ui_object = UiObject::from(&self.compiled_schema);
 
         (
             serde_json::to_value(schema).expect("Internal error: inconsistent schema: json schema"),
@@ -82,8 +52,47 @@ struct JsonSchema {
     required: Option<Vec<String>>,
 }
 
+impl From<&ValidatedSchema> for JsonSchema {
+    fn from(schema: &ValidatedSchema) -> Self {
+        let property_names = match schema.properties {
+            Some(ref list) => Some(list.clone().property_names),
+            None => None,
+        };
+
+        JsonSchema {
+            version: schema.version,
+            title: schema.title.to_string(),
+            properties: schema.properties.clone(),
+            required: property_names.clone(),
+            order: property_names.clone(),
+            type_spec: TypeSpec::Required(ObjectType::Object),
+            schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
+        }
+    }
+}
+
 #[derive(Serialize)]
 struct UiObject(HashMap<String, UiObjectProperty>);
+
+impl From<&ValidatedSchema> for UiObject {
+    fn from(schema: &ValidatedSchema) -> Self {
+        let mut ui_object_entries = HashMap::new();
+
+        if schema.properties.clone().is_some() {
+            for property_entry in schema.properties.clone().unwrap().entries {
+                ui_object_entries.insert(
+                    property_entry.name.to_string(),
+                    UiObjectProperty {
+                        help: property_entry.property.help,
+                        warning: property_entry.property.warning,
+                        description: property_entry.property.description,
+                    },
+                );
+            }
+        }
+        UiObject(ui_object_entries)
+    }
+}
 
 #[derive(Serialize)]
 struct UiObjectProperty {
