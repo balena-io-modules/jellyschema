@@ -1,4 +1,4 @@
 pub mod compiler;
-mod from_yaml;
+pub mod schema;
 pub mod types;
 pub mod validation;

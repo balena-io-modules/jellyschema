@@ -1,5 +1,5 @@
-use crate::dsl::compiler::Property;
-use crate::dsl::compiler::PropertyList;
+use crate::dsl::schema::Property;
+use crate::dsl::schema::PropertyList;
 use crate::dsl::types::ObjectType;
 use crate::dsl::types::TypeSpec;
 use serde::ser::{Serialize, SerializeMap, Serializer};

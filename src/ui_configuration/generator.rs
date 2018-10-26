@@ -1,5 +1,5 @@
 use crate::dsl::compiler::compile;
-use crate::dsl::compiler::PropertyList;
+use crate::dsl::schema::PropertyList;
 use crate::dsl::types::ObjectType;
 use crate::dsl::types::TypeSpec;
 use crate::dsl::validation;
@@ -109,7 +109,7 @@ struct UiObjectProperty {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::dsl::compiler::SourceSchema;
+    use crate::dsl::schema::SourceSchema;
     use crate::dsl::validation::validate;
 
     #[test]

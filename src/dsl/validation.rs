@@ -1,4 +1,4 @@
-use crate::dsl::compiler::SourceSchema;
+use crate::dsl::schema::SourceSchema;
 
 pub type ValidatedSchema = SourceSchema;
 
