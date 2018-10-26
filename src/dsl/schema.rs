@@ -10,10 +10,7 @@ use serde_yaml::Sequence;
 pub struct SourceSchema {
     pub title: String,
     pub version: u64,
-    #[serde(
-        default,
-        deserialize_with = "crate::dsl::schema::deserialize_property_list"
-    )]
+    #[serde(default, deserialize_with = "crate::dsl::schema::deserialize_property_list")]
     #[serde(rename = "properties")]
     pub property_list: Option<PropertyList>,
 }
