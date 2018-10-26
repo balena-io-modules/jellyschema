@@ -30,12 +30,11 @@ impl<'de> Deserialize<'de> for TypeSpec {
                 E: Error,
             {
                 let mut type_name = value.trim().to_lowercase();
-                let type_spec = match type_name.ends_with('?') {
-                    true => {
-                        type_name.remove(type_name.len() - 1);
-                        TypeSpec::Optional(ObjectType::from_str(&type_name)?)
-                    }
-                    false => TypeSpec::Required(ObjectType::from_str(&type_name)?),
+                let type_spec = if type_name.ends_with('?') {
+                    type_name.remove(type_name.len() - 1);
+                    TypeSpec::Optional(ObjectType::from_str(&type_name)?)
+                } else {
+                    TypeSpec::Required(ObjectType::from_str(&type_name)?)
                 };
                 Ok(type_spec)
             }
@@ -78,7 +77,7 @@ where
     let list_of_maybe_entries = sequence.into_iter().map(|value| {
         let mapping = value
             .as_mapping()
-            .ok_or(Error::custom("cannot deserialize property as mapping"))?;
+            .ok_or_else(|| Error::custom("cannot deserialize property as mapping"))?;
         let property_entry = mapping_to_property_entry(mapping)?;
         property_names.push(property_entry.name.clone());
         Ok(property_entry)
@@ -100,7 +99,7 @@ where
     let (key, value) = mapping
         .into_iter()
         .next()
-        .ok_or(Error::custom("cannot get first element of the sequence"))?;
+        .ok_or_else(|| Error::custom("cannot get first element of the sequence"))?;
     let key: String = serde_yaml::from_value(key.clone())
         .map_err(|e| Error::custom(format!("cannot deserialize property key - {}", e)))?;
     let value: Property = serde_yaml::from_value(value.clone())

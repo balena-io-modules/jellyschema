@@ -2,7 +2,6 @@ use crate::dsl::validation;
 use crate::dsl::validation::validate;
 use crate::dsl::validation::ValidatedSchema;
 use serde_derive::Deserialize;
-use serde_derive::Serialize;
 
 pub fn compile(schema: serde_yaml::Value) -> Result<ValidatedSchema, validation::Error> {
     let schema: SourceSchema = serde_yaml::from_value(schema)?;

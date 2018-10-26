@@ -7,6 +7,8 @@ use crate::dsl::validation::ValidatedSchema;
 use serde_derive::Serialize;
 use std::collections::HashMap;
 
+const SCHEMA_URL: &str = "http://json-schema.org/draft-04/schema#";
+
 pub struct Generator {
     compiled_schema: ValidatedSchema,
 }
@@ -66,7 +68,7 @@ impl From<&ValidatedSchema> for JsonSchema {
             required: property_names.clone(),
             order: property_names.clone(),
             type_spec: TypeSpec::Required(ObjectType::Object),
-            schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
+            schema_url: SCHEMA_URL.to_string(),
         }
     }
 }
@@ -126,7 +128,7 @@ mod tests {
 
         let (json_schema, _) = generator.generate();
 
-        assert_eq!(json_schema["$schema"], "http://json-schema.org/draft-04/schema#");
+        assert_eq!(json_schema["$schema"], SCHEMA_URL);
         Ok(())
     }
 
