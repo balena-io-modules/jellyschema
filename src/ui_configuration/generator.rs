@@ -56,16 +56,36 @@ struct JsonSchema {
 
 impl From<&ValidatedSchema> for JsonSchema {
     fn from(schema: &ValidatedSchema) -> Self {
-        let property_names = match schema.properties {
+        let property_names = match schema.property_list.clone() {
             Some(ref list) => Some(list.clone().property_names),
             None => None,
+        };
+
+        let required_property_names: Vec<String> = schema
+            .property_list
+            .clone()
+            .map_or(vec![], |list| list.entries)
+            .iter()
+            .filter_map(|property_entry| match property_entry.clone().property.type_spec {
+                Some(type_spec) => match type_spec {
+                    TypeSpec::Required(_) => Some(property_entry.clone().name),
+                    TypeSpec::Optional(_) => None,
+                },
+                None => None,
+            })
+            .collect();
+
+        let required_property_names = if !required_property_names.is_empty() {
+            Some(required_property_names)
+        } else {
+            None
         };
 
         JsonSchema {
             version: schema.version,
             title: schema.title.to_string(),
-            properties: schema.properties.clone(),
-            required: property_names.clone(),
+            properties: schema.property_list.clone(),
+            required: required_property_names,
             order: property_names.clone(),
             type_spec: TypeSpec::Required(ObjectType::Object),
             schema_url: SCHEMA_URL.to_string(),
@@ -80,8 +100,8 @@ impl From<&ValidatedSchema> for UiObject {
     fn from(schema: &ValidatedSchema) -> Self {
         let mut ui_object_entries = HashMap::new();
 
-        if schema.properties.clone().is_some() {
-            for property_entry in schema.properties.clone().unwrap().entries {
+        if schema.property_list.clone().is_some() {
+            for property_entry in schema.property_list.clone().unwrap().entries {
                 ui_object_entries.insert(
                     property_entry.name.to_string(),
                     UiObjectProperty {
@@ -168,7 +188,7 @@ mod tests {
             SourceSchema {
                 title: String::new(),
                 version: 1,
-                properties: None,
+                property_list: None,
             }
         }
 
@@ -176,7 +196,7 @@ mod tests {
             SourceSchema {
                 title: title.to_string(),
                 version,
-                properties: None,
+                property_list: None,
             }
         }
     }

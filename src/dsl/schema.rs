@@ -14,7 +14,8 @@ pub struct SourceSchema {
         default,
         deserialize_with = "crate::dsl::schema::deserialize_property_list"
     )]
-    pub properties: Option<PropertyList>,
+    #[serde(rename = "properties")]
+    pub property_list: Option<PropertyList>,
 }
 
 #[derive(Clone, Default, Debug, Deserialize)]
