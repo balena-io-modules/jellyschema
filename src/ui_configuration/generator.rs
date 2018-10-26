@@ -34,7 +34,7 @@ impl Generator {
 }
 
 #[derive(Serialize)]
-struct JsonSchema {
+struct JsonSchema<'a> {
     #[serde(rename = "$$version")]
     version: u64,
     #[serde(rename = "$schema")]
@@ -51,34 +51,19 @@ struct JsonSchema {
     #[serde(rename = "$$order", skip_serializing_if = "Option::is_none")]
     order: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    required: Option<Vec<String>>,
+    required: Option<Vec<&'a str>>,
 }
 
-impl From<&ValidatedSchema> for JsonSchema {
-    fn from(schema: &ValidatedSchema) -> Self {
+impl<'a> From<&'a ValidatedSchema> for JsonSchema<'a> {
+    fn from(schema: &'a ValidatedSchema) -> Self {
         let property_names = match schema.property_list.clone() {
             Some(ref list) => Some(list.clone().property_names),
             None => None,
         };
 
-        let required_property_names: Vec<String> = schema
-            .property_list
-            .clone()
-            .map_or(vec![], |list| list.entries)
-            .iter()
-            .filter_map(|property_entry| match property_entry.clone().property.type_spec {
-                Some(type_spec) => match type_spec {
-                    TypeSpec::Required(_) => Some(property_entry.clone().name),
-                    TypeSpec::Optional(_) => None,
-                },
-                None => None,
-            })
-            .collect();
-
-        let required_property_names = if !required_property_names.is_empty() {
-            Some(required_property_names)
-        } else {
-            None
+        let required_property_names = match &schema.property_list {
+            Some(ref list) => required_property_names(list),
+            None => None,
         };
 
         JsonSchema {
@@ -90,6 +75,26 @@ impl From<&ValidatedSchema> for JsonSchema {
             type_spec: TypeSpec::Required(ObjectType::Object),
             schema_url: SCHEMA_URL.to_string(),
         }
+    }
+}
+
+fn required_property_names(property_list: &PropertyList) -> Option<Vec<&str>> {
+    let required_property_names: Vec<&str> = property_list
+        .entries
+        .iter()
+        .filter_map(|property_entry| match &property_entry.property.type_spec {
+            Some(type_spec) => match type_spec {
+                TypeSpec::Required(_) => Some(property_entry.name.as_str()),
+                TypeSpec::Optional(_) => None,
+            },
+            None => None,
+        })
+        .collect();
+
+    if !required_property_names.is_empty() {
+        Some(required_property_names)
+    } else {
+        None
     }
 }
 
