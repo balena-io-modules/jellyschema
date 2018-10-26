@@ -54,6 +54,7 @@ impl<'a> From<&'a ValidatedSchema> for JsonSchema<'a> {
     }
 }
 
+// TODO: associate with PropertyList type
 fn required_property_names(property_list: &PropertyList) -> Option<Vec<&str>> {
     let required_property_names: Vec<&str> = property_list
         .entries
