@@ -10,17 +10,30 @@ pub fn compile(schema: serde_yaml::Value) -> Result<ValidatedSchema, validation:
     Ok(validated_schema)
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(rename_all = "lowercase")]
+#[derive(Clone, Debug)]
 pub enum ObjectType {
     Object,
     Hostname,
 }
 
+#[derive(Clone, Debug)]
+pub enum TypeSpec {
+    Required(ObjectType),
+    Optional(ObjectType),
+}
+
+impl TypeSpec {
+    pub fn unwrap(self) -> ObjectType {
+        match self {
+            TypeSpec::Optional(object_type) => object_type,
+            TypeSpec::Required(object_type) => object_type,
+        }
+    }
+}
 #[derive(Clone, Default, Debug, Deserialize)]
 pub struct Property {
-    #[serde(rename = "type")]
-    pub type_spec: Option<ObjectType>,
+    #[serde(default, rename = "type")]
+    pub type_spec: Option<TypeSpec>,
     pub title: Option<String>,
     pub help: Option<String>,
     pub warning: Option<String>,

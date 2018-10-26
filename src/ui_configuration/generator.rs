@@ -1,6 +1,7 @@
 use crate::dsl::compiler::compile;
 use crate::dsl::compiler::ObjectType;
 use crate::dsl::compiler::PropertyList;
+use crate::dsl::compiler::TypeSpec;
 use crate::dsl::validation;
 use crate::dsl::validation::ValidatedSchema;
 use serde_derive::Serialize;
@@ -33,7 +34,7 @@ impl Generator {
             properties: properties.clone(),
             required: property_names.clone(),
             order: property_names.clone(),
-            type_spec: crate::dsl::compiler::ObjectType::Object,
+            type_spec: TypeSpec::Required(ObjectType::Object),
             schema_url: "http://json-schema.org/draft-04/schema#".to_string(),
         };
 
@@ -67,7 +68,7 @@ struct JsonSchema {
     #[serde(rename = "$schema")]
     schema_url: String,
     #[serde(rename = "type")]
-    type_spec: ObjectType,
+    type_spec: TypeSpec,
     title: String,
     #[serde(
         rename = "properties",

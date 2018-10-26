@@ -1,6 +1,7 @@
 use crate::dsl::compiler::ObjectType;
 use crate::dsl::compiler::Property;
 use crate::dsl::compiler::PropertyList;
+use crate::dsl::compiler::TypeSpec;
 use serde::ser::{Serialize, SerializeMap, Serializer};
 
 impl Serialize for Property {
@@ -15,7 +16,8 @@ impl Serialize for Property {
 
         if self.type_spec.is_some() {
             let type_spec = self.type_spec.clone().unwrap();
-            match type_spec {
+            let object_type = type_spec.unwrap();
+            match object_type {
                 ObjectType::Object => map.serialize_entry("type", "object")?,
                 ObjectType::Hostname => {
                     map.serialize_entry("type", "string")?;
@@ -25,6 +27,18 @@ impl Serialize for Property {
         };
 
         map.end()
+    }
+}
+
+impl Serialize for TypeSpec {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match self.clone().unwrap() {
+            ObjectType::Object => serializer.serialize_str("object"),
+            _ => Err(serde::ser::Error::custom("unknown object type")),
+        }
     }
 }
 
