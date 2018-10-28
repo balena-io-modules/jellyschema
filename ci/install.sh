@@ -7,3 +7,5 @@ rustup default `cat rust-toolchain`
 rustup component add clippy-preview
 rustup component add rustfmt-preview
 pip install --user -r requirements.txt
+npm install -g ajv-cli
+

@@ -3,7 +3,13 @@
 set -e
 set -o pipefail
 
-find tests -name *.yml -exec yamllint {} +
+TESTS_DIRECTORY=tests
+
+find "$TESTS_DIRECTORY" -iname *.yml -exec yamllint {} +
+
+find "$TESTS_DIRECTORY" -type f -iname "output-json-schema.json" -print0 | while IFS= read -r -d $'\0' file; do
+    ajv compile -s "$file" --format=full
+done
 
 if [ ! "$CI" == "true" ]; then
     # When running locally, we have to clean the project, otherwise clippy
