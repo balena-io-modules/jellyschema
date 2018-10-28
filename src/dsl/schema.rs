@@ -33,8 +33,27 @@ pub struct PropertyEntry {
 
 #[derive(Clone, Debug)]
 pub struct PropertyList {
-    pub property_names: Vec<String>,
+    property_names: Vec<String>,
     pub entries: Vec<PropertyEntry>,
+}
+
+impl PropertyList {
+    pub fn property_names(&self) -> Vec<&str> {
+        self.property_names.iter().map(|name| name.as_str()).collect()
+    }
+
+    pub fn required_property_names(&self) -> Vec<&str> {
+        self.entries
+            .iter()
+            .filter_map(|property_entry| match &property_entry.property.type_spec {
+                Some(type_spec) => match type_spec {
+                    TypeSpec::Required(_) => Some(property_entry.name.as_str()),
+                    TypeSpec::Optional(_) => None,
+                },
+                None => None,
+            })
+            .collect()
+    }
 }
 
 pub fn deserialize_property_list<'de, D>(deserializer: D) -> Result<Option<PropertyList>, D::Error>
