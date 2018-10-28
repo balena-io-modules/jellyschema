@@ -18,7 +18,7 @@ pub enum TypeSpec {
 }
 
 impl TypeSpec {
-    pub fn unwrap(self) -> ObjectType {
+    pub fn inner(&self) -> &ObjectType {
         match self {
             TypeSpec::Optional(object_type) => object_type,
             TypeSpec::Required(object_type) => object_type,

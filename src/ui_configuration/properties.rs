@@ -1,8 +1,6 @@
-use crate::dsl::schema::Property;
-use crate::dsl::schema::PropertyList;
-use crate::dsl::types::ObjectType;
-use crate::dsl::types::TypeSpec;
-use serde::ser::{Serialize, SerializeMap, Serializer};
+use crate::dsl::schema::{Property, PropertyList};
+use crate::dsl::types::{ObjectType, TypeSpec};
+use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 
 impl Serialize for Property {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -10,50 +8,48 @@ impl Serialize for Property {
         S: Serializer,
     {
         let mut map = serializer.serialize_map(None)?;
-        if self.title.is_some() {
-            map.serialize_entry("title", &self.title.clone().unwrap())?;
+        for title in &self.title {
+            map.serialize_entry("title", &title)?;
         }
 
-        if self.type_spec.is_some() {
-            let type_spec = self.type_spec.clone().unwrap();
-            let object_type = type_spec.unwrap();
-            match object_type {
+        for type_spec in &self.type_spec {
+            match &type_spec.inner() {
                 ObjectType::Object => map.serialize_entry("type", "object")?,
                 ObjectType::Hostname => {
                     map.serialize_entry("type", "string")?;
                     map.serialize_entry("format", "hostname")?;
                 }
             };
-        };
+        }
 
         map.end()
     }
 }
 
+// TODO: merge into the code above - right now there are 2 paths through the serialization - one for root one for others
+// make it one
 impl Serialize for TypeSpec {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
-        match self.clone().unwrap() {
+        match self.inner() {
             ObjectType::Object => serializer.serialize_str("object"),
-            _ => Err(serde::ser::Error::custom("unknown object type")),
+            _ => Err(Error::custom("unknown object type")),
         }
     }
 }
 
-pub fn serialize_property_list<S>(property_list: &Option<PropertyList>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    match property_list {
-        Some(list) => {
-            let mut map = serializer.serialize_map(Some(list.entries.iter().count()))?;
-            for entry in list.clone().entries {
-                map.serialize_entry(&entry.name, &entry.property)?;
-            }
-            map.end()
+impl Serialize for PropertyList {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let entries_count = self.entries.iter().count();
+        let mut map = serializer.serialize_map(Some(entries_count))?;
+        for entry in &self.entries {
+            map.serialize_entry(&entry.name, &entry.property)?;
         }
-        None => serializer.serialize_none(),
+        map.end()
     }
 }

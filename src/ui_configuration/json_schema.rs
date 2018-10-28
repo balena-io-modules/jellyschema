@@ -11,16 +11,12 @@ pub struct JsonSchema<'a> {
     #[serde(rename = "$$version")]
     version: u64,
     #[serde(rename = "$schema")]
-    schema_url: String,
+    schema_url: &'a str,
     #[serde(rename = "type")]
     type_spec: TypeSpec,
-    title: String,
-    #[serde(
-        rename = "properties",
-        skip_serializing_if = "Option::is_none",
-        serialize_with = "crate::ui_configuration::properties::serialize_property_list"
-    )]
-    properties: Option<PropertyList>,
+    title: &'a str,
+    #[serde(rename = "properties", skip_serializing_if = "Option::is_none")]
+    properties: Option<&'a PropertyList>,
     #[serde(rename = "$$order", skip_serializing_if = "Option::is_none")]
     order: Option<Vec<&'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -38,18 +34,18 @@ impl<'a> From<&'a ValidatedSchema> for JsonSchema<'a> {
         };
 
         let required_property_names = match &schema.property_list {
-            Some(ref list) => required_property_names(list),
+            Some(list) => required_property_names(list),
             None => None,
         };
 
         JsonSchema {
-            version: schema.version,
-            title: schema.title.to_string(),
-            properties: schema.property_list.clone(),
+            properties: schema.property_list.as_ref(),
+            title: &schema.title,
             required: required_property_names,
             order: property_names,
             type_spec: TypeSpec::Required(ObjectType::Object),
-            schema_url: SCHEMA_URL.to_string(),
+            version: schema.version,
+            schema_url: SCHEMA_URL,
         }
     }
 }
