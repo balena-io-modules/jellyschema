@@ -1,3 +1,4 @@
+
 #[test]
 fn {name}() -> Result<(), validation::Error> {{
     let input_schema : serde_yaml::Value = serde_yaml::from_str(
