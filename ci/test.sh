@@ -4,8 +4,6 @@ set -e
 set -o pipefail
 
 find tests -name *.yml -exec yamllint {} +
-cargo test
-cargo fmt -- --check
 
 if [ ! "$CI" == "true" ]; then
     # When running locally, we have to clean the project, otherwise clippy
@@ -13,6 +11,8 @@ if [ ! "$CI" == "true" ]; then
     cargo clean
 fi
 cargo clippy
+cargo test
+cargo fmt -- --check
 
 if [ ! "$CI" == "true" ]; then
     # Allow uncommitted changes when running locally
