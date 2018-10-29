@@ -8,6 +8,7 @@ use std::fmt::Formatter;
 #[derive(Clone, Debug)]
 pub enum ObjectType {
     Object,
+    String,
     Hostname,
 }
 
@@ -66,6 +67,7 @@ impl ObjectType {
     {
         let object_type = match value {
             "object" => ObjectType::Object,
+            "string" => ObjectType::String,
             "hostname" => ObjectType::Hostname,
             _ => return Err(Error::custom(format!("unknown object type {}", value))),
         };

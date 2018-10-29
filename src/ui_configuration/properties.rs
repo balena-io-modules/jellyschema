@@ -15,6 +15,7 @@ impl Serialize for Property {
         for type_spec in &self.type_spec {
             match &type_spec.inner() {
                 ObjectType::Object => map.serialize_entry("type", "object")?,
+                ObjectType::String => map.serialize_entry("type", "string")?,
                 ObjectType::Hostname => {
                     map.serialize_entry("type", "string")?;
                     map.serialize_entry("format", "hostname")?;
