@@ -1,3 +1,4 @@
+use crate::dsl::types::TypeInformation;
 use crate::dsl::types::TypeSpec;
 use serde::de::Error;
 use serde::Deserialize;
@@ -15,17 +16,23 @@ pub struct SourceSchema {
     pub property_list: Option<PropertyList>,
 }
 
-#[derive(Clone, Default, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Property {
-    #[serde(default, rename = "type")]
-    pub type_spec: Option<TypeSpec>,
+    #[serde(flatten)]
+    pub type_information: TypeInformation,
+    #[serde(flatten)]
+    pub display_information: DisplayInformation,
+}
+
+#[derive(Clone, Default, Debug, Deserialize)]
+pub struct DisplayInformation {
     pub title: Option<String>,
     pub help: Option<String>,
     pub warning: Option<String>,
     pub description: Option<String>,
 }
 
-#[derive(Clone, Default, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct PropertyEntry {
     pub name: String,
     pub property: Property,
@@ -45,7 +52,7 @@ impl PropertyList {
     pub fn required_property_names(&self) -> Vec<&str> {
         self.entries
             .iter()
-            .filter_map(|property_entry| match &property_entry.property.type_spec {
+            .filter_map(|property_entry| match &property_entry.property.type_information.spec {
                 Some(type_spec) => match type_spec {
                     TypeSpec::Required(_) => Some(property_entry.name.as_str()),
                     TypeSpec::Optional(_) => None,
@@ -101,7 +108,7 @@ where
     let key: String = serde_yaml::from_value(key.clone())
         .map_err(|e| Error::custom(format!("cannot deserialize property key - {}", e)))?;
     let value: Property = serde_yaml::from_value(value.clone())
-        .map_err(|e| Error::custom(format!("cannot deserialize property value - {}", e)))?;
+        .map_err(|e| Error::custom(format!("cannot deserialize property value '{:?}' - {}", value, e)))?;
     Ok(PropertyEntry {
         name: key,
         property: value,

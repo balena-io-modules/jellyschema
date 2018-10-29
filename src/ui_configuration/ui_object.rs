@@ -43,9 +43,17 @@ impl<'a> From<&'a PropertyList> for UiObject<'a> {
 impl<'a> From<&'a Property> for UiObjectProperty<'a> {
     fn from(property: &'a Property) -> Self {
         UiObjectProperty {
-            help: property.help.as_ref().map(|string| string.as_ref()),
-            warning: property.warning.as_ref().map(|string| string.as_str()),
-            description: property.description.as_ref().map(|string| string.as_ref()),
+            help: property.display_information.help.as_ref().map(|string| string.as_ref()),
+            warning: property
+                .display_information
+                .warning
+                .as_ref()
+                .map(|string| string.as_str()),
+            description: property
+                .display_information
+                .description
+                .as_ref()
+                .map(|string| string.as_ref()),
         }
     }
 }

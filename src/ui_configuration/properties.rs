@@ -8,11 +8,11 @@ impl Serialize for Property {
         S: Serializer,
     {
         let mut map = serializer.serialize_map(None)?;
-        for title in &self.title {
+        for title in &self.display_information.title {
             map.serialize_entry("title", &title)?;
         }
 
-        for type_spec in &self.type_spec {
+        for type_spec in &self.type_information.spec {
             match &type_spec.inner() {
                 ObjectType::Object => map.serialize_entry("type", "object")?,
                 ObjectType::String => map.serialize_entry("type", "string")?,

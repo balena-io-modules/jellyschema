@@ -1,9 +1,54 @@
+use crate::dsl::enums::EnumerationValues;
+use crate::dsl::schema::DisplayInformation;
 use serde::de::Error;
 use serde::de::Visitor;
 use serde::Deserialize;
 use serde::Deserializer;
+use serde_yaml::Mapping;
+use serde_yaml::Value;
 use std::fmt;
 use std::fmt::Formatter;
+
+#[derive(Clone, Debug)]
+pub struct TypeInformation {
+    pub spec: Option<TypeSpec>,
+    pub enumeration_values: Option<EnumerationValues>,
+}
+
+impl<'de> Deserialize<'de> for TypeInformation {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let mapping = Mapping::deserialize(deserializer)?;
+
+        let type_key = Value::from("type");
+        let spec = &mapping.get(&type_key).map_or(Ok(None), |value| {
+            serde_yaml::from_value(value.clone())
+                .map_err(|e| Error::custom(format!("cannot deserialize type specifier: {:?} - {}", value, e)))
+        })?;
+
+        let enum_key = Value::from("enum");
+        let enumeration_values: &Option<Vec<Value>> = &mapping.get(&enum_key).map_or(Ok(None), |value| {
+            serde_yaml::from_value(value.clone()).map_err(|e| {
+                Error::custom(format!(
+                    "cannot deserialize list of enumeration values: {:?} - {}",
+                    value, e
+                ))
+            })
+        })?;
+
+        Ok(TypeInformation {
+            spec: spec.clone(),
+            enumeration_values: None,
+        })
+    }
+}
+
+#[derive(Clone, Debug)]
+pub enum ObjectValue {
+    String(String, DisplayInformation),
+}
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {
