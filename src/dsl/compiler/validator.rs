@@ -8,11 +8,8 @@ impl<T> Validated<T> {
     pub fn with(value: T) -> Self {
         Validated { validated: value }
     }
-}
-
-impl<T> Validated<T> {
-    pub fn validated(&self) -> &T {
-        &self.validated
+    pub fn validated(self) -> T {
+        self.validated
     }
 }
 
@@ -30,10 +27,13 @@ pub struct ValidationError {
 }
 
 impl ValidationError {
-    pub fn invalid_version(version: u64) -> Self {
+    pub fn with_message(message: &str) -> Self {
         ValidationError {
-            message: format!("Invalid version specified: {}", version),
+            message: message.to_string(),
         }
+    }
+    pub fn into_message(self) -> String {
+        self.message
     }
 }
 
@@ -50,22 +50,5 @@ impl From<serde_json::Error> for ValidationError {
         ValidationError {
             message: source.to_string(),
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    // TODO: morph into property, so that the actual unsupported version is rand
-    fn fail_on_unsupported_version() {
-        let schema = SourceSchema {
-            title: "some title".to_string(),
-            version: 13,
-            property_list: None,
-        };
-
-        assert!(validate(schema).is_err());
     }
 }

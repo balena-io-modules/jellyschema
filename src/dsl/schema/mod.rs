@@ -1,4 +1,5 @@
-mod from_yaml;
+mod deserialization;
+mod normalization;
 mod validation;
 
 use crate::dsl::object_types::ObjectType;
@@ -11,7 +12,7 @@ pub struct SourceSchema {
     pub version: u64,
     #[serde(
         default,
-        deserialize_with = "crate::dsl::schema::from_yaml::deserialize_property_list"
+        deserialize_with = "crate::dsl::schema::deserialization::deserialize_property_list"
     )]
     #[serde(rename = "properties")]
     pub property_list: Option<PropertyList>,

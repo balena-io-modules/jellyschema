@@ -1,4 +1,4 @@
-mod from_yaml;
+mod deserialization;
 
 use crate::dsl::enums::EnumerationValues;
 use serde::de::Error;

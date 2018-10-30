@@ -37,7 +37,7 @@ fn write_header(test_file: &mut File) {
     write!(
         test_file,
         r#"
-use balena_configuration_dsl::dsl::validator;
+use balena_configuration_dsl::dsl::compiler::CompilationError;
 use balena_configuration_dsl::ui_configuration::generator::Generator;
 use pretty_assertions::assert_eq;
 "#

@@ -18,28 +18,32 @@ impl<'de> Deserialize<'de> for EnumerationValues {
             .map_err(|e| Error::custom(format!("cannot deserialize sequence - {}", e)))?;
         let enumeration_values: Result<Vec<EnumerationValue>, D::Error> = definitions
             .iter()
-            .map(|definition| {
-                Ok({
-                    if definition.is_string() {
-                        let title = definition
-                            .as_str()
-                            .expect("unwrapping as string failed - serde_yaml inconsistency");
-                        title.into()
-                    } else if definition.is_mapping() {
-                        let mapping = definition
-                            .as_mapping()
-                            .expect("unwrapping mapping failed - serde_yaml inconsistency");
-                        mapping_to_enumeration_value(mapping)?
-                    } else {
-                        return Err(Error::custom(format!("no idea how to deserialize {:?}", definition)));
-                    }
-                })
-            })
+            .map(|definition| Ok(enumeration_definition_to_enumeration_value(definition)?))
             .collect();
 
         Ok(EnumerationValues {
             possible_values: enumeration_values?,
         })
+    }
+}
+
+fn enumeration_definition_to_enumeration_value<E>(definition: &Value) -> Result<EnumerationValue, E>
+where
+    E: Error,
+{
+    // FIXME: readability
+    if definition.is_string() {
+        Ok(definition
+            .as_str()
+            .expect("unwrapping as string failed - serde_yaml inconsistency")
+            .into())
+    } else if definition.is_mapping() {
+        let mapping = definition
+            .as_mapping()
+            .expect("unwrapping mapping failed - serde_yaml inconsistency");
+        Ok(mapping_to_enumeration_value(mapping)?)
+    } else {
+        Err(Error::custom(format!("no idea how to deserialize {:?}", definition)))
     }
 }
 

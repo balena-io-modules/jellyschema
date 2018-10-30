@@ -1,4 +1,4 @@
-mod from_yaml;
+mod deserialization;
 
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
