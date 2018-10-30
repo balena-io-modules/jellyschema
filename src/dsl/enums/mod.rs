@@ -1,4 +1,6 @@
 mod deserialization;
+mod normalization;
+mod validation;
 
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
@@ -13,7 +15,7 @@ pub struct EnumerationValues {
 pub struct EnumerationValue {
     pub type_spec: ObjectType,
     pub display_information: DisplayInformation,
-    pub value: String,
+    pub value: Option<String>,
 }
 
 impl From<&str> for EnumerationValue {
@@ -27,7 +29,7 @@ impl From<&str> for EnumerationValue {
         };
         EnumerationValue {
             display_information,
-            value: title.clone(),
+            value: Some(title.clone()),
             type_spec: ObjectType::Required(RawObjectType::String),
         }
     }

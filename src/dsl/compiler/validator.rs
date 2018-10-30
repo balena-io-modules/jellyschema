@@ -5,7 +5,7 @@ pub struct Validated<T> {
 }
 
 impl<T> Validated<T> {
-    pub fn with(value: T) -> Self {
+    pub fn from(value: T) -> Self {
         Validated { validated: value }
     }
     pub fn validated(self) -> T {
@@ -13,12 +13,14 @@ impl<T> Validated<T> {
     }
 }
 
-pub trait Validate<T> {
-    fn validate(self) -> Result<Validated<T>, ValidationError>;
+pub trait Validate<T>
+{
+    fn validate(&self) -> Result<(), ValidationError>;
 }
 
 pub fn validate(source_schema: SourceSchema) -> Result<Validated<SourceSchema>, ValidationError> {
-    Ok(source_schema.validate()?)
+    source_schema.validate()?;
+    Ok(Validated::from(source_schema))
 }
 
 #[derive(Debug)]

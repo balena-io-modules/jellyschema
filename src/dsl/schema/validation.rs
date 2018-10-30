@@ -4,13 +4,22 @@ use crate::dsl::compiler::validator::ValidationError;
 use crate::dsl::schema::SourceSchema;
 
 impl Validate<SourceSchema> for SourceSchema {
-    fn validate(self) -> Result<Validated<SourceSchema>, ValidationError> {
-        if self.version == 1 {
-            Ok(Validated::with(self))
-        } else {
-            Err(ValidationError::invalid_version(self.version))
+    fn validate(&self) -> Result<(), ValidationError> {
+        if self.version != 1 {
+            return Err(ValidationError::invalid_version(self.version));
         }
+        for list in &self.property_list {
+            for property in &list.entries {
+                for enumeration_values in &property.property.type_information.enumeration_values {
+                    for enumeration_value in &enumeration_values.possible_values {
+                        enumeration_value.validate()?
+                    }
+                }
+            }
+        }
+        Ok(())
     }
+
 }
 
 impl ValidationError {

@@ -53,19 +53,10 @@ where
 {
     let mut value = mapping.get(&Value::from("value"));
     let mut title = mapping.get(&Value::from("title"));
-    if title.is_none() {
-        title = value;
-    }
-    if value.is_none() {
-        value = title;
-    }
-    if value.is_none() {
-        return Err(Error::custom("no value for enum"));
-    }
-    let value = value.unwrap().as_str().unwrap().to_string();
-    let title = title.unwrap().as_str().unwrap().to_string();
+    let value = value.map(|value| value.as_str().expect("serde_yaml type inconsistence on value").to_string());
+    let title = title.map(|value| value.as_str().expect("serde_yaml type inconsistence on title").to_string());
     let display_information = DisplayInformation {
-        title: Some(title),
+        title: title,
         help: None,
         warning: None,
         description: None,
@@ -73,6 +64,7 @@ where
     Ok(EnumerationValue {
         display_information,
         value,
+        // fixme: enum is always of type string for now
         type_spec: ObjectType::Required(RawObjectType::String),
     })
 }

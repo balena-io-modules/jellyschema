@@ -6,7 +6,7 @@ pub struct Normalized<T> {
 }
 
 impl<T> Normalized<T> {
-    pub fn with(value: T) -> Self {
+    pub fn from(value: T) -> Self {
         Normalized { normalized: value }
     }
 
@@ -16,9 +16,11 @@ impl<T> Normalized<T> {
 }
 
 pub trait Normalize<T> {
-    fn normalize(self) -> Normalized<T>;
+    fn normalize(&mut self);
 }
 
 pub fn normalize(validated_schema: Validated<SourceSchema>) -> Normalized<SourceSchema> {
-    validated_schema.validated().normalize()
+    let mut schema = validated_schema.validated();
+    schema.normalize();
+    Normalized::from(schema)
 }
