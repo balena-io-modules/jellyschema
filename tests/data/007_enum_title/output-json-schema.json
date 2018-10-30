@@ -14,9 +14,9 @@
             "type": "string",
             "oneOf": [{
                     "type": "string",
-                    "title": "fincm3",
+                    "title": "Balena Fin (CM3)",
                     "enum": [
-                        "Balena Fin (CM3)"
+                        "fincm3"
                     ]
                 },
                 {

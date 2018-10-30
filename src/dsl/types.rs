@@ -48,7 +48,8 @@ impl<'de> Deserialize<'de> for TypeInformation {
 #[derive(Clone, Debug)]
 pub struct EnumerationValue {
     pub type_spec: TypeSpec,
-    pub display_information: DisplayInformation
+    pub display_information: DisplayInformation,
+    pub value: String
 }
 
 #[derive(Clone, Debug)]

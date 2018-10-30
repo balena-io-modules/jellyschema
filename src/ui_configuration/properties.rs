@@ -39,7 +39,7 @@ impl Serialize for EnumerationValue {
         let mut map = serializer.serialize_map(None)?;
         if self.display_information.title.is_some() {
             map.serialize_entry("title", &self.display_information.title)?;
-            map.serialize_entry("enum", &vec![&self.display_information.title])?;
+            map.serialize_entry("enum", &vec![&self.value])?;
         }
         serialize_object_type(&self.type_spec.inner(), &mut map);
 
