@@ -1,6 +1,6 @@
+use crate::dsl::enums::EnumerationValue;
+use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
-use crate::dsl::types::EnumerationValue;
-use crate::dsl::types::{ObjectType, TypeSpec};
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 
 impl Serialize for Property {
@@ -13,7 +13,7 @@ impl Serialize for Property {
             map.serialize_entry("title", &title)?;
         }
 
-        for type_spec in &self.type_information.spec {
+        for type_spec in &self.type_information.r#type {
             serialize_object_type(&type_spec.inner(), &mut map)?;
         }
 
@@ -49,7 +49,7 @@ impl Serialize for EnumerationValue {
     }
 }
 
-impl Serialize for TypeSpec {
+impl Serialize for ObjectType {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -60,15 +60,15 @@ impl Serialize for TypeSpec {
     }
 }
 
-fn serialize_object_type<O, E, S>(object_type: &ObjectType, map: &mut S) -> Result<(), E>
+fn serialize_object_type<O, E, S>(object_type: &RawObjectType, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
     match object_type {
-        ObjectType::Object => map.serialize_entry("type", "object")?,
-        ObjectType::String => map.serialize_entry("type", "string")?,
-        ObjectType::Hostname => {
+        RawObjectType::Object => map.serialize_entry("type", "object")?,
+        RawObjectType::String => map.serialize_entry("type", "string")?,
+        RawObjectType::Hostname => {
             map.serialize_entry("type", "string")?;
             map.serialize_entry("format", "hostname")?
         }

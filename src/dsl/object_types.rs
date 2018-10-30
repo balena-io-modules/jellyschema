@@ -1,5 +1,4 @@
 use crate::dsl::enums::EnumerationValues;
-use crate::dsl::schema::DisplayInformation;
 use serde::de::Error;
 use serde::de::Visitor;
 use serde::Deserialize;
@@ -10,12 +9,25 @@ use std::fmt;
 use std::fmt::Formatter;
 
 #[derive(Clone, Debug)]
-pub struct TypeInformation {
-    pub spec: Option<TypeSpec>,
+pub struct TypeDefinition {
+    pub r#type: Option<ObjectType>,
     pub enumeration_values: Option<EnumerationValues>,
 }
 
-impl<'de> Deserialize<'de> for TypeInformation {
+#[derive(Clone, Debug)]
+pub enum ObjectType {
+    Required(RawObjectType),
+    Optional(RawObjectType),
+}
+
+#[derive(Clone, Debug)]
+pub enum RawObjectType {
+    Object,
+    String,
+    Hostname,
+}
+
+impl<'de> Deserialize<'de> for TypeDefinition {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -38,43 +50,23 @@ impl<'de> Deserialize<'de> for TypeInformation {
             })
         })?;
 
-        Ok(TypeInformation {
-            spec: spec.clone(),
+        Ok(TypeDefinition {
+            r#type: spec.clone(),
             enumeration_values: enumeration_values.clone(),
         })
     }
 }
 
-#[derive(Clone, Debug)]
-pub struct EnumerationValue {
-    pub type_spec: TypeSpec,
-    pub display_information: DisplayInformation,
-    pub value: String,
-}
-
-#[derive(Clone, Debug)]
-pub enum ObjectType {
-    Object,
-    String,
-    Hostname,
-}
-
-#[derive(Clone, Debug)]
-pub enum TypeSpec {
-    Required(ObjectType),
-    Optional(ObjectType),
-}
-
-impl TypeSpec {
-    pub fn inner(&self) -> &ObjectType {
+impl ObjectType {
+    pub fn inner(&self) -> &RawObjectType {
         match self {
-            TypeSpec::Optional(object_type) => object_type,
-            TypeSpec::Required(object_type) => object_type,
+            ObjectType::Optional(object_type) => object_type,
+            ObjectType::Required(object_type) => object_type,
         }
     }
 }
 
-impl<'de> Deserialize<'de> for TypeSpec {
+impl<'de> Deserialize<'de> for ObjectType {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -82,7 +74,7 @@ impl<'de> Deserialize<'de> for TypeSpec {
         struct TypeSpecVisitor;
 
         impl<'de> Visitor<'de> for TypeSpecVisitor {
-            type Value = TypeSpec;
+            type Value = ObjectType;
 
             fn expecting(&self, formatter: &mut Formatter) -> fmt::Result {
                 formatter.write_str("type name")
@@ -95,9 +87,9 @@ impl<'de> Deserialize<'de> for TypeSpec {
                 let mut type_name = value.trim().to_lowercase();
                 let type_spec = if type_name.ends_with('?') {
                     type_name.remove(type_name.len() - 1);
-                    TypeSpec::Optional(ObjectType::from_str(&type_name)?)
+                    ObjectType::Optional(RawObjectType::from_str(&type_name)?)
                 } else {
-                    TypeSpec::Required(ObjectType::from_str(&type_name)?)
+                    ObjectType::Required(RawObjectType::from_str(&type_name)?)
                 };
                 Ok(type_spec)
             }
@@ -107,15 +99,15 @@ impl<'de> Deserialize<'de> for TypeSpec {
     }
 }
 
-impl ObjectType {
+impl RawObjectType {
     fn from_str<E>(value: &str) -> Result<Self, E>
     where
         E: Error,
     {
         let object_type = match value {
-            "object" => ObjectType::Object,
-            "string" => ObjectType::String,
-            "hostname" => ObjectType::Hostname,
+            "object" => RawObjectType::Object,
+            "string" => RawObjectType::String,
+            "hostname" => RawObjectType::Hostname,
             _ => return Err(Error::custom(format!("unknown object type {}", value))),
         };
         Ok(object_type)

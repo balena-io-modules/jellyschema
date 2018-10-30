@@ -1,5 +1,5 @@
 pub mod compiler;
-mod enums;
+pub mod enums;
+pub mod object_types;
 pub mod schema;
-pub mod types;
 pub mod validation;

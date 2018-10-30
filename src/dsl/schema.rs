@@ -1,5 +1,5 @@
-use crate::dsl::types::TypeInformation;
-use crate::dsl::types::TypeSpec;
+use crate::dsl::object_types::ObjectType;
+use crate::dsl::object_types::TypeDefinition;
 use serde::de::Error;
 use serde::Deserialize;
 use serde::Deserializer;
@@ -19,7 +19,7 @@ pub struct SourceSchema {
 #[derive(Clone, Debug, Deserialize)]
 pub struct Property {
     #[serde(flatten)]
-    pub type_information: TypeInformation,
+    pub type_information: TypeDefinition,
     #[serde(flatten)]
     pub display_information: DisplayInformation,
 }
@@ -52,13 +52,15 @@ impl PropertyList {
     pub fn required_property_names(&self) -> Vec<&str> {
         self.entries
             .iter()
-            .filter_map(|property_entry| match &property_entry.property.type_information.spec {
-                Some(type_spec) => match type_spec {
-                    TypeSpec::Required(_) => Some(property_entry.name.as_str()),
-                    TypeSpec::Optional(_) => None,
+            .filter_map(
+                |property_entry| match &property_entry.property.type_information.r#type {
+                    Some(type_spec) => match type_spec {
+                        ObjectType::Required(_) => Some(property_entry.name.as_str()),
+                        ObjectType::Optional(_) => None,
+                    },
+                    None => None,
                 },
-                None => None,
-            })
+            )
             .collect()
     }
 }

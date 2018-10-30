@@ -1,7 +1,6 @@
+use crate::dsl::object_types::ObjectType;
+use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::DisplayInformation;
-use crate::dsl::types::EnumerationValue;
-use crate::dsl::types::ObjectType;
-use crate::dsl::types::TypeSpec;
 use serde::de::Error;
 use serde::Deserialize;
 use serde::Deserializer;
@@ -10,6 +9,13 @@ use serde_yaml::Value;
 #[derive(Clone, Debug)]
 pub struct EnumerationValues {
     pub possible_values: Vec<EnumerationValue>,
+}
+
+#[derive(Clone, Debug)]
+pub struct EnumerationValue {
+    pub type_spec: ObjectType,
+    pub display_information: DisplayInformation,
+    pub value: String,
 }
 
 impl<'de> Deserialize<'de> for EnumerationValues {
@@ -36,7 +42,7 @@ impl<'de> Deserialize<'de> for EnumerationValues {
                     EnumerationValue {
                         display_information,
                         value: title.clone(),
-                        type_spec: TypeSpec::Required(ObjectType::String),
+                        type_spec: ObjectType::Required(RawObjectType::String),
                     }
                 } else if definition.is_mapping() {
                     // value or title
@@ -65,7 +71,7 @@ impl<'de> Deserialize<'de> for EnumerationValues {
                     EnumerationValue {
                         display_information,
                         value,
-                        type_spec: TypeSpec::Required(ObjectType::String),
+                        type_spec: ObjectType::Required(RawObjectType::String),
                     }
                 } else {
                     return Err(Error::custom(format!("no idea how to deserialize {:?}", definition)));
