@@ -1,6 +1,4 @@
 use crate::dsl::schema::PropertyList;
-use crate::dsl::types::ObjectType;
-use crate::dsl::types::TypeSpec;
 use crate::dsl::validation::ValidatedSchema;
 use serde_derive::Serialize;
 

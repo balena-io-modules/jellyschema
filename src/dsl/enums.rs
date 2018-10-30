@@ -3,14 +3,9 @@ use crate::dsl::types::EnumerationValue;
 use crate::dsl::types::ObjectType;
 use crate::dsl::types::TypeSpec;
 use serde::de::Error;
-use serde::de::SeqAccess;
-use serde::de::Visitor;
 use serde::Deserialize;
 use serde::Deserializer;
-use serde_yaml::Sequence;
 use serde_yaml::Value;
-use std::fmt;
-use std::fmt::Formatter;
 
 #[derive(Clone, Debug)]
 pub struct EnumerationValues {
@@ -22,8 +17,8 @@ impl<'de> Deserialize<'de> for EnumerationValues {
     where
         D: Deserializer<'de>,
     {
-        let definitions: Vec<Value> =
-            Vec::deserialize(deserializer).map_err(|e| Error::custom("cannot deserialize sequence"))?;
+        let definitions: Vec<Value> = Vec::deserialize(deserializer)
+            .map_err(|e| Error::custom(format!("cannot deserialize sequence - {}", e)))?;
         let mut enumeration_values = vec![];
         for definition in definitions {
             let enumeration_value = {

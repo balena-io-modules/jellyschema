@@ -43,7 +43,7 @@ impl Serialize for EnumerationValue {
             map.serialize_entry("title", &self.display_information.title)?;
             map.serialize_entry("enum", &vec![&self.value])?;
         }
-        serialize_object_type(&self.type_spec.inner(), &mut map);
+        serialize_object_type(&self.type_spec.inner(), &mut map)?;
 
         map.end()
     }
@@ -65,7 +65,7 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    let result = match object_type {
+    match object_type {
         ObjectType::Object => map.serialize_entry("type", "object")?,
         ObjectType::String => map.serialize_entry("type", "string")?,
         ObjectType::Hostname => {
@@ -73,7 +73,7 @@ where
             map.serialize_entry("format", "hostname")?
         }
     };
-    Ok(result)
+    Ok(())
 }
 
 impl Serialize for PropertyList {

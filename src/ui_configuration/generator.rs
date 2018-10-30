@@ -4,7 +4,6 @@ use crate::dsl::validation::ValidatedSchema;
 use crate::ui_configuration::json_schema::JsonSchema;
 use crate::ui_configuration::ui_object::UiObject;
 use serde_json::Map;
-use std::collections::HashMap;
 
 pub struct Generator {
     compiled_schema: ValidatedSchema,
@@ -23,11 +22,11 @@ impl Generator {
         let schema = JsonSchema::from(&self.compiled_schema);
         let ui_object = UiObject::from(&self.compiled_schema);
         let serialized_schema = serde_json::to_value(schema).expect("Internal error: inconsistent schema: json schema");
-        let mut serialized_ui_object = serde_json::Value::Object(Map::new());
-        if !ui_object.is_empty() {
-            serialized_ui_object =
-                serde_json::to_value(ui_object).expect("Internal error: inconsistent schema: ui object");
-        }
+        let serialized_ui_object = if !ui_object.is_empty() {
+            serde_json::to_value(ui_object).expect("Internal error: inconsistent schema: ui object")
+        } else {
+            serde_json::Value::Object(Map::new())
+        };
 
         (serialized_schema, serialized_ui_object)
     }
