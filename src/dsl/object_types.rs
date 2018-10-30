@@ -87,9 +87,9 @@ impl<'de> Deserialize<'de> for ObjectType {
                 let mut type_name = value.trim().to_lowercase();
                 let type_spec = if type_name.ends_with('?') {
                     type_name.remove(type_name.len() - 1);
-                    ObjectType::Optional(RawObjectType::from_str(&type_name)?)
+                    ObjectType::Optional(RawObjectType::parse(&type_name)?)
                 } else {
-                    ObjectType::Required(RawObjectType::from_str(&type_name)?)
+                    ObjectType::Required(RawObjectType::parse(&type_name)?)
                 };
                 Ok(type_spec)
             }
@@ -100,7 +100,7 @@ impl<'de> Deserialize<'de> for ObjectType {
 }
 
 impl RawObjectType {
-    fn from_str<E>(value: &str) -> Result<Self, E>
+    fn parse<E>(value: &str) -> Result<Self, E>
     where
         E: Error,
     {
