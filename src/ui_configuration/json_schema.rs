@@ -13,7 +13,8 @@ pub struct JsonSchema<'a> {
     #[serde(rename = "$schema")]
     schema_url: &'a str,
     #[serde(rename = "type")]
-    type_spec: TypeSpec,
+    // FIXME: make recursive
+    type_spec: String,
     title: &'a str,
     #[serde(rename = "properties", skip_serializing_if = "Option::is_none")]
     properties: Option<&'a PropertyList>,
@@ -31,7 +32,7 @@ impl<'a> From<&'a ValidatedSchema> for JsonSchema<'a> {
             title: &schema.title,
             required: property_list.map_or(vec![], |list| list.required_property_names()),
             order: property_list.map_or(vec![], |list| list.property_names()),
-            type_spec: TypeSpec::Required(ObjectType::Object),
+            type_spec: "object".to_string(),
             version: schema.version,
             schema_url: SCHEMA_URL,
         }

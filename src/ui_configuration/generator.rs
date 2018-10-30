@@ -39,7 +39,7 @@ mod tests {
         let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (json_schema, _) = generator.generate();
-
+        println!("schem: {:?}", &json_schema);
         assert_eq!(json_schema["type"], "object");
         Ok(())
     }

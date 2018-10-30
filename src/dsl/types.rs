@@ -29,7 +29,7 @@ impl<'de> Deserialize<'de> for TypeInformation {
         })?;
 
         let enum_key = Value::from("enum");
-        let enumeration_values: &Option<Vec<Value>> = &mapping.get(&enum_key).map_or(Ok(None), |value| {
+        let enumeration_values: &Option<EnumerationValues> = &mapping.get(&enum_key).map_or(Ok(None), |value| {
             serde_yaml::from_value(value.clone()).map_err(|e| {
                 Error::custom(format!(
                     "cannot deserialize list of enumeration values: {:?} - {}",
@@ -40,14 +40,15 @@ impl<'de> Deserialize<'de> for TypeInformation {
 
         Ok(TypeInformation {
             spec: spec.clone(),
-            enumeration_values: None,
+            enumeration_values: enumeration_values.clone(),
         })
     }
 }
 
 #[derive(Clone, Debug)]
-pub enum ObjectValue {
-    String(String, DisplayInformation),
+pub struct EnumerationValue {
+    pub type_spec: TypeSpec,
+    pub display_information: DisplayInformation
 }
 
 #[derive(Clone, Debug)]
