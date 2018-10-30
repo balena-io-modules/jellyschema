@@ -1,4 +1,4 @@
-pub mod from_yaml;
+mod from_yaml;
 
 use crate::dsl::enums::EnumerationValues;
 use serde::de::Error;

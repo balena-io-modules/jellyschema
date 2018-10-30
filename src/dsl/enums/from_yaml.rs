@@ -1,3 +1,5 @@
+use crate::dsl::enums::EnumerationValue;
+use crate::dsl::enums::EnumerationValues;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::DisplayInformation;
@@ -6,18 +8,6 @@ use serde::Deserialize;
 use serde::Deserializer;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
-
-#[derive(Clone, Debug)]
-pub struct EnumerationValues {
-    pub possible_values: Vec<EnumerationValue>,
-}
-
-#[derive(Clone, Debug)]
-pub struct EnumerationValue {
-    pub type_spec: ObjectType,
-    pub display_information: DisplayInformation,
-    pub value: String,
-}
 
 impl<'de> Deserialize<'de> for EnumerationValues {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
@@ -50,23 +40,6 @@ impl<'de> Deserialize<'de> for EnumerationValues {
         Ok(EnumerationValues {
             possible_values: enumeration_values?,
         })
-    }
-}
-
-impl From<&str> for EnumerationValue {
-    fn from(value: &str) -> Self {
-        let title = value.to_string();
-        let display_information = DisplayInformation {
-            title: Some(title.clone()),
-            help: None,
-            warning: None,
-            description: None,
-        };
-        EnumerationValue {
-            display_information,
-            value: title.clone(),
-            type_spec: ObjectType::Required(RawObjectType::String),
-        }
     }
 }
 
