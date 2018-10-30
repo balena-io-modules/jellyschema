@@ -1,7 +1,7 @@
 use core::borrow::Borrow;
 use crate::dsl::schema::Property;
 use crate::dsl::schema::PropertyList;
-use crate::dsl::validation::ValidatedSchema;
+use crate::dsl::schema::SourceSchema;
 use serde_derive::Serialize;
 use std::collections::HashMap;
 
@@ -30,8 +30,8 @@ impl<'a> UiObjectProperty<'a> {
     }
 }
 
-impl<'a> From<&'a ValidatedSchema> for UiObject<'a> {
-    fn from(schema: &'a ValidatedSchema) -> Self {
+impl<'a> From<&'a SourceSchema> for UiObject<'a> {
+    fn from(schema: &'a SourceSchema) -> Self {
         match &schema.property_list {
             Some(list) => list.into(),
             None => UiObject(HashMap::new()),

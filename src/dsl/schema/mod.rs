@@ -1,4 +1,5 @@
 mod from_yaml;
+mod validation;
 
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::TypeDefinition;

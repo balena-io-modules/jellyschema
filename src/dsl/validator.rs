@@ -1,38 +1,53 @@
 use crate::dsl::schema::SourceSchema;
 
-pub type ValidatedSchema = SourceSchema;
+pub struct Validated<T> {
+    validated: T,
+}
 
-pub fn validate(source_schema: SourceSchema) -> Result<ValidatedSchema, Error> {
-    if source_schema.version != 1 {
-        return Err(Error::invalid_version(source_schema.version));
+impl<T> Validated<T> {
+    pub fn with(value: T) -> Self {
+        Validated { validated: value }
     }
-    Ok(source_schema)
+}
+
+impl<T> Validated<T> {
+    pub fn validated(&self) -> &T {
+        &self.validated
+    }
+}
+
+pub trait Validate<T> {
+    fn validate(self) -> Result<Validated<T>, ValidationError>;
+}
+
+pub fn validate(source_schema: SourceSchema) -> Result<Validated<SourceSchema>, ValidationError> {
+    Ok(source_schema.validate()?)
 }
 
 #[derive(Debug)]
-pub struct Error {
+pub struct ValidationError {
     message: String,
 }
 
-impl Error {
+impl ValidationError {
     pub fn invalid_version(version: u64) -> Self {
-        Error {
+        ValidationError {
             message: format!("Invalid version specified: {}", version),
         }
     }
 }
 
-impl From<serde_yaml::Error> for Error {
+impl From<serde_yaml::Error> for ValidationError {
     fn from(source: serde_yaml::Error) -> Self {
-        Error {
+        ValidationError {
             message: source.to_string(),
         }
     }
 }
 
-impl From<serde_json::Error> for Error {
+impl From<serde_json::Error> for ValidationError {
     fn from(source: serde_json::Error) -> Self {
-        Error {
+        ValidationError {
             message: source.to_string(),
         }
     }

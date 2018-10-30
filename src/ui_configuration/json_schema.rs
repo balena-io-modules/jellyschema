@@ -1,5 +1,5 @@
 use crate::dsl::schema::PropertyList;
-use crate::dsl::validation::ValidatedSchema;
+use crate::dsl::schema::SourceSchema;
 use serde_derive::Serialize;
 
 const SCHEMA_URL: &str = "http://json-schema.org/draft-04/schema#";
@@ -22,8 +22,8 @@ pub struct JsonSchema<'a> {
     required: Vec<&'a str>,
 }
 
-impl<'a> From<&'a ValidatedSchema> for JsonSchema<'a> {
-    fn from(schema: &'a ValidatedSchema) -> Self {
+impl<'a> From<&'a SourceSchema> for JsonSchema<'a> {
+    fn from(schema: &'a SourceSchema) -> Self {
         let property_list = schema.property_list.as_ref();
         JsonSchema {
             properties: property_list,

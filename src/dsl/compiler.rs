@@ -1,9 +1,9 @@
 use crate::dsl::schema::SourceSchema;
-use crate::dsl::validation;
-use crate::dsl::validation::validate;
-use crate::dsl::validation::ValidatedSchema;
+use crate::dsl::validator;
+use crate::dsl::validator::validate;
+use crate::dsl::validator::Validated;
 
-pub fn compile(schema: serde_yaml::Value) -> Result<ValidatedSchema, validation::Error> {
+pub fn compile(schema: serde_yaml::Value) -> Result<Validated<SourceSchema>, validator::ValidationError> {
     let schema: SourceSchema = serde_yaml::from_value(schema)?;
     let validated_schema = validate(schema)?;
     Ok(validated_schema)
@@ -17,10 +17,10 @@ mod tests {
     const SOME_TITLE: &str = "some title";
 
     #[test]
-    fn pass_title_through() -> Result<(), validation::Error> {
+    fn pass_title_through() -> Result<(), validator::ValidationError> {
         let schema = yaml_schema_with(SOME_TITLE, 1);
 
-        assert_eq!(compile(schema)?.title, SOME_TITLE);
+        assert_eq!(compile(schema)?.validated().title, SOME_TITLE);
         Ok(())
     }
 
