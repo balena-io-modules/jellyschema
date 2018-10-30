@@ -1,0 +1,9 @@
+version: 1
+title: Enum test
+properties:
+  - mediumOne:
+      type: string
+      enum:
+        - value: fincm3
+        - value: raspberrypi3
+        - value: raspberrypi2
