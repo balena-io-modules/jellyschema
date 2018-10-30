@@ -3,7 +3,7 @@ use crate::dsl::compiler::validator::ValidationError;
 use crate::dsl::schema::PropertyEntry;
 use crate::dsl::schema::SourceSchema;
 
-impl Validate<SourceSchema> for SourceSchema {
+impl Validate for SourceSchema {
     fn validate(&self) -> Result<(), ValidationError> {
         if self.version != 1 {
             return Err(ValidationError::invalid_version(self.version));
@@ -17,7 +17,7 @@ impl Validate<SourceSchema> for SourceSchema {
     }
 }
 
-impl Validate<PropertyEntry> for PropertyEntry {
+impl Validate for PropertyEntry {
     fn validate(&self) -> Result<(), ValidationError> {
         self.property.type_information.validate()?;
         Ok(())

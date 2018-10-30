@@ -13,7 +13,7 @@ impl<T> Validated<T> {
     }
 }
 
-pub trait Validate<T> {
+pub trait Validate {
     fn validate(&self) -> Result<(), ValidationError>;
 }
 

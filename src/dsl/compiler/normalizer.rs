@@ -15,7 +15,7 @@ impl<T> Normalized<T> {
     }
 }
 
-pub trait Normalize<T> {
+pub trait Normalize {
     fn normalize(&mut self);
 }
 

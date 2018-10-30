@@ -2,7 +2,7 @@ use crate::dsl::compiler::normalizer::Normalize;
 use crate::dsl::schema::PropertyEntry;
 use crate::dsl::schema::SourceSchema;
 
-impl Normalize<SourceSchema> for SourceSchema {
+impl Normalize for SourceSchema {
     fn normalize(&mut self) {
         for list in &mut self.property_list {
             for property in &mut list.entries {
@@ -12,7 +12,7 @@ impl Normalize<SourceSchema> for SourceSchema {
     }
 }
 
-impl Normalize<PropertyEntry> for PropertyEntry {
+impl Normalize for PropertyEntry {
     fn normalize(&mut self) {
         self.property.type_information.normalize();
     }
