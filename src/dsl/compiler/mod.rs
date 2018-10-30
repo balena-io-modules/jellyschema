@@ -35,9 +35,9 @@ impl CompiledSchema {
 
 pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, validator::ValidationError> {
     let schema: SourceSchema = serde_yaml::from_value(schema)?;
-    let validated_schema = validate(schema)?;
-    let normalized_schema = normalize(validated_schema);
-    Ok(CompiledSchema::with(normalized_schema.normalized()))
+    let normalized_schema = normalize(schema).normalized();
+    let validated_schema = validate(normalized_schema)?;
+    Ok(CompiledSchema::with(validated_schema.validated()))
 }
 
 #[cfg(test)]

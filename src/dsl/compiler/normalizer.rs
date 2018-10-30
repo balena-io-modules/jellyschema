@@ -1,4 +1,3 @@
-use crate::dsl::compiler::validator::Validated;
 use crate::dsl::schema::SourceSchema;
 
 pub struct Normalized<T> {
@@ -19,8 +18,8 @@ pub trait Normalize {
     fn normalize(&mut self);
 }
 
-pub fn normalize(validated_schema: Validated<SourceSchema>) -> Normalized<SourceSchema> {
-    let mut schema = validated_schema.validated();
+pub fn normalize(schema: SourceSchema) -> Normalized<SourceSchema> {
+    let mut schema = schema;
     schema.normalize();
     Normalized::from(schema)
 }
