@@ -3,6 +3,8 @@ use crate::dsl::validation;
 use crate::dsl::validation::ValidatedSchema;
 use crate::ui_configuration::json_schema::JsonSchema;
 use crate::ui_configuration::ui_object::UiObject;
+use serde_json::Map;
+use std::collections::HashMap;
 
 pub struct Generator {
     compiled_schema: ValidatedSchema,
@@ -20,11 +22,14 @@ impl Generator {
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
         let schema = JsonSchema::from(&self.compiled_schema);
         let ui_object = UiObject::from(&self.compiled_schema);
+        let serialized_schema = serde_json::to_value(schema).expect("Internal error: inconsistent schema: json schema");
+        let mut serialized_ui_object = serde_json::Value::Object(Map::new());
+        if !ui_object.is_empty() {
+            serialized_ui_object =
+                serde_json::to_value(ui_object).expect("Internal error: inconsistent schema: ui object");
+        }
 
-        (
-            serde_json::to_value(schema).expect("Internal error: inconsistent schema: json schema"),
-            serde_json::to_value(ui_object).expect("Internal error: inconsistent schema: ui object"),
-        )
+        (serialized_schema, serialized_ui_object)
     }
 }
 
@@ -35,11 +40,10 @@ mod tests {
     use crate::dsl::validation::validate;
 
     #[test]
-    fn hardcode_a_type() -> Result<(), validation::Error> {
+    fn hardcode_root_level_type() -> Result<(), validation::Error> {
         let generator = Generator::new(validate(SourceSchema::empty())?);
 
         let (json_schema, _) = generator.generate();
-        println!("schem: {:?}", &json_schema);
         assert_eq!(json_schema["type"], "object");
         Ok(())
     }

@@ -1,7 +1,7 @@
 use crate::dsl::schema::{Property, PropertyList};
+use crate::dsl::types::EnumerationValue;
 use crate::dsl::types::{ObjectType, TypeSpec};
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
-use crate::dsl::types::EnumerationValue;
 
 impl Serialize for Property {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -34,8 +34,10 @@ impl Serialize for Property {
 
 // TODO: use json display struct instead
 impl Serialize for EnumerationValue {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where
-        S: Serializer {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
         let mut map = serializer.serialize_map(None)?;
         if self.display_information.title.is_some() {
             map.serialize_entry("title", &self.display_information.title)?;
@@ -62,7 +64,6 @@ fn serialize_object_type<O, E, S>(object_type: &ObjectType, map: &mut S) -> Resu
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
-
 {
     let result = match object_type {
         ObjectType::Object => map.serialize_entry("type", "object")?,

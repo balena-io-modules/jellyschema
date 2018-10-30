@@ -1,5 +1,7 @@
+use crate::dsl::schema::DisplayInformation;
 use crate::dsl::types::EnumerationValue;
 use crate::dsl::types::ObjectType;
+use crate::dsl::types::TypeSpec;
 use serde::de::Error;
 use serde::de::SeqAccess;
 use serde::de::Visitor;
@@ -9,8 +11,6 @@ use serde_yaml::Sequence;
 use serde_yaml::Value;
 use std::fmt;
 use std::fmt::Formatter;
-use crate::dsl::schema::DisplayInformation;
-use crate::dsl::types::TypeSpec;
 
 #[derive(Clone, Debug)]
 pub struct EnumerationValues {
@@ -28,21 +28,26 @@ impl<'de> Deserialize<'de> for EnumerationValues {
         for definition in definitions {
             let enumeration_value = {
                 if definition.is_string() {
-                    let title = definition.as_str().expect("unwrapping as string failed - serde_yaml inconsistency").to_string();
+                    let title = definition
+                        .as_str()
+                        .expect("unwrapping as string failed - serde_yaml inconsistency")
+                        .to_string();
                     let display_information = DisplayInformation {
                         title: Some(title.clone()),
                         help: None,
                         warning: None,
-                        description: None
+                        description: None,
                     };
                     EnumerationValue {
                         display_information,
                         value: title.clone(),
-                        type_spec: TypeSpec::Required(ObjectType::String)
+                        type_spec: TypeSpec::Required(ObjectType::String),
                     }
                 } else if definition.is_mapping() {
                     // value or title
-                    let mapping = definition.as_mapping().expect("unwrapping mapping failed - serde_yaml inconsistency");
+                    let mapping = definition
+                        .as_mapping()
+                        .expect("unwrapping mapping failed - serde_yaml inconsistency");
                     let mut value = mapping.get(&Value::from("value"));
                     let mut title = mapping.get(&Value::from("title"));
                     if title.is_none() {
@@ -60,12 +65,12 @@ impl<'de> Deserialize<'de> for EnumerationValues {
                         title: Some(title),
                         help: None,
                         warning: None,
-                        description: None
+                        description: None,
                     };
                     EnumerationValue {
                         display_information,
                         value,
-                        type_spec: TypeSpec::Required(ObjectType::String)
+                        type_spec: TypeSpec::Required(ObjectType::String),
                     }
                 } else {
                     return Err(Error::custom(format!("no idea how to deserialize {:?}", definition)));

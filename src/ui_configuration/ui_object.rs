@@ -8,6 +8,12 @@ use std::collections::HashMap;
 #[derive(Serialize)]
 pub struct UiObject<'a>(HashMap<&'a str, UiObjectProperty<'a>>);
 
+impl<'a> UiObject<'a> {
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+}
+
 #[derive(Serialize)]
 struct UiObjectProperty<'a> {
     #[serde(rename = "ui:help")]
@@ -16,6 +22,12 @@ struct UiObjectProperty<'a> {
     warning: Option<&'a str>,
     #[serde(rename = "ui:description")]
     description: Option<&'a str>,
+}
+
+impl<'a> UiObjectProperty<'a> {
+    pub fn is_empty(&self) -> bool {
+        self.help.is_none() && self.warning.is_none() && self.description.is_none()
+    }
 }
 
 impl<'a> From<&'a ValidatedSchema> for UiObject<'a> {
@@ -32,7 +44,14 @@ impl<'a> From<&'a PropertyList> for UiObject<'a> {
         let ui_object_entries: Vec<(&str, UiObjectProperty)> = list
             .entries
             .iter()
-            .map(|entry| (entry.name.as_str(), entry.property.borrow().into()))
+            .filter_map(|entry| {
+                let property: UiObjectProperty = entry.property.borrow().into();
+                if !property.is_empty() {
+                    Some((entry.name.as_str(), entry.property.borrow().into()))
+                } else {
+                    None
+                }
+            })
             .collect();
 
         let ui_object_entries: HashMap<&str, UiObjectProperty> = ui_object_entries.into_iter().collect();
