@@ -51,8 +51,8 @@ fn mapping_to_enumeration_value<E>(mapping: &Mapping) -> Result<EnumerationValue
 where
     E: Error,
 {
-    let mut value = mapping.get(&Value::from("value"));
-    let mut title = mapping.get(&Value::from("title"));
+    let value = mapping.get(&Value::from("value"));
+    let title = mapping.get(&Value::from("title"));
     let value = value.map(|value| {
         value
             .as_str()
@@ -66,7 +66,7 @@ where
             .to_string()
     });
     let display_information = DisplayInformation {
-        title: title,
+        title,
         help: None,
         warning: None,
         description: None,
