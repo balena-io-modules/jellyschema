@@ -1,6 +1,5 @@
 use crate::dsl::compiler::normalizer::Normalize;
 use crate::dsl::enums::EnumerationValue;
-use crate::dsl::compiler::normalizer::Normalized;
 
 impl Normalize<EnumerationValue> for EnumerationValue {
     fn normalize(&mut self) {
@@ -10,6 +9,5 @@ impl Normalize<EnumerationValue> for EnumerationValue {
         if self.value.is_none() {
             self.value = self.display_information.title.clone();
         }
-
     }
 }

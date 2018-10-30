@@ -53,8 +53,18 @@ where
 {
     let mut value = mapping.get(&Value::from("value"));
     let mut title = mapping.get(&Value::from("title"));
-    let value = value.map(|value| value.as_str().expect("serde_yaml type inconsistence on value").to_string());
-    let title = title.map(|value| value.as_str().expect("serde_yaml type inconsistence on title").to_string());
+    let value = value.map(|value| {
+        value
+            .as_str()
+            .expect("serde_yaml type inconsistence on value")
+            .to_string()
+    });
+    let title = title.map(|value| {
+        value
+            .as_str()
+            .expect("serde_yaml type inconsistence on title")
+            .to_string()
+    });
     let display_information = DisplayInformation {
         title: title,
         help: None,

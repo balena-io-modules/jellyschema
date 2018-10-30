@@ -1,6 +1,6 @@
 use crate::dsl::compiler::validator::Validate;
-use crate::dsl::compiler::validator::Validated;
 use crate::dsl::compiler::validator::ValidationError;
+use crate::dsl::schema::PropertyEntry;
 use crate::dsl::schema::SourceSchema;
 
 impl Validate<SourceSchema> for SourceSchema {
@@ -10,16 +10,18 @@ impl Validate<SourceSchema> for SourceSchema {
         }
         for list in &self.property_list {
             for property in &list.entries {
-                for enumeration_values in &property.property.type_information.enumeration_values {
-                    for enumeration_value in &enumeration_values.possible_values {
-                        enumeration_value.validate()?
-                    }
-                }
+                property.validate()?
             }
         }
         Ok(())
     }
+}
 
+impl Validate<PropertyEntry> for PropertyEntry {
+    fn validate(&self) -> Result<(), ValidationError> {
+        self.property.type_information.validate()?;
+        Ok(())
+    }
 }
 
 impl ValidationError {

@@ -1,7 +1,6 @@
 use crate::dsl::compiler::validator::Validate;
-use crate::dsl::enums::EnumerationValue;
-use crate::dsl::compiler::validator::Validated;
 use crate::dsl::compiler::validator::ValidationError;
+use crate::dsl::enums::EnumerationValue;
 
 impl Validate<EnumerationValue> for EnumerationValue {
     fn validate(&self) -> Result<(), ValidationError> {
