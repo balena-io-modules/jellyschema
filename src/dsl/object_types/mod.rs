@@ -8,7 +8,7 @@ use crate::dsl::enums::EnumerationValues;
 pub struct TypeDefinition {
     pub r#type: Option<ObjectType>,
     pub enumeration_values: Option<EnumerationValues>,
-    pub constant_value: Option<String>
+    pub constant_value: Option<String>,
 }
 
 #[derive(Clone, Debug)]
@@ -22,6 +22,7 @@ pub enum RawObjectType {
     Object,
     String,
     Hostname,
+    Integer,
 }
 
 impl ObjectType {

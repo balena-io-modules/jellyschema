@@ -20,15 +20,14 @@ impl<'de> Deserialize<'de> for TypeDefinition {
 
         let type_key = Value::from("type");
         let spec = &mapping.get(&type_key).map_or(Ok(None), |value| {
-            serde_yaml::from_value(value.clone())
-                .map_err(|e| Error::custom(format!("cannot deserialize type specifier: {:?} - {}", value, e)))
+            serde_yaml::from_value(value.clone()).map_err(|e| Error::custom(format!("{}", e)))
         })?;
 
         let enum_key = Value::from("enum");
         let enumeration_values: &Option<EnumerationValues> = &mapping.get(&enum_key).map_or(Ok(None), |value| {
             serde_yaml::from_value(value.clone()).map_err(|e| {
                 Error::custom(format!(
-                    "cannot deserialize list of enumeration values: {:?} - {}",
+                    "cannot deserialize list of enumeration values: {:#?} - {}",
                     value, e
                 ))
             })
@@ -43,7 +42,7 @@ impl<'de> Deserialize<'de> for TypeDefinition {
         Ok(TypeDefinition {
             r#type: spec.clone(),
             enumeration_values: enumeration_values.clone(),
-            constant_value: constant.clone()
+            constant_value: constant.clone(),
         })
     }
 }
@@ -90,7 +89,8 @@ impl RawObjectType {
             "object" => RawObjectType::Object,
             "string" => RawObjectType::String,
             "hostname" => RawObjectType::Hostname,
-            _ => return Err(Error::custom(format!("unknown object type {}", value))),
+            "integer" => RawObjectType::Integer,
+            _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
         };
         Ok(object_type)
     }

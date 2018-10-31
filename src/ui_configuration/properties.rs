@@ -1,8 +1,8 @@
 use crate::dsl::enums::EnumerationValue;
+use crate::dsl::enums::EnumerationValues;
 use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
-use crate::dsl::enums::EnumerationValues;
 
 impl Serialize for Property {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -60,8 +60,8 @@ impl Serialize for ObjectType {
 
 impl Serialize for PropertyList {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: Serializer,
+    where
+        S: Serializer,
     {
         let entries_count = self.entries.iter().count();
         let mut map = serializer.serialize_map(Some(entries_count))?;
@@ -84,22 +84,21 @@ where
             map.serialize_entry("type", "string")?;
             map.serialize_entry("format", "hostname")?
         }
+        RawObjectType::Integer => map.serialize_entry("type", "integer")?,
     };
     Ok(())
 }
 
-
 fn serialize_enumeration_values<O, E, S>(enumeration_values: &EnumerationValues, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok = O, Error = E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     // fixme use map instead
     let mut enumeration_possible_values = vec![];
-        for enumeration_value in &enumeration_values.possible_values {
-            enumeration_possible_values.push(enumeration_value);
-        }
-
+    for enumeration_value in &enumeration_values.possible_values {
+        enumeration_possible_values.push(enumeration_value);
+    }
 
     if !enumeration_possible_values.is_empty() {
         map.serialize_entry("oneOf", &enumeration_possible_values)?;
@@ -108,9 +107,9 @@ fn serialize_enumeration_values<O, E, S>(enumeration_values: &EnumerationValues,
 }
 
 fn serialize_constant_value<O, E, S>(constant: &str, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok = O, Error = E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     Ok(map.serialize_entry("enum", &vec![constant]))?
 }

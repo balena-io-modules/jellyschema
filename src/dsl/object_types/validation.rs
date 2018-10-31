@@ -5,7 +5,9 @@ use crate::dsl::object_types::TypeDefinition;
 impl Validate for TypeDefinition {
     fn validate(&self) -> Result<(), ValidationError> {
         if self.constant_value.is_some() && self.enumeration_values.is_some() {
-            return Err(ValidationError::with_message("cannot have both enumeration values definition and constant value definition"));
+            return Err(ValidationError::with_message(
+                "cannot have both enumeration values definition and constant value definition",
+            ));
         }
 
         for enumeration_values in &self.enumeration_values {
@@ -13,8 +15,6 @@ impl Validate for TypeDefinition {
                 enumeration_value.validate()?
             }
         }
-
-
 
         Ok(())
     }

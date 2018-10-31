@@ -52,7 +52,7 @@ where
     let key: String = serde_yaml::from_value(key.clone())
         .map_err(|e| Error::custom(format!("cannot deserialize property key - {}", e)))?;
     let value: Property = serde_yaml::from_value(value.clone())
-        .map_err(|e| Error::custom(format!("cannot deserialize property value '{:?}' - {}", value, e)))?;
+        .map_err(|e| Error::custom(format!("cannot deserialize property `{}` - {}", key, e)))?;
     Ok(PropertyEntry {
         name: key,
         property: value,

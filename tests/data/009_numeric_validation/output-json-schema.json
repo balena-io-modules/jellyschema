@@ -1,0 +1,19 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "$$order": [
+        "multiplesOfTen"
+    ],
+    "required": [
+        "multiplesOfTen"
+    ],
+    "title": "Numeric validation",
+    "properties": {
+        "multiplesOfTen": {
+            "type": "integer",
+            "minimum": 10,
+            "exclusiveMaximum": 100
+        }
+    }
+}
