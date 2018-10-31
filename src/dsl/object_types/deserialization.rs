@@ -34,9 +34,16 @@ impl<'de> Deserialize<'de> for TypeDefinition {
             })
         })?;
 
+        let constant_key = Value::from("const");
+        let constant = &mapping.get(&constant_key).map_or(Ok(None), |value| {
+            serde_yaml::from_value(value.clone())
+                .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
+        })?;
+
         Ok(TypeDefinition {
             r#type: spec.clone(),
             enumeration_values: enumeration_values.clone(),
+            constant_value: constant.clone()
         })
     }
 }
