@@ -1,12 +1,12 @@
 version: 1
 title: Enum test
 properties:
-  - longOne:
-      type: string
-      enum:
-        - value: fincm3
-          title: Balena Fin (CM3)
-        - value: raspberrypi3
-          title: Raspberry Pi 3
-        - value: raspberrypi2
-          title: Raspberry Pi 2
+- longOne:
+    type: string
+    enum:
+    - value: fincm3
+      title: Balena Fin (CM3)
+    - value: raspberrypi3
+      title: Raspberry Pi 3
+    - value: raspberrypi2
+      title: Raspberry Pi 2

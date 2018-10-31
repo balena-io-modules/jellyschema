@@ -1,10 +1,10 @@
 version: 1
 title: Optional hostname configuration
 properties:
-  - hostname:
-      type: hostname?
-      title: Hostname
-      default: hostname
-      help: You should set your machine name.
-      warning: Use something useful.
-      description: Hostname is a name of your machine.
+- hostname:
+    type: hostname?
+    title: Hostname
+    default: hostname
+    help: You should set your machine name.
+    warning: Use something useful.
+    description: Hostname is a name of your machine.

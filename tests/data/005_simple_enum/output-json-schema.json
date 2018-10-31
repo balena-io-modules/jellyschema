@@ -12,7 +12,8 @@
     "properties": {
         "shortOne": {
             "type": "string",
-            "oneOf": [{
+            "oneOf": [
+                {
                     "type": "string",
                     "title": "fincm3",
                     "enum": [

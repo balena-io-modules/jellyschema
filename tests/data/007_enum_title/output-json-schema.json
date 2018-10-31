@@ -12,7 +12,8 @@
     "properties": {
         "longOne": {
             "type": "string",
-            "oneOf": [{
+            "oneOf": [
+                {
                     "type": "string",
                     "title": "Balena Fin (CM3)",
                     "enum": [

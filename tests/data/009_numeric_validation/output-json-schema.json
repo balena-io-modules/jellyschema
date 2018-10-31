@@ -13,7 +13,8 @@
         "multiplesOfTen": {
             "type": "integer",
             "minimum": 10,
-            "exclusiveMaximum": 100
+            "maximum": 100,
+            "exclusiveMaximum": true
         }
     }
 }

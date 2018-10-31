@@ -19,7 +19,8 @@
         },
         "mixedNetworks": {
             "type": "array",
-            "items": [{
+            "items": [
+                {
                     "type": "object",
                     "properties": {
                         "ssid": {
@@ -45,7 +46,8 @@
         },
         "mixedNetworksUnlimitedWifi": {
             "type": "array",
-            "items": [{
+            "items": [
+                {
                     "type": "object",
                     "properties": {
                         "ssid": {
