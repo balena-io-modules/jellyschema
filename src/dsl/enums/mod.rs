@@ -13,7 +13,6 @@ pub struct EnumerationValues {
 
 #[derive(Clone, Debug)]
 pub struct EnumerationValue {
-    pub type_spec: ObjectType,
     pub display_information: DisplayInformation,
     pub value: Option<String>,
 }
@@ -30,8 +29,6 @@ impl From<&str> for EnumerationValue {
         EnumerationValue {
             display_information,
             value: Some(title.clone()),
-            // fixme: use parent type
-            type_spec: ObjectType::Required(RawObjectType::String(None)),
         }
     }
 }

@@ -32,14 +32,44 @@ where
     E: Error,
 {
     let enum_key = Value::from("enum");
-    Ok(mapping.get(&enum_key).map_or(Ok(None), |value| {
+    let enums = mapping.get(&enum_key).map_or(Ok(None), |value| {
         serde_yaml::from_value(value.clone()).map_err(|e| {
             Error::custom(format!(
                 "cannot deserialize list of enumeration values: {:#?} - {}",
                 value, e
             ))
         })
-    })?)
+    })?;
+
+    let constant_key = Value::from("const");
+    let constant = mapping.get(&constant_key).map_or(Ok(None), |value| {
+        serde_yaml::from_value(value.clone())
+            .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
+    })?;
+
+    if enums.is_some() && constant.is_some() {
+        return Err(Error::custom("cannot have both enum and const defined"));
+    }
+
+    if constant.is_some() {
+        return Ok(Some({
+            let display_information = DisplayInformation {
+                title: None,
+                help: None,
+                warning: None,
+                description: None,
+            };
+
+            EnumerationValues {
+                possible_values: vec![EnumerationValue {
+                    value: constant.clone(),
+                    display_information,
+                }],
+            }
+        }));
+    }
+
+    Ok(enums)
 }
 fn enumeration_definition_to_enumeration_value<E>(definition: &Value) -> Result<EnumerationValue, E>
 where
@@ -88,7 +118,5 @@ where
     Ok(EnumerationValue {
         display_information,
         value,
-        // fixme: enum is always of type string for now
-        type_spec: ObjectType::Required(RawObjectType::String(None)),
     })
 }

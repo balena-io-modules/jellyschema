@@ -8,7 +8,6 @@ use crate::dsl::enums::EnumerationValues;
 #[derive(Clone, Debug)]
 pub struct TypeDefinition {
     pub r#type: Option<ObjectType>,
-    pub constant_value: Option<String>,
 }
 
 #[derive(Clone, Debug)]

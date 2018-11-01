@@ -5,6 +5,7 @@ use crate::dsl::object_types::IntegerObjectBounds;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
 use crate::dsl::object_types::TypeDefinition;
+use heck::MixedCase;
 use serde::de::Error;
 use serde::de::Visitor;
 use serde::Deserialize;
@@ -13,9 +14,7 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 use std::fmt;
 use std::fmt::Formatter;
-use heck::MixedCase;
 
-// TODO deserialize types with their bounds here, pass the whole object to the smaller methods
 impl<'de> Deserialize<'de> for TypeDefinition {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -25,19 +24,7 @@ impl<'de> Deserialize<'de> for TypeDefinition {
 
         let spec = deserialize_object_type(&mapping)?;
 
-        // enum bound
-        let enum_key = Value::from("enum");
-
-        let constant_key = Value::from("const");
-        let constant = &mapping.get(&constant_key).map_or(Ok(None), |value| {
-            serde_yaml::from_value(value.clone())
-                .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
-        })?;
-
-        Ok(TypeDefinition {
-            r#type: spec,
-            constant_value: constant.clone(),
-        })
+        Ok(TypeDefinition { r#type: spec })
     }
 }
 
@@ -82,7 +69,7 @@ where
     E: Error,
 {
     let normal = deserialize_integer(name, mapping)?;
-    let exclusive = deserialize_integer(&("exclusive ".to_string() + &name).to_mixed_case(), mapping)?;
+    let exclusive = deserialize_integer(&("exclusive ".to_string() + name).to_mixed_case(), mapping)?;
     if normal.is_some() && exclusive.is_some() {
         return Err(Error::custom("cannot have both {} and exclusive {} set"));
     }

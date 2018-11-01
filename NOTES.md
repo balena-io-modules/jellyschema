@@ -1,5 +1,9 @@
-Ideas for code shape:
+Guidelines: 
+* deserialization bit should be as simple as possible, not much logic there
+* serialization should have all the computation, the typesystem should be as small as possible though
 
+
+Compiler phases:
 * phases (traits + eventually macros, see `Validate` trait): - effectively compilation-level state machine
   * deserialize from yaml - in general this creates values, other phases have references to them
   * normalize (e.g. copy title into value if needed)
@@ -7,10 +11,7 @@ Ideas for code shape:
   * validate
   * serialize
 
-* the serialization into final json should be as trivial as possible - use just serde derives when possible
-  
 TODOs:
-* enum -> object bound on string type
 * support properties on every level - recursive schema
 * low level code quality: 
   * make serde use consistent, right now there is a mix of attributes, `with` functions and `impl (De)serialize`
