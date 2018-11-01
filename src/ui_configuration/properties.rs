@@ -1,5 +1,7 @@
+use core::borrow::Borrow;
 use crate::dsl::enums::EnumerationValue;
 use crate::dsl::enums::EnumerationValues;
+use crate::dsl::object_types::IntegerObjectBounds;
 use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
@@ -17,7 +19,6 @@ impl Serialize for Property {
         for type_spec in &self.type_information.r#type {
             serialize_object_type(&type_spec.inner(), &mut map)?;
         }
-
 
         for constant in &self.type_information.constant_value {
             serialize_constant_value(&constant, &mut map)?;
@@ -77,18 +78,35 @@ where
     match object_type {
         RawObjectType::Object => map.serialize_entry("type", "object")?,
         // fixme
-        RawObjectType::String(object_bounds) =>{
+        RawObjectType::String(object_bounds) => {
+            map.serialize_entry("type", "string")?;
             for enumeration_values in object_bounds {
                 serialize_enumeration_values(&enumeration_values, map)?;
             }
-            map.serialize_entry("type", "string")?
-        },
+        }
         RawObjectType::Hostname => {
             map.serialize_entry("type", "string")?;
             map.serialize_entry("format", "hostname")?
         }
-        RawObjectType::Integer(object_bounds) => map.serialize_entry("type", "integer")?,
+        RawObjectType::Integer(object_bounds) => {
+            map.serialize_entry("type", "integer")?;
+            for bounds in object_bounds {
+                serialize_integer_bounds(bounds, map)?;
+            }
+        }
     };
+    Ok(())
+}
+
+fn serialize_integer_bounds<O, E, S>(bounds: &IntegerObjectBounds, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if bounds.maximum.is_some() {
+        map.serialize_entry("maximum", bounds.maximum.unwrap().inner())?;
+    }
+
     Ok(())
 }
 

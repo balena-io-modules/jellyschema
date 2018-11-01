@@ -28,7 +28,8 @@ impl<'de> Deserialize<'de> for EnumerationValues {
 }
 
 pub fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<EnumerationValues>, E>
-    where E: Error
+where
+    E: Error,
 {
     let enum_key = Value::from("enum");
     Ok(mapping.get(&enum_key).map_or(Ok(None), |value| {
