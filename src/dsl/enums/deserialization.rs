@@ -75,6 +75,6 @@ where
         display_information,
         value,
         // fixme: enum is always of type string for now
-        type_spec: ObjectType::Required(RawObjectType::String),
+        type_spec: ObjectType::Required(RawObjectType::String(None)),
     })
 }

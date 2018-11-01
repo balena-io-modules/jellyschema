@@ -30,7 +30,8 @@ impl From<&str> for EnumerationValue {
         EnumerationValue {
             display_information,
             value: Some(title.clone()),
-            type_spec: ObjectType::Required(RawObjectType::String),
+            // fixme: use parent type
+            type_spec: ObjectType::Required(RawObjectType::String(None)),
         }
     }
 }

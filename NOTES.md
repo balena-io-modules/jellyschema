@@ -10,6 +10,7 @@ Ideas for code shape:
 * the serialization into final json should be as trivial as possible - use just serde derives when possible
   
 TODOs:
+* enum -> object bound on string type
 * support properties on every level - recursive schema
 * low level code quality: 
   * make serde use consistent, right now there is a mix of attributes, `with` functions and `impl (De)serialize`

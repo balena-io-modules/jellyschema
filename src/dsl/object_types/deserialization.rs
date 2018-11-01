@@ -11,6 +11,7 @@ use serde_yaml::Value;
 use std::fmt;
 use std::fmt::Formatter;
 
+// TODO deserialize types with their bounds here, pass the whole object to the smaller methods
 impl<'de> Deserialize<'de> for TypeDefinition {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -18,20 +19,11 @@ impl<'de> Deserialize<'de> for TypeDefinition {
     {
         let mapping = Mapping::deserialize(deserializer)?;
 
-        let type_key = Value::from("type");
-        let spec = &mapping.get(&type_key).map_or(Ok(None), |value| {
-            serde_yaml::from_value(value.clone()).map_err(|e| Error::custom(format!("{}", e)))
-        })?;
+        let spec = deserialize_object_type(&mapping)?;
 
+        // enum bound
         let enum_key = Value::from("enum");
-        let enumeration_values: &Option<EnumerationValues> = &mapping.get(&enum_key).map_or(Ok(None), |value| {
-            serde_yaml::from_value(value.clone()).map_err(|e| {
-                Error::custom(format!(
-                    "cannot deserialize list of enumeration values: {:#?} - {}",
-                    value, e
-                ))
-            })
-        })?;
+        let enumeration_values = deserialize_enumeration_values(&mapping)?;
 
         let constant_key = Value::from("const");
         let constant = &mapping.get(&constant_key).map_or(Ok(None), |value| {
@@ -40,56 +32,58 @@ impl<'de> Deserialize<'de> for TypeDefinition {
         })?;
 
         Ok(TypeDefinition {
-            r#type: spec.clone(),
-            enumeration_values: enumeration_values.clone(),
+            r#type: spec,
+            enumeration_values,
             constant_value: constant.clone(),
         })
     }
 }
 
-impl<'de> Deserialize<'de> for ObjectType {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        struct TypeSpecVisitor;
-
-        impl<'de> Visitor<'de> for TypeSpecVisitor {
-            type Value = ObjectType;
-
-            fn expecting(&self, formatter: &mut Formatter) -> fmt::Result {
-                formatter.write_str("type name")
+fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
+where
+    E: Error,
+{
+    let type_key = Value::from("type");
+    Ok(mapping.get(&type_key).map_or(Ok(None), |value| match value.as_str() {
+        Some(value) => Ok(Some({
+            let mut type_name = value.trim().to_lowercase();
+            if type_name.ends_with('?') {
+                type_name.remove(type_name.len() - 1);
+                ObjectType::Optional(RawObjectType::from(&type_name, &mapping)?)
+            } else {
+                ObjectType::Required(RawObjectType::from(&type_name, &mapping)?)
             }
+        })),
+        None => Ok(None),
+    })?)
+}
 
-            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
-            where
-                E: Error,
-            {
-                let mut type_name = value.trim().to_lowercase();
-                let type_spec = if type_name.ends_with('?') {
-                    type_name.remove(type_name.len() - 1);
-                    ObjectType::Optional(RawObjectType::parse(&type_name)?)
-                } else {
-                    ObjectType::Required(RawObjectType::parse(&type_name)?)
-                };
-                Ok(type_spec)
-            }
-        }
-
-        deserializer.deserialize_any(TypeSpecVisitor)
-    }
+fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<EnumerationValues>, E>
+where E: Error
+{
+    let enum_key = Value::from("enum");
+    Ok(mapping.get(&enum_key).map_or(Ok(None), |value| {
+        serde_yaml::from_value(value.clone()).map_err(|e| {
+            Error::custom(format!(
+                "cannot deserialize list of enumeration values: {:#?} - {}",
+                value, e
+            ))
+        })
+    })?)
 }
 
 impl RawObjectType {
-    fn parse<E>(value: &str) -> Result<Self, E>
+    fn from<E>(value: &str, mapping: &Mapping) -> Result<Self, E>
     where
         E: Error,
     {
+
+        let enumeration_values = deserialize_enumeration_values(&mapping)?;
         let object_type = match value {
             "object" => RawObjectType::Object,
-            "string" => RawObjectType::String,
+            "string" => RawObjectType::String(enumeration_values),
             "hostname" => RawObjectType::Hostname,
-            "integer" => RawObjectType::Integer,
+            "integer" => RawObjectType::Integer(vec![]),
             _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
         };
         Ok(object_type)

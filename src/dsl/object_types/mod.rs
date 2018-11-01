@@ -20,9 +20,15 @@ pub enum ObjectType {
 #[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    String,
+    String(Option<EnumerationValues>),
     Hostname,
-    Integer,
+    Integer(Vec<IntegerObjectBound>),
+}
+
+#[derive(Clone, Debug)]
+pub enum IntegerObjectBound {
+    Minimum(u64),
+    Maximum(u64),
 }
 
 impl ObjectType {

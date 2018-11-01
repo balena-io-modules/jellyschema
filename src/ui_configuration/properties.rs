@@ -79,12 +79,13 @@ where
 {
     match object_type {
         RawObjectType::Object => map.serialize_entry("type", "object")?,
-        RawObjectType::String => map.serialize_entry("type", "string")?,
+        // fixme
+        RawObjectType::String(_) => map.serialize_entry("type", "string")?,
         RawObjectType::Hostname => {
             map.serialize_entry("type", "string")?;
             map.serialize_entry("format", "hostname")?
         }
-        RawObjectType::Integer => map.serialize_entry("type", "integer")?,
+        RawObjectType::Integer(object_bounds) => map.serialize_entry("type", "integer")?,
     };
     Ok(())
 }
