@@ -10,6 +10,7 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 use std::fmt;
 use std::fmt::Formatter;
+use crate::dsl::enums::deserialization::deserialize_enumeration_values;
 
 // TODO deserialize types with their bounds here, pass the whole object to the smaller methods
 impl<'de> Deserialize<'de> for TypeDefinition {
@@ -23,7 +24,6 @@ impl<'de> Deserialize<'de> for TypeDefinition {
 
         // enum bound
         let enum_key = Value::from("enum");
-        let enumeration_values = deserialize_enumeration_values(&mapping)?;
 
         let constant_key = Value::from("const");
         let constant = &mapping.get(&constant_key).map_or(Ok(None), |value| {
@@ -33,7 +33,6 @@ impl<'de> Deserialize<'de> for TypeDefinition {
 
         Ok(TypeDefinition {
             r#type: spec,
-            enumeration_values,
             constant_value: constant.clone(),
         })
     }
@@ -58,19 +57,6 @@ where
     })?)
 }
 
-fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<EnumerationValues>, E>
-where E: Error
-{
-    let enum_key = Value::from("enum");
-    Ok(mapping.get(&enum_key).map_or(Ok(None), |value| {
-        serde_yaml::from_value(value.clone()).map_err(|e| {
-            Error::custom(format!(
-                "cannot deserialize list of enumeration values: {:#?} - {}",
-                value, e
-            ))
-        })
-    })?)
-}
 
 impl RawObjectType {
     fn from<E>(value: &str, mapping: &Mapping) -> Result<Self, E>

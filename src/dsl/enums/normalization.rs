@@ -1,5 +1,14 @@
 use crate::dsl::compiler::normalizer::Normalize;
 use crate::dsl::enums::EnumerationValue;
+use crate::dsl::enums::EnumerationValues;
+
+impl Normalize for EnumerationValues {
+    fn normalize(&mut self) {
+        for value in self.possible_values.iter_mut() {
+            value.normalize()
+        }
+    }
+}
 
 impl Normalize for EnumerationValue {
     fn normalize(&mut self) {

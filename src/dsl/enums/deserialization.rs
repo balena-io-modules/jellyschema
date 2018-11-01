@@ -27,6 +27,19 @@ impl<'de> Deserialize<'de> for EnumerationValues {
     }
 }
 
+pub fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<EnumerationValues>, E>
+    where E: Error
+{
+    let enum_key = Value::from("enum");
+    Ok(mapping.get(&enum_key).map_or(Ok(None), |value| {
+        serde_yaml::from_value(value.clone()).map_err(|e| {
+            Error::custom(format!(
+                "cannot deserialize list of enumeration values: {:#?} - {}",
+                value, e
+            ))
+        })
+    })?)
+}
 fn enumeration_definition_to_enumeration_value<E>(definition: &Value) -> Result<EnumerationValue, E>
 where
     E: Error,

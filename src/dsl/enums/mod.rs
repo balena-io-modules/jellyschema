@@ -1,4 +1,4 @@
-mod deserialization;
+pub mod deserialization;
 mod normalization;
 mod validation;
 

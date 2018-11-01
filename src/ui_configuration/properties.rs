@@ -18,9 +18,6 @@ impl Serialize for Property {
             serialize_object_type(&type_spec.inner(), &mut map)?;
         }
 
-        for enumeration_values in &self.type_information.enumeration_values {
-            serialize_enumeration_values(&enumeration_values, &mut map)?;
-        }
 
         for constant in &self.type_information.constant_value {
             serialize_constant_value(&constant, &mut map)?;
@@ -80,7 +77,12 @@ where
     match object_type {
         RawObjectType::Object => map.serialize_entry("type", "object")?,
         // fixme
-        RawObjectType::String(_) => map.serialize_entry("type", "string")?,
+        RawObjectType::String(object_bounds) =>{
+            for enumeration_values in object_bounds {
+                serialize_enumeration_values(&enumeration_values, map)?;
+            }
+            map.serialize_entry("type", "string")?
+        },
         RawObjectType::Hostname => {
             map.serialize_entry("type", "string")?;
             map.serialize_entry("format", "hostname")?
