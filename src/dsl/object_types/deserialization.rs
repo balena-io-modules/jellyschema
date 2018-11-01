@@ -13,6 +13,7 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 use std::fmt;
 use std::fmt::Formatter;
+use heck::MixedCase;
 
 // TODO deserialize types with their bounds here, pass the whole object to the smaller methods
 impl<'de> Deserialize<'de> for TypeDefinition {
@@ -80,9 +81,8 @@ fn deserialize_minmax<E>(name: &str, mapping: &Mapping) -> Result<Option<Integer
 where
     E: Error,
 {
-    use heck::TitleCase;
     let normal = deserialize_integer(name, mapping)?;
-    let exclusive = deserialize_integer(&("exclusive".to_string() + &name.to_title_case()), mapping)?;
+    let exclusive = deserialize_integer(&("exclusive ".to_string() + &name).to_mixed_case(), mapping)?;
     if normal.is_some() && exclusive.is_some() {
         return Err(Error::custom("cannot have both {} and exclusive {} set"));
     }

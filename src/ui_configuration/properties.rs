@@ -6,6 +6,7 @@ use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 use crate::dsl::object_types::IntegerBound;
+use heck::MixedCase;
 
 impl Serialize for Property {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -99,27 +100,31 @@ where
     Ok(())
 }
 
+fn serialize_integer_bound<O, E, S>(name: &str, bound: &Option<IntegerBound>, map: &mut S) -> Result<(), E>
+    where
+        E: Error,
+        S: SerializeMap<Ok = O, Error = E>,
+{
+    if bound.is_some() {
+        let value = bound.unwrap();
+        match value {
+            IntegerBound::Inclusive(value) => map.serialize_entry(name, &value)?,
+            IntegerBound::Exclusive(value) => {
+                map.serialize_entry(name, &value)?;
+                map.serialize_entry(&("exclusive ".to_string() + &name).to_mixed_case(), &true)?;
+            },
+        }
+    }
+    Ok(())
+}
+
 fn serialize_integer_bounds<O, E, S>(bounds: &IntegerObjectBounds, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    if bounds.maximum.is_some() {
-        let value = bounds.maximum.unwrap();
-        match value {
-            IntegerBound::Inclusive(value) => map.serialize_entry("maximum", &value)?,
-            IntegerBound::Exclusive(value) => {
-                map.serialize_entry("maximum", &value)?;
-                map.serialize_entry("exclusiveMaximum", &true)?;
-            },
-
-        }
-
-    }
-
-    if bounds.minimum.is_some() {
-        map.serialize_entry("minimum", bounds.minimum.unwrap().inner())?;
-    }
+    serialize_integer_bound("maximum", &bounds.maximum, map)?;
+    serialize_integer_bound("minimum", &bounds.minimum, map)?;
 
     if bounds.multiple_of.is_some() {
         map.serialize_entry("multipleOf", &bounds.multiple_of.unwrap())?;
