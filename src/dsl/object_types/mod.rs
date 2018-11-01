@@ -33,9 +33,9 @@ pub enum IntegerBound {
 
 #[derive(Clone, Copy, Debug)]
 pub struct IntegerObjectBounds {
-    minimum: Option<i64>,
+    pub minimum: Option<IntegerBound>,
     pub maximum: Option<IntegerBound>,
-    multiple_of: Option<i64>,
+    pub multiple_of: Option<i64>,
 }
 
 impl IntegerBound {

@@ -5,6 +5,7 @@ use crate::dsl::object_types::IntegerObjectBounds;
 use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
+use crate::dsl::object_types::IntegerBound;
 
 impl Serialize for Property {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -104,9 +105,25 @@ where
     S: SerializeMap<Ok = O, Error = E>,
 {
     if bounds.maximum.is_some() {
-        map.serialize_entry("maximum", bounds.maximum.unwrap().inner())?;
+        let value = bounds.maximum.unwrap();
+        match value {
+            IntegerBound::Inclusive(value) => map.serialize_entry("maximum", &value)?,
+            IntegerBound::Exclusive(value) => {
+                map.serialize_entry("maximum", &value)?;
+                map.serialize_entry("exclusiveMaximum", &true)?;
+            },
+
+        }
+
     }
 
+    if bounds.minimum.is_some() {
+        map.serialize_entry("minimum", bounds.minimum.unwrap().inner())?;
+    }
+
+    if bounds.multiple_of.is_some() {
+        map.serialize_entry("multipleOf", &bounds.multiple_of.unwrap())?;
+    }
     Ok(())
 }
 

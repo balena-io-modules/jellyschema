@@ -104,14 +104,15 @@ where
     let exclusive_maximum_key = Value::from("exclusiveMaximum");
     let maximum = deserialize_minmax("maximum", mapping)?;
     let minimum = deserialize_minmax("minimum", mapping)?;
+    let multiple_of = deserialize_integer("multipleOf", mapping)?;
     println!("maximum: {:#?}", &maximum);
     println!("minimum: {:#?}", &minimum);
 
     if maximum.is_some() {
         Ok(Some(IntegerObjectBounds {
-            minimum: None,
+            minimum,
             maximum,
-            multiple_of: None,
+            multiple_of,
         }))
     } else {
         Ok(None)
