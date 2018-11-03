@@ -1,7 +1,7 @@
 use crate::dsl::object_types::bounds::EnumerationValue;
-use crate::dsl::object_types::bounds::EnumerationValues;
 use crate::dsl::object_types::bounds::IntegerBound;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::object_types::bounds::StringObjectBounds;
 use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
 use heck::MixedCase;
@@ -124,7 +124,7 @@ where
     Ok(())
 }
 
-fn serialize_enumeration_values<O, E, S>(enumeration_values: &EnumerationValues, map: &mut S) -> Result<(), E>
+fn serialize_enumeration_values<O, E, S>(enumeration_values: &StringObjectBounds, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,

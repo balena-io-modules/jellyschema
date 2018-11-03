@@ -1,13 +1,17 @@
 use crate::dsl::object_types::bounds::EnumerationValue;
-use crate::dsl::object_types::bounds::EnumerationValues;
+use crate::dsl::object_types::bounds::IntegerBound;
+use crate::dsl::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::object_types::bounds::StringObjectBounds;
+use crate::dsl::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::DisplayInformation;
+use heck::MixedCase;
 use serde::de::Error;
 use serde::Deserialize;
 use serde::Deserializer;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-impl<'de> Deserialize<'de> for EnumerationValues {
+impl<'de> Deserialize<'de> for StringObjectBounds {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -19,13 +23,13 @@ impl<'de> Deserialize<'de> for EnumerationValues {
             .map(|definition| Ok(enumeration_definition_to_enumeration_value(definition)?))
             .collect();
 
-        Ok(EnumerationValues {
+        Ok(StringObjectBounds {
             possible_values: enumeration_values?,
         })
     }
 }
 
-pub fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<EnumerationValues>, E>
+pub fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
     E: Error,
 {
@@ -58,7 +62,7 @@ where
                 description: None,
             };
 
-            EnumerationValues {
+            StringObjectBounds {
                 possible_values: vec![EnumerationValue {
                     value: constant.clone(),
                     display_information,
@@ -69,6 +73,28 @@ where
 
     Ok(enums)
 }
+
+pub fn deserialize_integer_bounds<E>(mapping: &Mapping) -> Result<Option<IntegerObjectBounds>, E>
+where
+    E: Error,
+{
+    let maximum = deserialize_integer_bound("maximum", mapping)?;
+    let minimum = deserialize_integer_bound("minimum", mapping)?;
+    let multiple_of = deserialize_integer("multipleOf", mapping)?;
+    println!("maximum: {:#?}", &maximum);
+    println!("minimum: {:#?}", &minimum);
+
+    if maximum.is_some() {
+        Ok(Some(IntegerObjectBounds {
+            minimum,
+            maximum,
+            multiple_of,
+        }))
+    } else {
+        Ok(None)
+    }
+}
+
 fn enumeration_definition_to_enumeration_value<E>(definition: &Value) -> Result<EnumerationValue, E>
 where
     E: Error,
@@ -117,4 +143,22 @@ where
         display_information,
         value,
     })
+}
+
+fn deserialize_integer_bound<E>(name: &str, mapping: &Mapping) -> Result<Option<IntegerBound>, E>
+where
+    E: Error,
+{
+    let normal = deserialize_integer(name, mapping)?;
+    let exclusive = deserialize_integer(&("exclusive ".to_string() + name).to_mixed_case(), mapping)?;
+    if normal.is_some() && exclusive.is_some() {
+        return Err(Error::custom("cannot have both {} and exclusive {} set"));
+    }
+    if normal.is_some() {
+        return Ok(Some(IntegerBound::Inclusive(normal.unwrap())));
+    }
+    if exclusive.is_some() {
+        return Ok(Some(IntegerBound::Exclusive(exclusive.unwrap())));
+    }
+    Ok(None)
 }

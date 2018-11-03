@@ -1,8 +1,8 @@
 use crate::dsl::compiler::normalizer::Normalize;
 use crate::dsl::object_types::bounds::EnumerationValue;
-use crate::dsl::object_types::bounds::EnumerationValues;
+use crate::dsl::object_types::bounds::StringObjectBounds;
 
-impl Normalize for EnumerationValues {
+impl Normalize for StringObjectBounds {
     fn normalize(&mut self) {
         for value in self.possible_values.iter_mut() {
             value.normalize()

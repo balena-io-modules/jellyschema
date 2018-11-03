@@ -1,5 +1,5 @@
 use crate::dsl::compiler::normalizer::Normalize;
-use crate::dsl::object_types::IntegerObjectBounds;
+use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
 

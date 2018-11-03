@@ -3,8 +3,8 @@ pub mod deserialization;
 mod normalization;
 mod validation;
 
-use crate::dsl::object_types::bounds::EnumerationValues;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::object_types::bounds::StringObjectBounds;
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {
@@ -15,7 +15,7 @@ pub enum ObjectType {
 #[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    String(Option<EnumerationValues>),
+    String(Option<StringObjectBounds>),
     Hostname,
     Integer(Option<IntegerObjectBounds>),
 }

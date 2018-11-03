@@ -28,7 +28,7 @@ impl IntegerBound {
 }
 
 #[derive(Clone, Debug)]
-pub struct EnumerationValues {
+pub struct StringObjectBounds {
     pub possible_values: Vec<EnumerationValue>,
 }
 
