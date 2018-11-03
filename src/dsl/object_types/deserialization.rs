@@ -1,6 +1,6 @@
-use crate::dsl::enums::deserialization::deserialize_enumeration_values;
-use crate::dsl::object_types::IntegerBound;
-use crate::dsl::object_types::IntegerObjectBounds;
+use crate::dsl::object_types::bounds::deserialization::deserialize_enumeration_values;
+use crate::dsl::object_types::bounds::IntegerBound;
+use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
 use heck::MixedCase;

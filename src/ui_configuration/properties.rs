@@ -1,7 +1,7 @@
-use crate::dsl::enums::EnumerationValue;
-use crate::dsl::enums::EnumerationValues;
-use crate::dsl::object_types::IntegerBound;
-use crate::dsl::object_types::IntegerObjectBounds;
+use crate::dsl::object_types::bounds::EnumerationValue;
+use crate::dsl::object_types::bounds::EnumerationValues;
+use crate::dsl::object_types::bounds::IntegerBound;
+use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
 use heck::MixedCase;

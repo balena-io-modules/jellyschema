@@ -1,9 +1,10 @@
+pub mod bounds;
 pub mod deserialization;
 mod normalization;
 mod validation;
-use serde_derive::Serialize;
 
-use crate::dsl::enums::EnumerationValues;
+use crate::dsl::object_types::bounds::EnumerationValues;
+use crate::dsl::object_types::bounds::IntegerObjectBounds;
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {
@@ -17,28 +18,6 @@ pub enum RawObjectType {
     String(Option<EnumerationValues>),
     Hostname,
     Integer(Option<IntegerObjectBounds>),
-}
-
-#[derive(Clone, Copy, Debug, Serialize)]
-pub enum IntegerBound {
-    Inclusive(i64),
-    Exclusive(i64),
-}
-
-#[derive(Clone, Copy, Debug)]
-pub struct IntegerObjectBounds {
-    pub minimum: Option<IntegerBound>,
-    pub maximum: Option<IntegerBound>,
-    pub multiple_of: Option<i64>,
-}
-
-impl IntegerBound {
-    pub fn inner(&self) -> &i64 {
-        match self {
-            IntegerBound::Exclusive(value) => value,
-            IntegerBound::Inclusive(value) => value,
-        }
-    }
 }
 
 impl ObjectType {

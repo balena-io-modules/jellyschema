@@ -1,6 +1,6 @@
 use crate::dsl::compiler::normalizer::Normalize;
-use crate::dsl::enums::EnumerationValue;
-use crate::dsl::enums::EnumerationValues;
+use crate::dsl::object_types::bounds::EnumerationValue;
+use crate::dsl::object_types::bounds::EnumerationValues;
 
 impl Normalize for EnumerationValues {
     fn normalize(&mut self) {
