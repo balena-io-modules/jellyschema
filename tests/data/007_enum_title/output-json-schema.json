@@ -14,21 +14,18 @@
             "type": "string",
             "oneOf": [
                 {
-                    "type": "string",
                     "title": "Balena Fin (CM3)",
                     "enum": [
                         "fincm3"
                     ]
                 },
                 {
-                    "type": "string",
                     "title": "Raspberry Pi 3",
                     "enum": [
                         "raspberrypi3"
                     ]
                 },
                 {
-                    "type": "string",
                     "title": "Raspberry Pi 2",
                     "enum": [
                         "raspberrypi2"

@@ -14,6 +14,9 @@ impl Normalize for SourceSchema {
 
 impl Normalize for PropertyEntry {
     fn normalize(&mut self) {
-        self.property.type_information.normalize();
+        match &mut self.property.type_information {
+            Some(spec) => spec.normalize(),
+            None => {}
+        }
     }
 }

@@ -4,7 +4,6 @@ use crate::dsl::object_types::IntegerBound;
 use crate::dsl::object_types::IntegerObjectBounds;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
-use crate::dsl::object_types::TypeDefinition;
 use heck::MixedCase;
 use serde::de::Error;
 use serde::de::Visitor;
@@ -15,20 +14,7 @@ use serde_yaml::Value;
 use std::fmt;
 use std::fmt::Formatter;
 
-impl<'de> Deserialize<'de> for TypeDefinition {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let mapping = Mapping::deserialize(deserializer)?;
-
-        let spec = deserialize_object_type(&mapping)?;
-
-        Ok(TypeDefinition { r#type: spec })
-    }
-}
-
-fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
+pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
 where
     E: Error,
 {
@@ -43,7 +29,7 @@ where
                 ObjectType::Required(RawObjectType::from(&type_name, &mapping)?)
             }
         })),
-        None => Ok(None),
+        None => Err(Error::custom("cannot find type definition")),
     })?)
 }
 

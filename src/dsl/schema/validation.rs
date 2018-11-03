@@ -19,8 +19,10 @@ impl Validate for SourceSchema {
 
 impl Validate for PropertyEntry {
     fn validate(&self) -> Result<(), ValidationError> {
-        self.property.type_information.validate()?;
-        Ok(())
+        match &self.property.type_information {
+            Some(spec) => spec.validate(),
+            None => Ok(()),
+        }
     }
 }
 

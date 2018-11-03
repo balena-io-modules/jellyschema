@@ -18,7 +18,7 @@ impl Serialize for Property {
             map.serialize_entry("title", &title)?;
         }
 
-        for type_spec in &self.type_information.r#type {
+        for type_spec in &self.type_information {
             serialize_object_type(&type_spec.inner(), &mut map)?;
         }
 
@@ -72,7 +72,7 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    match raw_type{
+    match raw_type {
         RawObjectType::Object => map.serialize_entry("type", "object")?,
         // fixme
         RawObjectType::String(object_bounds) => {
@@ -140,7 +140,7 @@ where
 
     if !enumeration_possible_values.is_empty() {
         if enumeration_possible_values.iter().count() == 1 {
-            serialize_constant_value(enumeration_possible_values.get(0).unwrap(), map)?;
+            serialize_singular_constant_value(enumeration_possible_values.get(0).unwrap(), map)?;
         } else {
             map.serialize_entry("oneOf", &enumeration_possible_values)?;
         }
@@ -148,7 +148,7 @@ where
     Ok(())
 }
 
-fn serialize_constant_value<O, E, S>(constant: &EnumerationValue, map: &mut S) -> Result<(), E>
+fn serialize_singular_constant_value<O, E, S>(constant: &EnumerationValue, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,

@@ -1,14 +1,9 @@
-mod deserialization;
+pub mod deserialization;
 mod normalization;
 mod validation;
 use serde_derive::Serialize;
 
 use crate::dsl::enums::EnumerationValues;
-
-#[derive(Clone, Debug)]
-pub struct TypeDefinition {
-    pub r#type: Option<ObjectType>,
-}
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {

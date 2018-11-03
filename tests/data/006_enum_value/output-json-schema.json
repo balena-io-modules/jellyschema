@@ -14,21 +14,18 @@
             "type": "string",
             "oneOf": [
                 {
-                    "type": "string",
                     "title": "fincm3",
                     "enum": [
                         "fincm3"
                     ]
                 },
                 {
-                    "type": "string",
                     "title": "raspberrypi3",
                     "enum": [
                         "raspberrypi3"
                     ]
                 },
                 {
-                    "type": "string",
                     "title": "raspberrypi2",
                     "enum": [
                         "raspberrypi2"

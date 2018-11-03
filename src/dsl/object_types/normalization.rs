@@ -1,15 +1,12 @@
 use crate::dsl::compiler::normalizer::Normalize;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
-use crate::dsl::object_types::TypeDefinition;
 
-impl Normalize for TypeDefinition {
+impl Normalize for ObjectType {
     fn normalize(&mut self) {
-        for r#type in self.r#type.iter_mut() {
-            match r#type {
-                ObjectType::Required(object_type) => object_type.normalize(),
-                ObjectType::Optional(object_type) => object_type.normalize(),
-            }
+        match self {
+            ObjectType::Required(object_type) => object_type.normalize(),
+            ObjectType::Optional(object_type) => object_type.normalize(),
         }
     }
 }
