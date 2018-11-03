@@ -81,8 +81,6 @@ where
     let maximum = deserialize_integer_bound("maximum", mapping)?;
     let minimum = deserialize_integer_bound("minimum", mapping)?;
     let multiple_of = deserialize_integer("multipleOf", mapping)?;
-    println!("maximum: {:#?}", &maximum);
-    println!("minimum: {:#?}", &minimum);
 
     if maximum.is_some() {
         Ok(Some(IntegerObjectBounds {

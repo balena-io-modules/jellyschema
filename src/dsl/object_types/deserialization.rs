@@ -53,7 +53,6 @@ where
 {
     let maximum_key = Value::from(name);
     let value = mapping.get(&maximum_key);
-    println!("value from mapping {:#?} for {}", &value, &name);
 
     match value {
         None => Ok(None),
