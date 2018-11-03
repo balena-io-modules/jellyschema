@@ -23,6 +23,8 @@ impl Validate for PropertyEntry {
             Some(spec) => spec.validate(),
             None => Ok(()),
         }
+
+        // TODO: validate that if there are properties the type must be object
     }
 }
 

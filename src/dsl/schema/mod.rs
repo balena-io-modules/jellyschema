@@ -4,6 +4,7 @@ mod validation;
 
 use crate::dsl::object_types::ObjectType;
 use serde_derive::Deserialize;
+use serde_derive::Serialize;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct SourceSchema {
@@ -23,9 +24,11 @@ pub struct PropertyList {
     pub entries: Vec<PropertyEntry>,
 }
 
-#[derive(Clone, Debug)]
+// fixme move serialize implementation to the `ui_configuration` module
+#[derive(Clone, Debug, Serialize)]
 pub struct PropertyEntry {
     pub name: String,
+    #[serde(flatten)]
     pub property: Property,
 }
 
@@ -33,6 +36,7 @@ pub struct PropertyEntry {
 pub struct Property {
     pub type_information: Option<ObjectType>,
     pub display_information: DisplayInformation,
+    pub property_list: Option<PropertyList>,
 }
 
 #[derive(Clone, Default, Debug, Deserialize)]

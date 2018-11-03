@@ -6,6 +6,29 @@ use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
 use heck::MixedCase;
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
+use std::collections::HashMap;
+
+pub fn serialize_property_list<O, E, S>(property_list: &PropertyList, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if !property_list.entries.is_empty() {
+        let mut properties_map = HashMap::new();
+        for property in &property_list.entries {
+            properties_map.insert(&property.name, &property.property);
+        }
+        map.serialize_entry("properties", &properties_map)?;
+    };
+
+    if !property_list.required_property_names().is_empty() {
+        map.serialize_entry("required", &property_list.required_property_names())?;
+    }
+    if !property_list.property_names().is_empty() {
+        map.serialize_entry("$$order", &property_list.property_names())?;
+    }
+    Ok(())
+}
 
 impl Serialize for Property {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -19,6 +42,11 @@ impl Serialize for Property {
 
         for type_spec in &self.type_information {
             serialize_object_type(&type_spec.inner(), &mut map)?;
+        }
+
+        let property_list = &self.property_list;
+        if property_list.is_some() {
+            serialize_property_list(&property_list.clone().unwrap(), &mut map)?;
         }
 
         map.end()
@@ -47,20 +75,6 @@ impl Serialize for ObjectType {
     {
         let mut map = serializer.serialize_map(None)?;
         serialize_object_type(&self.inner(), &mut map)?;
-        map.end()
-    }
-}
-
-impl Serialize for PropertyList {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let entries_count = self.entries.iter().count();
-        let mut map = serializer.serialize_map(Some(entries_count))?;
-        for entry in &self.entries {
-            map.serialize_entry(&entry.name, &entry.property)?;
-        }
         map.end()
     }
 }

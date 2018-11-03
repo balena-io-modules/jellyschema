@@ -32,15 +32,9 @@ impl RawObjectType {
     {
         let object_type = match value {
             "object" => RawObjectType::Object, // fixme - deserialize recursively here
-            "string" => {
-                let enumeration_values = deserialize_enumeration_values(mapping)?;
-                RawObjectType::String(enumeration_values)
-            }
+            "string" => RawObjectType::String(deserialize_enumeration_values(mapping)?),
             "hostname" => RawObjectType::Hostname,
-            "integer" => {
-                let bounds = deserialize_integer_bounds(mapping)?;
-                RawObjectType::Integer(bounds)
-            }
+            "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
             _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
         };
         Ok(object_type)
@@ -51,14 +45,10 @@ pub fn deserialize_integer<E>(name: &str, mapping: &Mapping) -> Result<Option<i6
 where
     E: Error,
 {
-    let maximum_key = Value::from(name);
-    let value = mapping.get(&maximum_key);
-
-    match value {
-        None => Ok(None),
-        Some(value) => match value.as_i64() {
-            None => Err(Error::custom(format!("cannot deserialize {:#?} as integer", value))),
-            Some(value) => Ok(Some(value)),
-        },
-    }
+    let value = mapping.get(&Value::from(name));
+    value.map_or(Ok(None), |value| {
+        Ok(Some(value.as_i64().ok_or_else(|| {
+            Error::custom(format!("cannot deserialize {:#?} as integer", value))
+        })?))
+    })
 }

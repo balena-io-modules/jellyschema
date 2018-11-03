@@ -1,25 +1,38 @@
 use crate::dsl::schema::PropertyList;
 use crate::dsl::schema::SourceSchema;
-use serde_derive::Serialize;
+use crate::ui_configuration::properties::serialize_property_list;
+use serde::ser::SerializeMap;
+use serde::Serialize;
+use serde::Serializer;
 
 const SCHEMA_URL: &str = "http://json-schema.org/draft-04/schema#";
 
-#[derive(Serialize)]
 pub struct JsonSchema<'a> {
-    #[serde(rename = "$$version")]
     version: u64,
-    #[serde(rename = "$schema")]
     schema_url: &'a str,
-    #[serde(rename = "type")]
     // FIXME: make recursive
     type_spec: String,
     title: &'a str,
-    #[serde(rename = "properties", skip_serializing_if = "Option::is_none")]
     properties: Option<&'a PropertyList>,
-    #[serde(rename = "$$order", skip_serializing_if = "Vec::is_empty")]
-    order: Vec<&'a str>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    required: Vec<&'a str>,
+}
+
+impl<'a> Serialize for JsonSchema<'a> {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let mut map = serializer.serialize_map(None)?;
+        map.serialize_entry("$schema", &self.schema_url)?;
+        map.serialize_entry("$$version", &self.version)?;
+        map.serialize_entry("type", &self.type_spec)?;
+        map.serialize_entry("title", &self.title)?;
+
+        if self.properties.is_some() {
+            serialize_property_list(&self.properties.unwrap(), &mut map)?;
+        }
+
+        map.end()
+    }
 }
 
 impl<'a> From<&'a SourceSchema> for JsonSchema<'a> {
@@ -28,8 +41,6 @@ impl<'a> From<&'a SourceSchema> for JsonSchema<'a> {
         JsonSchema {
             properties: property_list,
             title: &schema.title,
-            required: property_list.map_or(vec![], |list| list.required_property_names()),
-            order: property_list.map_or(vec![], |list| list.property_names()),
             type_spec: "object".to_string(),
             version: schema.version,
             schema_url: SCHEMA_URL,

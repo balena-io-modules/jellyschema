@@ -71,8 +71,22 @@ where
 
     let display_information = serde_yaml::from_value(value.clone())
         .map_err(|e| Error::custom(format!("cannot deserialize display information - {}", e)))?;
+
+    let properties = mapping.get(&Value::from("properties"));
+    let properties = match properties {
+        None => None,
+        Some(properties) => {
+            let sequence = properties.as_sequence();
+            match sequence {
+                None => return Err(Error::custom("")),
+                Some(sequence) => Some(sequence_to_property_list(sequence.to_vec())?),
+            }
+        }
+    };
+
     Ok(Property {
         type_information,
         display_information,
+        property_list: properties,
     })
 }
