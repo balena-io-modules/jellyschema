@@ -13,10 +13,7 @@ impl Normalize for StringObjectBounds {
 impl Normalize for EnumerationValue {
     fn normalize(&mut self) {
         if self.display_information.title.is_none() {
-            self.display_information.title = self.value.clone();
-        }
-        if self.value.is_none() {
-            self.value = self.display_information.title.clone();
+            self.display_information.title = Some(self.value.clone());
         }
     }
 }

@@ -36,21 +36,21 @@ pub struct StringObjectBounds {
 pub struct EnumerationValue {
     pub display_information: DisplayInformation,
     // TODO: value should nor really be optional, semantically speaking
-    pub value: Option<String>,
+    pub value: String,
 }
 
 impl From<&str> for EnumerationValue {
     fn from(value: &str) -> Self {
-        let title = value.to_string();
+        let value = value.to_string();
         let display_information = DisplayInformation {
-            title: Some(title.clone()),
+            title: Some(value.clone()),
             help: None,
             warning: None,
             description: None,
         };
         EnumerationValue {
+            value: value.clone(),
             display_information,
-            value: Some(title.clone()),
         }
     }
 }

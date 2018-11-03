@@ -44,7 +44,7 @@ where
     })?;
 
     let constant_key = Value::from("const");
-    let constant = mapping.get(&constant_key).map_or(Ok(None), |value| {
+    let constant: Option<String> = mapping.get(&constant_key).map_or(Ok(None), |value| {
         serde_yaml::from_value(value.clone())
             .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
     })?;
@@ -64,7 +64,7 @@ where
 
             StringObjectBounds {
                 possible_values: vec![EnumerationValue {
-                    value: constant.clone(),
+                    value: constant.unwrap().clone(),
                     display_information,
                 }],
             }
@@ -121,12 +121,14 @@ where
 {
     let value = mapping.get(&Value::from("value"));
     let title = mapping.get(&Value::from("title"));
-    let value = value.map(|value| {
-        value
-            .as_str()
-            .expect("serde_yaml type inconsistence on value")
-            .to_string()
-    });
+    let value = value
+        .map(|value| {
+            value
+                .as_str()
+                .expect("serde_yaml type inconsistence on value")
+                .to_string()
+        })
+        .ok_or_else(|| Error::custom("when the enumeration is a mapping - expected 'value' to be present"))?;
     let title = title.map(|value| {
         value
             .as_str()
