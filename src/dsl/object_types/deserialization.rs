@@ -1,18 +1,12 @@
 use crate::dsl::enums::deserialization::deserialize_enumeration_values;
-use crate::dsl::enums::EnumerationValues;
 use crate::dsl::object_types::IntegerBound;
 use crate::dsl::object_types::IntegerObjectBounds;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
 use heck::MixedCase;
 use serde::de::Error;
-use serde::de::Visitor;
-use serde::Deserialize;
-use serde::Deserializer;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
-use std::fmt;
-use std::fmt::Formatter;
 
 pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
 where
@@ -72,9 +66,6 @@ fn deserialize_integer_bounds<E>(mapping: &Mapping) -> Result<Option<IntegerObje
 where
     E: Error,
 {
-    let minimum_key = Value::from("minimum");
-    let multiple_of_key = Value::from("multipleOf");
-    let exclusive_maximum_key = Value::from("exclusiveMaximum");
     let maximum = deserialize_minmax("maximum", mapping)?;
     let minimum = deserialize_minmax("minimum", mapping)?;
     let multiple_of = deserialize_integer("multipleOf", mapping)?;

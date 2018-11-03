@@ -1,7 +1,5 @@
 use crate::dsl::enums::EnumerationValue;
 use crate::dsl::enums::EnumerationValues;
-use crate::dsl::object_types::ObjectType;
-use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::DisplayInformation;
 use serde::de::Error;
 use serde::Deserialize;

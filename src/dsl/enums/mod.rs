@@ -2,8 +2,6 @@ pub mod deserialization;
 mod normalization;
 mod validation;
 
-use crate::dsl::object_types::ObjectType;
-use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::DisplayInformation;
 
 #[derive(Clone, Debug)]
@@ -14,6 +12,7 @@ pub struct EnumerationValues {
 #[derive(Clone, Debug)]
 pub struct EnumerationValue {
     pub display_information: DisplayInformation,
+    // TODO: value should nor really be optional, semantically speaking
     pub value: Option<String>,
 }
 

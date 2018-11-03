@@ -43,24 +43,6 @@ where
     })
 }
 
-fn deserialize_property<E>(value: &Value) -> Result<Property, E>
-where
-    E: Error,
-{
-    let key = Value::from("type");
-    let mapping = value
-        .as_mapping()
-        .ok_or(Error::custom("property is not a yaml mapping"))?;
-    let type_information = deserialize_object_type(&mapping)?;
-
-    let display_information = serde_yaml::from_value(value.clone())
-        .map_err(|e| Error::custom(format!("cannot deserialize display information - {}", e)))?;
-    Ok(Property {
-        type_information,
-        display_information,
-    })
-}
-
 fn mapping_to_property_entry<E>(mapping: &Mapping) -> Result<PropertyEntry, E>
 where
     E: Error,
@@ -75,5 +57,22 @@ where
     Ok(PropertyEntry {
         name: key,
         property: value,
+    })
+}
+
+fn deserialize_property<E>(value: &Value) -> Result<Property, E>
+where
+    E: Error,
+{
+    let mapping = value
+        .as_mapping()
+        .ok_or_else(|| Error::custom("property is not a yaml mapping"))?;
+    let type_information = deserialize_object_type(&mapping)?;
+
+    let display_information = serde_yaml::from_value(value.clone())
+        .map_err(|e| Error::custom(format!("cannot deserialize display information - {}", e)))?;
+    Ok(Property {
+        type_information,
+        display_information,
     })
 }

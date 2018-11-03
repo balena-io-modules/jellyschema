@@ -1,4 +1,3 @@
-use core::borrow::Borrow;
 use crate::dsl::enums::EnumerationValue;
 use crate::dsl::enums::EnumerationValues;
 use crate::dsl::object_types::IntegerBound;
@@ -26,7 +25,6 @@ impl Serialize for Property {
     }
 }
 
-// TODO: use json display struct instead
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
@@ -74,7 +72,6 @@ where
 {
     match raw_type {
         RawObjectType::Object => map.serialize_entry("type", "object")?,
-        // fixme
         RawObjectType::String(object_bounds) => {
             map.serialize_entry("type", "string")?;
             for enumeration_values in object_bounds {
@@ -132,18 +129,24 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    // fixme use map instead
-    let mut enumeration_possible_values = vec![];
-    for enumeration_value in &enumeration_values.possible_values {
-        enumeration_possible_values.push(enumeration_value);
+    let enumeration_possible_values = &enumeration_values.possible_values;
+
+    if enumeration_possible_values.iter().count() == 1 {
+        serialize_singular_constant_value(enumeration_possible_values.iter().next().unwrap(), map)?;
+    } else {
+        serialize_multiple_enum_values(enumeration_possible_values, map)?;
     }
 
-    if !enumeration_possible_values.is_empty() {
-        if enumeration_possible_values.iter().count() == 1 {
-            serialize_singular_constant_value(enumeration_possible_values.get(0).unwrap(), map)?;
-        } else {
-            map.serialize_entry("oneOf", &enumeration_possible_values)?;
-        }
+    Ok(())
+}
+
+fn serialize_multiple_enum_values<O, E, S>(enumeration_values: &[EnumerationValue], map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if !enumeration_values.is_empty() {
+        map.serialize_entry("oneOf", &enumeration_values)?;
     }
     Ok(())
 }
