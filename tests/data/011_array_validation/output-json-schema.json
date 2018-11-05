@@ -1,4 +1,13 @@
 {
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$$order": [
+        "wifiNetworks",
+        "mixedNetworks",
+        "mixedNetworksUnlimitedWifi",
+        "uniqueWifiNetworks",
+        "uniqueSsidWifiNetworks"
+    ],
     "properties": {
         "wifiNetworks": {
             "type": "array",
