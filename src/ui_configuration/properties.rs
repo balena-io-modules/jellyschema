@@ -89,7 +89,7 @@ where
         RawObjectType::String(object_bounds) => {
             map.serialize_entry("type", "string")?;
             for enumeration_values in object_bounds {
-                serialize_enumeration_values(&enumeration_values, map)?;
+                serialize_string_bounds(&enumeration_values, map)?;
             }
         }
         RawObjectType::Hostname => {
@@ -138,19 +138,29 @@ where
     Ok(())
 }
 
-fn serialize_enumeration_values<O, E, S>(enumeration_values: &StringObjectBounds, map: &mut S) -> Result<(), E>
+fn serialize_string_bounds<O, E, S>(string_bounds: &StringObjectBounds, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    let enumeration_possible_values = &enumeration_values.possible_values;
-
-    if enumeration_possible_values.is_some() {
-        let enumeration_possible_values = enumeration_possible_values.as_ref().unwrap();
-        if enumeration_possible_values.iter().count() == 1 {
-            serialize_singular_constant_value(&enumeration_possible_values.iter().next().unwrap(), map)?;
-        } else {
-            serialize_multiple_enum_values(&enumeration_possible_values, map)?;
+    match string_bounds {
+        StringObjectBounds::PossibleValues(values) => {
+            if values.is_some() {
+                let enumeration_possible_values = values.as_ref().unwrap();
+                if enumeration_possible_values.iter().count() == 1 {
+                    serialize_singular_constant_value(&enumeration_possible_values.iter().next().unwrap(), map)?;
+                } else {
+                    serialize_multiple_enum_values(&enumeration_possible_values, map)?;
+                }
+            }
+        }
+        StringObjectBounds::Pattern(pattern) => {
+            match pattern {
+                Some(pattern) => {
+                    map.serialize_entry("pattern", pattern.as_str())?;
+                },
+                None => {}
+            }
         }
     }
     Ok(())

@@ -3,8 +3,8 @@ mod normalization;
 mod validation;
 
 use crate::dsl::schema::DisplayInformation;
-use serde_derive::Serialize;
 use regex::Regex;
+use serde_derive::Serialize;
 
 #[derive(Clone, Copy, Debug, Serialize)]
 pub enum IntegerBound {
@@ -29,9 +29,9 @@ impl IntegerBound {
 }
 
 #[derive(Clone, Debug)]
-pub struct StringObjectBounds {
-    pub possible_values: Option<Vec<EnumerationValue>>,
-    pub pattern: Option<Regex>
+pub enum StringObjectBounds {
+    PossibleValues(Option<Vec<EnumerationValue>>),
+    Pattern(Option<Regex>),
 }
 
 #[derive(Clone, Debug)]

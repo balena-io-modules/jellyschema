@@ -22,6 +22,7 @@ TODOs:
   * lifetimes: remove unnecessary clones
   * most of the above are marked with `todo` or `fixme` in the code
 * after adding support for basic features:do a sweep through the spec and add tests for edge cases etc
+* Option<> => enum
 
 Spec notes:
 * password field - should it have associated `UIObject` widget

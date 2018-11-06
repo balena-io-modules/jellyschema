@@ -4,10 +4,13 @@ use crate::dsl::object_types::bounds::StringObjectBounds;
 
 impl Normalize for StringObjectBounds {
     fn normalize(&mut self) {
-        if self.possible_values.is_some() {
-            for value in self.possible_values.as_mut().unwrap().iter_mut() {
-                value.normalize()
+        match self {
+            StringObjectBounds::PossibleValues(values) => {
+                for value in values.as_mut().unwrap().iter_mut() {
+                    value.normalize()
+                }
             }
+            StringObjectBounds::Pattern(_) => {}
         }
     }
 }
