@@ -1,20 +1,11 @@
-use crate::dsl::schema::PropertyList;
 use crate::dsl::schema::SourceSchema;
-use crate::ui_configuration::properties::serialize_property_list;
+use crate::ui_configuration::serialization::properties::serialize_property_list;
+use crate::ui_configuration::JsonSchema;
 use serde::ser::SerializeMap;
 use serde::Serialize;
 use serde::Serializer;
 
 const SCHEMA_URL: &str = "http://json-schema.org/draft-04/schema#";
-
-pub struct JsonSchema<'a> {
-    version: u64,
-    schema_url: &'a str,
-    // FIXME: use RawObjectType and reuse type_spec, title and properties from Property
-    type_spec: String,
-    title: &'a str,
-    properties: Option<&'a PropertyList>,
-}
 
 impl<'a> Serialize for JsonSchema<'a> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
