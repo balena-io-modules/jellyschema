@@ -16,6 +16,7 @@ pub enum ObjectType {
 pub enum RawObjectType {
     Object,
     String(Option<StringObjectBounds>),
+    Password(Option<StringObjectBounds>),
     Hostname,
     Integer(Option<IntegerObjectBounds>),
 }

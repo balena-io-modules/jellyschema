@@ -35,7 +35,7 @@ impl RawObjectType {
             "string" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
             "hostname" => RawObjectType::Hostname,
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
-            "password" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
+            "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
             _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
         };
         Ok(object_type)

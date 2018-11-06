@@ -93,6 +93,13 @@ where
                 serialize_string_bounds(&enumeration_values, map)?;
             }
         }
+        RawObjectType::Password(object_bounds) => {
+            map.serialize_entry("type", "string")?;
+            map.serialize_entry("writeOnly", &true)?;
+            for enumeration_values in object_bounds {
+                serialize_string_bounds(&enumeration_values, map)?;
+            }
+        }
         RawObjectType::Hostname => {
             map.serialize_entry("type", "string")?;
             map.serialize_entry("format", "hostname")?

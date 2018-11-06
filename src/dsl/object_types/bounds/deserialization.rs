@@ -11,6 +11,7 @@ use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
+// fixme this method is not the best method ;)
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
     E: Error,
