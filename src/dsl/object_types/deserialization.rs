@@ -1,4 +1,4 @@
-use crate::dsl::object_types::bounds::deserialization::deserialize_enumeration_values;
+use crate::dsl::object_types::bounds::deserialization::deserialize_string_object_bounds;
 use crate::dsl::object_types::bounds::deserialization::deserialize_integer_bounds;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
@@ -32,9 +32,12 @@ impl RawObjectType {
     {
         let object_type = match value {
             "object" => RawObjectType::Object, // fixme - deserialize recursively here
-            "string" => RawObjectType::String(deserialize_enumeration_values(mapping)?),
+            "string" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
             "hostname" => RawObjectType::Hostname,
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
+            "password" => {
+                RawObjectType::String(deserialize_string_object_bounds(mapping)?)
+            },
             _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
         };
         Ok(object_type)

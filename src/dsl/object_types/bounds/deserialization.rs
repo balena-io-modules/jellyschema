@@ -11,67 +11,75 @@ use serde::Deserializer;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-impl<'de> Deserialize<'de> for StringObjectBounds {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+pub fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Vec<EnumerationValue>, E>
     where
-        D: Deserializer<'de>,
+        E: Error,
     {
-        let definitions: Vec<Value> = Vec::deserialize(deserializer)
-            .map_err(|e| Error::custom(format!("cannot deserialize sequence - {}", e)))?;
-        let enumeration_values: Result<Vec<EnumerationValue>, D::Error> = definitions
+        let enum_key = Value::from("enum");
+        let enums = mapping.get(&enum_key);
+        if enums.is_none() {
+            return Ok(vec![]);
+        }
+
+
+        let definitions = enums.unwrap().as_sequence();
+
+        if definitions.is_none() {
+            return Err(Error::custom(format!("cannot deserialize sequence - {:#?} is not a sequence", enums)));
+        }
+
+        definitions.unwrap()
             .iter()
             .map(|definition| Ok(enumeration_definition_to_enumeration_value(definition)?))
-            .collect();
-
-        Ok(StringObjectBounds {
-            possible_values: enumeration_values?,
-        })
+            .collect()
     }
-}
 
-pub fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
-where
-    E: Error,
+pub fn deserialize_constant_value<E>(mapping: &Mapping) -> Result<Option<EnumerationValue>, E>
+    where
+        E: Error,
 {
-    let enum_key = Value::from("enum");
-    let enums = mapping.get(&enum_key).map_or(Ok(None), |value| {
-        serde_yaml::from_value(value.clone()).map_err(|e| {
-            Error::custom(format!(
-                "cannot deserialize list of enumeration values: {:#?} - {}",
-                value, e
-            ))
-        })
-    })?;
-
     let constant_key = Value::from("const");
-    let constant: Option<String> = mapping.get(&constant_key).map_or(Ok(None), |value| {
+    let value = mapping.get(&constant_key).map_or(Ok(None), |value| {
         serde_yaml::from_value(value.clone())
             .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
     })?;
+    let display_information = DisplayInformation {
+        title: None,
+        help: None,
+        warning: None,
+        description: None,
+    };
+    match value {
+        None => Ok(None),
+        Some(value) => Ok(Some(EnumerationValue {
+            value, display_information
+        }))
+    }
+}
 
-    if enums.is_some() && constant.is_some() {
+pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
+where
+    E: Error,
+{
+
+    let enumeration_values = deserialize_enumeration_values(&mapping)?;
+    let constant_value = deserialize_constant_value(&mapping)?;
+
+    if (!enumeration_values.is_empty()) && constant_value.is_some() {
         return Err(Error::custom("cannot have both enum and const defined"));
     }
 
-    if constant.is_some() {
-        return Ok(Some({
-            let display_information = DisplayInformation {
-                title: None,
-                help: None,
-                warning: None,
-                description: None,
-            };
-
-            StringObjectBounds {
-                possible_values: vec![EnumerationValue {
-                    value: constant.unwrap().clone(),
-                    display_information,
-                }],
-            }
-        }));
+    if constant_value.is_some() {
+        Ok(Some(StringObjectBounds {
+            possible_values: Some(vec![constant_value.unwrap()]),
+            pattern: None
+        }))
+    } else {
+        Ok(Some(StringObjectBounds {
+            possible_values: Some(enumeration_values),
+            pattern: None
+        }))
     }
-
-    Ok(enums)
 }
 
 pub fn deserialize_integer_bounds<E>(mapping: &Mapping) -> Result<Option<IntegerObjectBounds>, E>

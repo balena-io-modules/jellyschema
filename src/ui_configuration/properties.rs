@@ -145,12 +145,14 @@ where
 {
     let enumeration_possible_values = &enumeration_values.possible_values;
 
-    if enumeration_possible_values.iter().count() == 1 {
-        serialize_singular_constant_value(enumeration_possible_values.iter().next().unwrap(), map)?;
-    } else {
-        serialize_multiple_enum_values(enumeration_possible_values, map)?;
+    if enumeration_possible_values.is_some() {
+        let enumeration_possible_values = enumeration_possible_values.as_ref().unwrap();
+        if enumeration_possible_values.iter().count() == 1 {
+            serialize_singular_constant_value(&enumeration_possible_values.iter().next().unwrap(), map)?;
+        } else {
+            serialize_multiple_enum_values(&enumeration_possible_values, map)?;
+        }
     }
-
     Ok(())
 }
 

@@ -4,6 +4,7 @@ mod validation;
 
 use crate::dsl::schema::DisplayInformation;
 use serde_derive::Serialize;
+use regex::Regex;
 
 #[derive(Clone, Copy, Debug, Serialize)]
 pub enum IntegerBound {
@@ -29,13 +30,13 @@ impl IntegerBound {
 
 #[derive(Clone, Debug)]
 pub struct StringObjectBounds {
-    pub possible_values: Vec<EnumerationValue>,
+    pub possible_values: Option<Vec<EnumerationValue>>,
+    pub pattern: Option<Regex>
 }
 
 #[derive(Clone, Debug)]
 pub struct EnumerationValue {
     pub display_information: DisplayInformation,
-    // TODO: value should nor really be optional, semantically speaking
     pub value: String,
 }
 

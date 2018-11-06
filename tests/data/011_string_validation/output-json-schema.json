@@ -1,4 +1,16 @@
 {
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "String validation",
+    "$$order": [
+        "ssid",
+        "password"
+    ],
+    "required": [
+        "ssid",
+        "password"
+    ],
     "properties": {
         "ssid": {
             "type": "string",

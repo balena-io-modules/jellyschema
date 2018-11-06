@@ -1,3 +1,6 @@
+
+
+
 Guidelines: 
 * deserialization bit should be as simple as possible, not much logic there
 * serialization should have all the computation, the typesystem should be as small as possible though
@@ -19,3 +22,7 @@ TODOs:
   * lifetimes: remove unnecessary clones
   * most of the above are marked with `todo` or `fixme` in the code
 * after adding support for basic features:do a sweep through the spec and add tests for edge cases etc
+
+Spec notes:
+* password field - should it have associated `UIObject` widget
+
