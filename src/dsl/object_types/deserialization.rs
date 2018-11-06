@@ -31,7 +31,7 @@ impl RawObjectType {
         E: Error,
     {
         let object_type = match value {
-            "object" => RawObjectType::Object, // fixme - deserialize recursively here
+            "object" => RawObjectType::Object,
             "string" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
             "hostname" => RawObjectType::Hostname,
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),

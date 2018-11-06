@@ -11,7 +11,7 @@ use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-// fixme this method is not the best method ;)
+// fixme this function is not the best function ;)
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
     E: Error,
@@ -74,7 +74,7 @@ where
     let minimum = deserialize_integer_bound("minimum", mapping)?;
     let multiple_of = deserialize_integer("multipleOf", mapping)?;
 
-    if maximum.is_some() {
+    if maximum.is_some() || minimum.is_some() || multiple_of.is_some() {
         Ok(Some(IntegerObjectBounds {
             minimum,
             maximum,
@@ -104,12 +104,11 @@ where
         )));
     }
 
-    let result: Result<Vec<EnumerationValue>, E> = definitions
+    let result = definitions
         .unwrap()
         .iter()
         .map(|definition| enumeration_definition_to_enumeration_value(definition))
-        .collect();
-    let result = result?;
+        .collect::<Result<Vec<EnumerationValue>, E>>()?;
 
     if !result.is_empty() {
         Ok(Some(result))
@@ -177,7 +176,7 @@ where
             .expect("unwrapping mapping failed - serde_yaml inconsistency");
         Ok(mapping_to_enumeration_value(mapping)?)
     } else {
-        Err(Error::custom(format!("no idea how to deserialize {:?}", definition)))
+        Err(Error::custom(format!("no idea how to deserialize {:#?}", definition)))
     }
 }
 

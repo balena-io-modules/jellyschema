@@ -10,7 +10,7 @@ const SCHEMA_URL: &str = "http://json-schema.org/draft-04/schema#";
 pub struct JsonSchema<'a> {
     version: u64,
     schema_url: &'a str,
-    // FIXME: make recursive
+    // FIXME: use RawObjectType and reuse type_spec, title and properties from Property
     type_spec: String,
     title: &'a str,
     properties: Option<&'a PropertyList>,

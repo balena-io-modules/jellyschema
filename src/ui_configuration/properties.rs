@@ -3,7 +3,7 @@ use crate::dsl::object_types::bounds::IntegerBound;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::bounds::StringLength;
 use crate::dsl::object_types::bounds::StringObjectBounds;
-use crate::dsl::object_types::{ObjectType, RawObjectType};
+use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::{Property, PropertyList};
 use heck::MixedCase;
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
@@ -22,11 +22,14 @@ where
         map.serialize_entry("properties", &properties_map)?;
     };
 
-    if !property_list.required_property_names().is_empty() {
-        map.serialize_entry("required", &property_list.required_property_names())?;
+    let required = &property_list.required_property_names();
+    if !required.is_empty() {
+        map.serialize_entry("required", required)?;
     }
-    if !property_list.property_names().is_empty() {
-        map.serialize_entry("$$order", &property_list.property_names())?;
+
+    let names = &property_list.property_names();
+    if !names.is_empty() {
+        map.serialize_entry("$$order", names)?;
     }
     Ok(())
 }
@@ -65,17 +68,6 @@ impl Serialize for EnumerationValue {
             map.serialize_entry("enum", &vec![&self.value])?;
         }
 
-        map.end()
-    }
-}
-
-impl Serialize for ObjectType {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let mut map = serializer.serialize_map(None)?;
-        serialize_object_type(&self.inner(), &mut map)?;
         map.end()
     }
 }
