@@ -36,6 +36,7 @@ impl RawObjectType {
             "hostname" => RawObjectType::Hostname,
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
+            "boolean" => RawObjectType::Boolean,
             _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
         };
         Ok(object_type)

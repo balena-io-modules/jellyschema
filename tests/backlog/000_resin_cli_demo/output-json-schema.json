@@ -42,6 +42,7 @@
                 "ssid",
                 "passphrase"
             ],
+            "type": "object",
             "$$mapping": {
                 "target": "resin_wifi",
                 "template": {

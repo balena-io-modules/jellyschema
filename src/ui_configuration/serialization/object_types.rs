@@ -34,6 +34,7 @@ where
 {
     match raw_type {
         RawObjectType::Object => map.serialize_entry("type", "object")?,
+        RawObjectType::Boolean => map.serialize_entry("type", "boolean")?,
         RawObjectType::String(object_bounds) => {
             serialize_string_with_bounds(object_bounds, map)?;
         }
