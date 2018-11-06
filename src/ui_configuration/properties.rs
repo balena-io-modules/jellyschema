@@ -154,14 +154,12 @@ where
                 }
             }
         }
-        StringObjectBounds::Pattern(pattern) => {
-            match pattern {
-                Some(pattern) => {
-                    map.serialize_entry("pattern", pattern.as_str())?;
-                },
-                None => {}
+        StringObjectBounds::Pattern(pattern) => match pattern {
+            Some(pattern) => {
+                map.serialize_entry("pattern", pattern.as_str())?;
             }
-        }
+            None => {}
+        },
     }
     Ok(())
 }
