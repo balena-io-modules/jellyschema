@@ -1,6 +1,7 @@
 use crate::dsl::object_types::bounds::EnumerationValue;
 use crate::dsl::object_types::bounds::IntegerBound;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::object_types::bounds::StringLength;
 use crate::dsl::object_types::bounds::StringObjectBounds;
 use crate::dsl::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::DisplayInformation;
@@ -28,15 +29,28 @@ where
     }
 
     if pattern.is_some() {
-        return Ok(Some(StringObjectBounds::Pattern(pattern)));
+        return Ok(Some(StringObjectBounds::Pattern(pattern.unwrap())));
+    }
+
+    let max_length = deserialize_integer("maxLength", &mapping)?;
+    let min_length = deserialize_integer("minLength", &mapping)?;
+    if max_length.is_some() || min_length.is_some() {
+        if constant_value.is_some() {
+            return Err(Error::custom("cannot have both length set and const bound"));
+        }
+        if !enumeration_values.is_empty() {
+            return Err(Error::custom("cannot have both length set and enum bound"));
+        }
+        return Ok(Some(StringObjectBounds::Length(StringLength {
+            minimum: min_length,
+            maximum: max_length,
+        })));
     }
 
     if constant_value.is_some() {
-        Ok(Some(StringObjectBounds::PossibleValues(Some(vec![
-            constant_value.unwrap()
-        ]))))
+        Ok(Some(StringObjectBounds::PossibleValues(vec![constant_value.unwrap()])))
     } else {
-        Ok(Some(StringObjectBounds::PossibleValues(Some(enumeration_values))))
+        Ok(Some(StringObjectBounds::PossibleValues(enumeration_values)))
     }
 }
 

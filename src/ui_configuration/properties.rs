@@ -1,6 +1,7 @@
 use crate::dsl::object_types::bounds::EnumerationValue;
 use crate::dsl::object_types::bounds::IntegerBound;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::object_types::bounds::StringLength;
 use crate::dsl::object_types::bounds::StringObjectBounds;
 use crate::dsl::object_types::{ObjectType, RawObjectType};
 use crate::dsl::schema::{Property, PropertyList};
@@ -145,21 +146,28 @@ where
 {
     match string_bounds {
         StringObjectBounds::PossibleValues(values) => {
-            if values.is_some() {
-                let enumeration_possible_values = values.as_ref().unwrap();
-                if enumeration_possible_values.iter().count() == 1 {
-                    serialize_singular_constant_value(&enumeration_possible_values.iter().next().unwrap(), map)?;
-                } else {
-                    serialize_multiple_enum_values(&enumeration_possible_values, map)?;
-                }
+            if values.len() == 1 {
+                serialize_singular_constant_value(&values[0], map)?;
+            } else {
+                serialize_multiple_enum_values(&values, map)?;
             }
         }
-        StringObjectBounds::Pattern(pattern) => match pattern {
-            Some(pattern) => {
-                map.serialize_entry("pattern", pattern.as_str())?;
-            }
-            None => {}
-        },
+        StringObjectBounds::Pattern(pattern) => map.serialize_entry("pattern", pattern.as_str())?,
+        StringObjectBounds::Length(length) => serialize_length_bounds(length, map)?,
+    }
+    Ok(())
+}
+
+fn serialize_length_bounds<O, E, S>(length_bounds: &StringLength, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if length_bounds.maximum.is_some() {
+        map.serialize_entry("maxLength", &length_bounds.maximum.unwrap())?;
+    }
+    if length_bounds.minimum.is_some() {
+        map.serialize_entry("minLength", &length_bounds.minimum.unwrap())?;
     }
     Ok(())
 }

@@ -6,11 +6,12 @@ impl Normalize for StringObjectBounds {
     fn normalize(&mut self) {
         match self {
             StringObjectBounds::PossibleValues(values) => {
-                for value in values.as_mut().unwrap().iter_mut() {
+                for value in values.iter_mut() {
                     value.normalize()
                 }
             }
             StringObjectBounds::Pattern(_) => {}
+            StringObjectBounds::Length(_) => {}
         }
     }
 }

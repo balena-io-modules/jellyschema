@@ -29,9 +29,16 @@ impl IntegerBound {
 }
 
 #[derive(Clone, Debug)]
+pub struct StringLength {
+    pub minimum: Option<i64>,
+    pub maximum: Option<i64>,
+}
+
+#[derive(Clone, Debug)]
 pub enum StringObjectBounds {
-    PossibleValues(Option<Vec<EnumerationValue>>),
-    Pattern(Option<Regex>),
+    PossibleValues(Vec<EnumerationValue>),
+    Pattern(Regex),
+    Length(StringLength),
 }
 
 #[derive(Clone, Debug)]
