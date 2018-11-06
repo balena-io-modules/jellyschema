@@ -88,17 +88,11 @@ where
     match raw_type {
         RawObjectType::Object => map.serialize_entry("type", "object")?,
         RawObjectType::String(object_bounds) => {
-            map.serialize_entry("type", "string")?;
-            for enumeration_values in object_bounds {
-                serialize_string_bounds(&enumeration_values, map)?;
-            }
+            serialize_string_with_bounds(object_bounds, map)?;
         }
         RawObjectType::Password(object_bounds) => {
-            map.serialize_entry("type", "string")?;
             map.serialize_entry("writeOnly", &true)?;
-            for enumeration_values in object_bounds {
-                serialize_string_bounds(&enumeration_values, map)?;
-            }
+            serialize_string_with_bounds(object_bounds, map)?;
         }
         RawObjectType::Hostname => {
             map.serialize_entry("type", "string")?;
@@ -111,6 +105,18 @@ where
             }
         }
     };
+    Ok(())
+}
+
+fn serialize_string_with_bounds<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    map.serialize_entry("type", "string")?;
+    for enumeration_values in bounds {
+        serialize_string_bounds(&enumeration_values, map)?;
+    }
     Ok(())
 }
 

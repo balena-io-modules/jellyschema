@@ -16,42 +16,53 @@ pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<S
 where
     E: Error,
 {
-    // fixme: there seems to be some exclusivity going on between the flags - fix with types ?
     let enumeration_values = deserialize_enumeration_values(&mapping)?;
-    let constant_value = deserialize_constant_value(&mapping)?;
+    let constant_value = deserialize_constant_value(&mapping)?.map(|value| vec![value]);
     let pattern = deserialize_pattern(&mapping)?;
+    let length = deserialize_length_bounds(&mapping)?;
 
-    if (!enumeration_values.is_empty()) && constant_value.is_some() {
+    if (enumeration_values.is_some()) && constant_value.is_some() {
         return Err(Error::custom("cannot have both enum and const defined"));
     }
 
-    if pattern.is_some() && (constant_value.is_some() || !enumeration_values.is_empty()) {
+    let possible_values = enumeration_values.or(constant_value);
+
+    if possible_values.is_some() && pattern.is_some() {
         return Err(Error::custom("cannot have both pattern set and enum/const bound"));
     }
 
-    if pattern.is_some() {
-        return Ok(Some(StringObjectBounds::Pattern(pattern.unwrap())));
+    if possible_values.is_some() && length.is_some() {
+        return Err(Error::custom("cannot have both length set and enum/const bound"));
     }
 
+    let result = {
+        if let Some(values) = possible_values {
+            Some(StringObjectBounds::PossibleValues(values))
+        } else if let Some(pattern) = pattern {
+            Some(StringObjectBounds::Pattern(pattern))
+        } else if let Some(length) = length {
+            Some(length)
+        } else {
+            None
+        }
+    };
+
+    Ok(result)
+}
+
+pub fn deserialize_length_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
+where
+    E: Error,
+{
     let max_length = deserialize_integer("maxLength", &mapping)?;
     let min_length = deserialize_integer("minLength", &mapping)?;
     if max_length.is_some() || min_length.is_some() {
-        if constant_value.is_some() {
-            return Err(Error::custom("cannot have both length set and const bound"));
-        }
-        if !enumeration_values.is_empty() {
-            return Err(Error::custom("cannot have both length set and enum bound"));
-        }
-        return Ok(Some(StringObjectBounds::Length(StringLength {
+        Ok(Some(StringObjectBounds::Length(StringLength {
             minimum: min_length,
             maximum: max_length,
-        })));
-    }
-
-    if constant_value.is_some() {
-        Ok(Some(StringObjectBounds::PossibleValues(vec![constant_value.unwrap()])))
+        })))
     } else {
-        Ok(Some(StringObjectBounds::PossibleValues(enumeration_values)))
+        Ok(None)
     }
 }
 
@@ -74,14 +85,14 @@ where
     }
 }
 
-fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Vec<EnumerationValue>, E>
+fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<Vec<EnumerationValue>>, E>
 where
     E: Error,
 {
     let enum_key = Value::from("enum");
     let enums = mapping.get(&enum_key);
     if enums.is_none() {
-        return Ok(vec![]);
+        return Ok(None);
     }
 
     let definitions = enums.unwrap().as_sequence();
@@ -93,11 +104,18 @@ where
         )));
     }
 
-    definitions
+    let result: Result<Vec<EnumerationValue>, E> = definitions
         .unwrap()
         .iter()
-        .map(|definition| Ok(enumeration_definition_to_enumeration_value(definition)?))
-        .collect()
+        .map(|definition| enumeration_definition_to_enumeration_value(definition))
+        .collect();
+    let result = result?;
+
+    if !result.is_empty() {
+        Ok(Some(result))
+    } else {
+        Ok(None)
+    }
 }
 
 fn deserialize_pattern<E>(mapping: &Mapping) -> Result<Option<Regex>, E>
