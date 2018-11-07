@@ -11,6 +11,7 @@ use serde::Serializer;
 use std::string::ToString;
 
 use heck::MixedCase;
+use crate::dsl::object_types::bounds::BooleanObjectBounds;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -34,7 +35,9 @@ where
 {
     match raw_type {
         RawObjectType::Object => map.serialize_entry("type", "object")?,
-        RawObjectType::Boolean => map.serialize_entry("type", "boolean")?,
+        RawObjectType::Boolean(object_bounds) => {
+            serialize_boolean_with_bounds(object_bounds, map)?;
+        },
         RawObjectType::String(object_bounds) => {
             serialize_string_with_bounds(object_bounds, map)?;
         }
@@ -53,6 +56,22 @@ where
             }
         }
     };
+    Ok(())
+}
+
+fn serialize_boolean_with_bounds<O, E, S>(bounds: &Option<BooleanObjectBounds>, map: &mut S) -> Result<(), E>
+    where
+        E: Error,
+        S: SerializeMap<Ok = O, Error = E>,
+{
+    map.serialize_entry("type", "boolean")?;
+    for value in bounds {
+        match value {
+            BooleanObjectBounds::DefaultValue(default_value) => {
+                map.serialize_entry("default", default_value)?;
+            }
+        }
+    }
     Ok(())
 }
 

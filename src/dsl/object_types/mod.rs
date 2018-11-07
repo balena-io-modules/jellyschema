@@ -5,6 +5,7 @@ mod validation;
 
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::bounds::StringObjectBounds;
+use crate::dsl::object_types::bounds::BooleanObjectBounds;
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {
@@ -15,7 +16,7 @@ pub enum ObjectType {
 #[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    Boolean,
+    Boolean(Option<BooleanObjectBounds>),
     String(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),
     Hostname,

@@ -42,6 +42,11 @@ pub enum StringObjectBounds {
 }
 
 #[derive(Clone, Debug)]
+pub enum BooleanObjectBounds {
+    DefaultValue(bool),
+}
+
+#[derive(Clone, Debug)]
 pub struct EnumerationValue {
     pub display_information: DisplayInformation,
     pub value: String,

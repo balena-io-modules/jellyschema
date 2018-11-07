@@ -99,6 +99,7 @@
                 "hostname",
                 "persistentLogging"
             ],
+            "type": "object",
             "properties": {
                 "hostname": {
                     "title": "Device Hostname",
