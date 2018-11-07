@@ -3,9 +3,9 @@ pub mod deserialization;
 mod normalization;
 mod validation;
 
+use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::bounds::StringObjectBounds;
-use crate::dsl::object_types::bounds::BooleanObjectBounds;
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {

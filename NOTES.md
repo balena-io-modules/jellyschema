@@ -33,3 +33,6 @@ Spec notes:
 * "The value of this keyword MUST be either a string or an array. If it is an array, elements of the array MUST be strings and MUST be unique." 
    String values MUST be one of the seven primitive types"
    - on the first reading not clear the difference between yaml types and dsl types
+
+Roadmap:
+* Create a playground application that would allow other people to play with the DSL

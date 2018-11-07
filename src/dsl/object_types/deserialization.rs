@@ -1,3 +1,4 @@
+use crate::dsl::object_types::bounds::deserialization::deserialize_boolean_object_bounds;
 use crate::dsl::object_types::bounds::deserialization::deserialize_integer_bounds;
 use crate::dsl::object_types::bounds::deserialization::deserialize_string_object_bounds;
 use crate::dsl::object_types::ObjectType;
@@ -5,7 +6,6 @@ use crate::dsl::object_types::RawObjectType;
 use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
-use crate::dsl::object_types::bounds::deserialization::deserialize_boolean_object_bounds;
 
 pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
 where

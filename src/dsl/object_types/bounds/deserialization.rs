@@ -1,3 +1,4 @@
+use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::EnumerationValue;
 use crate::dsl::object_types::bounds::IntegerBound;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
@@ -10,7 +11,6 @@ use regex::Regex;
 use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
-use crate::dsl::object_types::bounds::BooleanObjectBounds;
 
 // fixme this function is not the best function ;)
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
@@ -87,10 +87,9 @@ where
 }
 
 pub fn deserialize_boolean_object_bounds<E>(mapping: &Mapping) -> Result<Option<BooleanObjectBounds>, E>
-    where
-        E: Error,
+where
+    E: Error,
 {
-
     let default_key = Value::from("default");
     let default = mapping.get(&default_key);
     if default.is_none() {
@@ -101,7 +100,7 @@ pub fn deserialize_boolean_object_bounds<E>(mapping: &Mapping) -> Result<Option<
     if default_value.is_none() {
         return Err(Error::custom(format!(
             "cannot deserialize default vaule - {:#?} is not a boolean",
-             default
+            default
         )));
     }
     Ok(Some(BooleanObjectBounds::DefaultValue(default_value.unwrap())))
