@@ -75,13 +75,10 @@ where
     let properties = mapping.get(&Value::from("properties"));
     let properties = match properties {
         None => None,
-        Some(properties) => {
-            let sequence = properties.as_sequence();
-            match sequence {
-                None => return Err(Error::custom("")),
-                Some(sequence) => Some(sequence_to_property_list(sequence.to_vec())?),
-            }
-        }
+        Some(properties) => match properties {
+            Value::Sequence(sequence) => Some(sequence_to_property_list(sequence.to_vec())?),
+            _ => return Err(Error::custom("`properties` is not a yaml sequence")),
+        },
     };
 
     Ok(Property {

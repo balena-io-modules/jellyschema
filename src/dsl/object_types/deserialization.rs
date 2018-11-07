@@ -12,18 +12,26 @@ where
     E: Error,
 {
     let type_key = Value::from("type");
-    Ok(mapping.get(&type_key).map_or(Ok(None), |value| match value.as_str() {
-        Some(value) => Ok(Some({
-            let mut type_name = value.trim().to_lowercase();
-            if type_name.ends_with('?') {
-                type_name.remove(type_name.len() - 1);
-                ObjectType::Optional(RawObjectType::from(&type_name, &mapping)?)
-            } else {
-                ObjectType::Required(RawObjectType::from(&type_name, &mapping)?)
-            }
-        })),
-        None => Err(Error::custom("cannot find type definition")),
+    Ok(mapping.get(&type_key).map_or(Ok(None), |value| match value {
+        Value::String(string) => Ok(Some(deserialize_individual_type_definition(string, &mapping)?)),
+        _ => Err(Error::custom(format!(
+            "cannot recognize type definition format `{:#?}`",
+            value
+        ))),
     })?)
+}
+
+fn deserialize_individual_type_definition<E>(definition: &str, mapping: &Mapping) -> Result<ObjectType, E>
+where
+    E: Error,
+{
+    let mut type_name = definition.trim().to_lowercase();
+    Ok(if type_name.ends_with('?') {
+        type_name.remove(type_name.len() - 1);
+        ObjectType::Optional(RawObjectType::from(&type_name, &mapping)?)
+    } else {
+        ObjectType::Required(RawObjectType::from(&type_name, &mapping)?)
+    })
 }
 
 impl RawObjectType {

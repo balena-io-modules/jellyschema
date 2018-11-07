@@ -16,7 +16,7 @@ TODOs:
 * test edge cases - generate with property based tests
 * add fuzzer (afl?) to see if there are no crashes on any input
 * when used in other projects - create a `crater-like` test suite where we take the latest raleases stable version of the project that uses the library and then run its test suite with previous stable version of this library and with the new one, pre-release
-
+* use `valico` to validate the json schemas in tests
 
 Compiler phases:
 * phases (traits + eventually macros, see `Validate` trait): - effectively compilation-level state machine

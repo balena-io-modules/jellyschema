@@ -91,19 +91,17 @@ where
     E: Error,
 {
     let default_key = Value::from("default");
-    let default = mapping.get(&default_key);
-    if default.is_none() {
-        return Ok(None);
-    }
 
-    let default_value = default.unwrap().as_bool();
-    if default_value.is_none() {
-        return Err(Error::custom(format!(
-            "cannot deserialize default vaule - {:#?} is not a boolean",
-            default
-        )));
+    match mapping.get(&default_key) {
+        Some(default) => match default {
+            Value::Bool(value) => Ok(Some(BooleanObjectBounds::DefaultValue(*value))),
+            _ => Err(Error::custom(format!(
+                "cannot deserialize default value - {:#?} is not a boolean",
+                default
+            ))),
+        },
+        None => Ok(None),
     }
-    Ok(Some(BooleanObjectBounds::DefaultValue(default_value.unwrap())))
 }
 
 fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<Vec<EnumerationValue>>, E>
@@ -111,30 +109,22 @@ where
     E: Error,
 {
     let enum_key = Value::from("enum");
-    let enums = mapping.get(&enum_key);
-    if enums.is_none() {
-        return Ok(None);
-    }
-
-    let definitions = enums.unwrap().as_sequence();
-
-    if definitions.is_none() {
-        return Err(Error::custom(format!(
-            "cannot deserialize sequence - {:#?} is not a sequence",
-            enums
-        )));
-    }
-
-    let result = definitions
-        .unwrap()
-        .iter()
-        .map(|definition| enumeration_definition_to_enumeration_value(definition))
-        .collect::<Result<Vec<EnumerationValue>, E>>()?;
-
-    if !result.is_empty() {
-        Ok(Some(result))
-    } else {
-        Ok(None)
+    match mapping.get(&enum_key) {
+        Some(mapping) => match mapping {
+            Value::Sequence(sequence) => {
+                let result = sequence
+                    .iter()
+                    .map(|definition| enumeration_definition_to_enumeration_value(definition))
+                    .collect::<Result<Vec<EnumerationValue>, E>>()?;
+                if !result.is_empty() {
+                    Ok(Some(result))
+                } else {
+                    Ok(None)
+                }
+            }
+            _ => Err(Error::custom(format!("enum `{:#?}` is not a sequence", mapping))),
+        },
+        None => Ok(None),
     }
 }
 
@@ -143,18 +133,17 @@ where
     E: Error,
 {
     let pattern_key = Value::from("pattern");
-    let pattern = mapping.get(&pattern_key);
-    if pattern.is_none() {
-        return Ok(None);
+    match mapping.get(&pattern_key) {
+        Some(pattern) => match pattern {
+            Value::String(string) => {
+                Ok(Some(Regex::new(string).map_err(|e| {
+                    Error::custom(format!("pattern `{:?}` is not a regex - {}", pattern, e))
+                })?))
+            }
+            _ => Err(Error::custom(format!("pattern `{:#?}` must be a string", pattern))),
+        },
+        None => Ok(None),
     }
-
-    let pattern_text = pattern.unwrap().as_str();
-    if pattern_text.is_none() {
-        return Err(Error::custom(format!("pattern `{:#?}` must be a string", pattern)));
-    }
-    Ok(Some(Regex::new(pattern_text.unwrap()).map_err(|e| {
-        Error::custom(format!("pattern `{:?}` is not a regex - {}", pattern_text, e))
-    })?))
 }
 
 fn deserialize_constant_value<E>(mapping: &Mapping) -> Result<Option<EnumerationValue>, E>
@@ -185,19 +174,10 @@ fn enumeration_definition_to_enumeration_value<E>(definition: &Value) -> Result<
 where
     E: Error,
 {
-    // FIXME: readability
-    if definition.is_string() {
-        Ok(definition
-            .as_str()
-            .expect("unwrapping as string failed - serde_yaml inconsistency")
-            .into())
-    } else if definition.is_mapping() {
-        let mapping = definition
-            .as_mapping()
-            .expect("unwrapping mapping failed - serde_yaml inconsistency");
-        Ok(mapping_to_enumeration_value(mapping)?)
-    } else {
-        Err(Error::custom(format!("no idea how to deserialize {:#?}", definition)))
+    match definition {
+        Value::String(string) => Ok(string.as_str().into()),
+        Value::Mapping(mapping) => Ok(mapping_to_enumeration_value(mapping)?),
+        _ => Err(Error::custom(format!("no idea how to deserialize {:#?}", definition))),
     }
 }
 
