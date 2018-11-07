@@ -18,8 +18,8 @@ impl<'a> Serialize for JsonSchema<'a> {
         map.serialize_entry("type", &self.type_spec)?;
         map.serialize_entry("title", &self.title)?;
 
-        if self.properties.is_some() {
-            serialize_property_list(&self.properties.unwrap(), &mut map)?;
+        if let Some(properties) = self.properties {
+            serialize_property_list(properties, &mut map)?
         }
 
         map.end()

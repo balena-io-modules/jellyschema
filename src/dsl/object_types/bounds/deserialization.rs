@@ -185,22 +185,27 @@ fn mapping_to_enumeration_value<E>(mapping: &Mapping) -> Result<EnumerationValue
 where
     E: Error,
 {
-    let value = mapping.get(&Value::from("value"));
-    let title = mapping.get(&Value::from("title"));
-    let value = value
-        .map(|value| {
-            value
-                .as_str()
-                .expect("serde_yaml type inconsistence on value")
-                .to_string()
+    let value = mapping
+        .get(&Value::from("value"))
+        .map(|value| match value {
+            Value::String(string) => Ok(string),
+            _ => Err(Error::custom(format!("enum value `{:#?}` must be a string", value))),
         })
-        .ok_or_else(|| Error::custom("when the enumeration is a mapping - expected 'value' to be present"))?;
-    let title = title.map(|value| {
-        value
-            .as_str()
-            .expect("serde_yaml type inconsistence on title")
-            .to_string()
+        .ok_or_else(|| Error::custom("when the enumeration is a mapping - expected 'value' to be present"))??;
+
+    let title = mapping.get(&Value::from("title")).map(|value| match value {
+        Value::String(string) => Ok(string),
+        _ => Err(Error::custom(format!("enum title `{:#?}` must be a string", value))),
     });
+
+    let title = match title {
+        None => None,
+        Some(result) => match result {
+            Ok(value) => Some(value.to_string()),
+            Err(e) => return Err(e),
+        },
+    };
+
     let display_information = DisplayInformation {
         title,
         help: None,
@@ -209,7 +214,7 @@ where
     };
     Ok(EnumerationValue {
         display_information,
-        value,
+        value: value.to_string(),
     })
 }
 
@@ -222,11 +227,11 @@ where
     if normal.is_some() && exclusive.is_some() {
         return Err(Error::custom("cannot have both {} and exclusive {} set"));
     }
-    if normal.is_some() {
-        return Ok(Some(IntegerBound::Inclusive(normal.unwrap())));
+    if let Some(normal) = normal {
+        return Ok(Some(IntegerBound::Inclusive(normal)));
     }
-    if exclusive.is_some() {
-        return Ok(Some(IntegerBound::Exclusive(exclusive.unwrap())));
+    if let Some(exclusive) = exclusive {
+        return Ok(Some(IntegerBound::Exclusive(exclusive)));
     }
     Ok(None)
 }

@@ -43,8 +43,8 @@ impl Serialize for Property {
         }
 
         let property_list = &self.property_list;
-        if property_list.is_some() {
-            serialize_property_list(&property_list.clone().unwrap(), &mut map)?;
+        if let Some(properties) = property_list {
+            serialize_property_list(properties, &mut map)?
         }
 
         map.end()

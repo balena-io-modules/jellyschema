@@ -92,8 +92,7 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    if bound.is_some() {
-        let value = bound.unwrap();
+    if let Some(value) = bound {
         match value {
             IntegerBound::Inclusive(value) => map.serialize_entry(name, &value)?,
             IntegerBound::Exclusive(value) => {
@@ -113,8 +112,8 @@ where
     serialize_integer_bound("maximum", &bounds.maximum, map)?;
     serialize_integer_bound("minimum", &bounds.minimum, map)?;
 
-    if bounds.multiple_of.is_some() {
-        map.serialize_entry("multipleOf", &bounds.multiple_of.unwrap())?;
+    if let Some(multiple_of) = bounds.multiple_of {
+        map.serialize_entry("multipleOf", &multiple_of)?;
     }
     Ok(())
 }
@@ -143,11 +142,11 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    if length_bounds.maximum.is_some() {
-        map.serialize_entry("maxLength", &length_bounds.maximum.unwrap())?;
+    if let Some(maximum) = length_bounds.maximum {
+        map.serialize_entry("maxLength", &maximum)?;
     }
-    if length_bounds.minimum.is_some() {
-        map.serialize_entry("minLength", &length_bounds.minimum.unwrap())?;
+    if let Some(minimum) = length_bounds.minimum {
+        map.serialize_entry("minLength", &minimum)?;
     }
     Ok(())
 }
