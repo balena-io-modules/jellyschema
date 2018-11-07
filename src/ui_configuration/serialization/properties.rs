@@ -1,3 +1,4 @@
+use crate::dsl::object_types::ObjectType;
 use crate::dsl::schema::{Property, PropertyList};
 use crate::ui_configuration::serialization::object_types::object_type_name;
 use crate::ui_configuration::serialization::object_types::serialize_object_type;
@@ -40,18 +41,11 @@ impl Serialize for Property {
         }
 
         if let Some(types) = &self.types {
-            if types.len() > 1 {
-                if types.iter().any(|def| def.inner().has_bounds()) {
-                    return Err(Error::custom(
-                        "cannot have type bounds when specifying multiple types per property",
-                    ));
-                }
-
-                let type_names: Vec<_> = types.iter().map(|def| object_type_name(def.inner())).collect();
-                map.serialize_entry("type", &type_names)?;
-            }
             if types.len() == 1 {
                 serialize_object_type(types[0].inner(), &mut map)?;
+            }
+            if types.len() > 1 {
+                serialize_type_array(types, &mut map)?;
             }
         }
 
@@ -62,4 +56,20 @@ impl Serialize for Property {
 
         map.end()
     }
+}
+
+fn serialize_type_array<O, E, S>(types: &[ObjectType], map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if types.iter().any(|def| def.inner().has_bounds()) {
+        return Err(Error::custom(
+            "cannot have type bounds when specifying multiple types per property",
+        ));
+    }
+
+    let type_names: Vec<_> = types.iter().map(|def| object_type_name(def.inner())).collect();
+    map.serialize_entry("type", &type_names)?;
+    Ok(())
 }
