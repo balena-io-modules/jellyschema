@@ -1,4 +1,5 @@
 use crate::dsl::schema::{Property, PropertyList};
+use crate::ui_configuration::serialization::object_types::object_type_name;
 use crate::ui_configuration::serialization::object_types::serialize_object_type;
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 use std::collections::HashMap;
@@ -38,13 +39,25 @@ impl Serialize for Property {
             map.serialize_entry("title", &title)?;
         }
 
-        for type_spec in &self.type_information {
-            serialize_object_type(&type_spec.inner(), &mut map)?;
+        if let Some(types) = &self.types {
+            if types.len() > 1 {
+                if types.iter().any(|def| def.inner().has_bounds()) {
+                    return Err(Error::custom(
+                        "cannot have type bounds when specifying multiple types per property",
+                    ));
+                }
+
+                let type_names: Vec<_> = types.iter().map(|def| object_type_name(def.inner())).collect();
+                map.serialize_entry("type", &type_names)?;
+            }
+            if types.len() == 1 {
+                serialize_object_type(types[0].inner(), &mut map)?;
+            }
         }
 
         let property_list = &self.property_list;
         if let Some(properties) = property_list {
-            serialize_property_list(properties, &mut map)?
+            serialize_property_list(properties, &mut map)?;
         }
 
         map.end()

@@ -7,18 +7,32 @@ use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
+pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<Vec<ObjectType>>, E>
 where
     E: Error,
 {
     let type_key = Value::from("type");
     Ok(mapping.get(&type_key).map_or(Ok(None), |value| match value {
-        Value::String(string) => Ok(Some(deserialize_individual_type_definition(string, &mapping)?)),
+        Value::String(string) => Ok(Some(vec![deserialize_individual_type_definition(string, &mapping)?])),
+        Value::Sequence(sequence) => Ok(Some(deserialize_array_of_types(sequence, mapping)?)),
         _ => Err(Error::custom(format!(
             "cannot recognize type definition format `{:#?}`",
             value
         ))),
     })?)
+}
+
+fn deserialize_array_of_types<E>(sequence: &[Value], mapping: &Mapping) -> Result<Vec<ObjectType>, E>
+where
+    E: Error,
+{
+    sequence
+        .iter()
+        .map(|type_definition| match type_definition {
+            Value::String(string) => Ok(deserialize_individual_type_definition(string, mapping)?),
+            _ => Err(Error::custom("type definition needs to be a string")),
+        })
+        .collect()
 }
 
 fn deserialize_individual_type_definition<E>(definition: &str, mapping: &Mapping) -> Result<ObjectType, E>

@@ -23,6 +23,19 @@ pub enum RawObjectType {
     Integer(Option<IntegerObjectBounds>),
 }
 
+impl RawObjectType {
+    pub fn has_bounds(&self) -> bool {
+        match self {
+            RawObjectType::Object => false,
+            RawObjectType::Hostname => false,
+            RawObjectType::Boolean(bounds) => bounds.is_some(),
+            RawObjectType::String(bounds) => bounds.is_some(),
+            RawObjectType::Password(bounds) => bounds.is_some(),
+            RawObjectType::Integer(bounds) => bounds.is_some(),
+        }
+    }
+}
+
 impl ObjectType {
     pub fn inner(&self) -> &RawObjectType {
         match self {

@@ -82,7 +82,7 @@ where
     };
 
     Ok(Property {
-        type_information,
+        types: type_information,
         display_information,
         property_list: properties,
     })

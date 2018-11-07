@@ -16,13 +16,17 @@ impl Normalize for SourceSchema {
 
 impl Normalize for PropertyEntry {
     fn normalize(&mut self) {
-        match &mut self.property.type_information {
-            Some(spec) => spec.normalize(),
+        match &mut self.property.types {
+            Some(spec) => {
+                for def in spec {
+                    def.normalize();
+                }
+            }
             None => {}
         }
 
-        if self.property.type_information.is_none() {
-            self.property.type_information = Some(ObjectType::Required(RawObjectType::Object));
+        if self.property.types.is_none() {
+            self.property.types = Some(vec![ObjectType::Required(RawObjectType::Object)]);
         }
     }
 }

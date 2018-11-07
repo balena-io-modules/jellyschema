@@ -34,7 +34,7 @@ pub struct PropertyEntry {
 
 #[derive(Clone, Debug)]
 pub struct Property {
-    pub type_information: Option<ObjectType>,
+    pub types: Option<Vec<ObjectType>>,
     pub display_information: DisplayInformation,
     pub property_list: Option<PropertyList>,
 }
@@ -55,11 +55,17 @@ impl PropertyList {
     pub fn required_property_names(&self) -> Vec<&str> {
         self.entries
             .iter()
-            .filter_map(|property_entry| match &property_entry.property.type_information {
-                Some(type_spec) => match type_spec {
-                    ObjectType::Required(_) => Some(property_entry.name.as_str()),
-                    ObjectType::Optional(_) => None,
-                },
+            .filter_map(|property_entry| match &property_entry.property.types {
+                Some(type_list) => {
+                    if type_list.iter().any(|type_spec| match type_spec {
+                        ObjectType::Required(_) => true,
+                        ObjectType::Optional(_) => false,
+                    }) {
+                        Some(property_entry.name.as_str())
+                    } else {
+                        None
+                    }
+                }
                 None => None,
             })
             .collect()
