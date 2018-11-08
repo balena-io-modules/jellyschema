@@ -12,6 +12,7 @@ use std::string::ToString;
 
 use crate::dsl::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::object_types::bounds::ArrayObjectBounds;
+use crate::dsl::object_types::bounds::ArrayUniqueItemBound;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use heck::MixedCase;
 
@@ -129,8 +130,15 @@ where
                 }
             }
         }
-        if let Some(unique_items) = bounds.unique_items {
-            map.serialize_entry("uniqueItems", &unique_items)?;
+        if let Some(ref unique_items) = bounds.unique_items {
+            match unique_items {
+                ArrayUniqueItemBound::All => {
+                    map.serialize_entry("uniqueItems", &true)?;
+                }
+                ArrayUniqueItemBound::Specific(items) => {
+                    map.serialize_entry("$$uniqueItemProperties", items)?;
+                }
+            }
         }
     }
     Ok(())

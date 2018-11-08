@@ -26,7 +26,13 @@ pub struct ArrayObjectBounds {
     pub minimum_number_of_items: Option<i64>,
     pub maximum_number_of_items: Option<i64>,
     pub items: Option<ArrayItemObjectBounds>,
-    pub unique_items: Option<bool>,
+    pub unique_items: Option<ArrayUniqueItemBound>,
+}
+
+#[derive(Clone, Debug)]
+pub enum ArrayUniqueItemBound {
+    All,
+    Specific(Vec<String>),
 }
 
 #[derive(Clone, Debug)]

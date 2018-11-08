@@ -1,5 +1,6 @@
 use crate::dsl::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::object_types::bounds::ArrayObjectBounds;
+use crate::dsl::object_types::bounds::ArrayUniqueItemBound;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::EnumerationValue;
 use crate::dsl::object_types::bounds::IntegerBound;
@@ -128,15 +129,32 @@ where
     Ok(None)
 }
 
-fn deserialize_array_unique_items_bounds<E>(mapping: &Mapping) -> Result<Option<bool>, E>
+fn deserialize_array_unique_items_bounds<E>(mapping: &Mapping) -> Result<Option<ArrayUniqueItemBound>, E>
 where
     E: Error,
 {
     match mapping.get(&Value::from("uniqueItems")) {
         None => Ok(None),
         Some(items) => match items {
-            Value::Bool(value) => Ok(Some(*value)),
-            Value::Sequence(_) => Ok(None),
+            Value::Bool(value) => {
+                if *value {
+                    Ok(Some(ArrayUniqueItemBound::All))
+                } else {
+                    Ok(None)
+                }
+            }
+            Value::Sequence(sequence) => {
+                let names = sequence
+                    .iter()
+                    .map(|item| match item {
+                        Value::String(name) => Ok(name.to_string()),
+                        _ => Err(Error::custom(
+                            "`uniqueItems` entry cannot be anything else than a string",
+                        )),
+                    })
+                    .collect::<Result<Vec<String>, E>>();
+                Ok(Some(ArrayUniqueItemBound::Specific(names?)))
+            }
             _ => Err(Error::custom(format!(
                 "unsupported shape of the `uniqueItems` {:#?}",
                 items
