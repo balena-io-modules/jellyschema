@@ -3,6 +3,7 @@ mod normalization;
 mod validation;
 
 use crate::dsl::schema::DisplayInformation;
+use crate::dsl::schema::Property;
 use regex::Regex;
 use serde_derive::Serialize;
 
@@ -23,6 +24,13 @@ pub struct IntegerObjectBounds {
 pub struct ArrayObjectBounds {
     pub minimum_number_of_items: Option<i64>,
     pub maximum_number_of_items: Option<i64>,
+    pub items: Option<ArrayItemObjectBounds>,
+}
+
+#[derive(Clone, Debug)]
+pub enum ArrayItemObjectBounds {
+    AllItems(Property),
+    RespectiveItems(Vec<Property>),
 }
 
 impl IntegerBound {

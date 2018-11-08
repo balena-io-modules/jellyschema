@@ -10,6 +10,7 @@ use serde::Serialize;
 use serde::Serializer;
 use std::string::ToString;
 
+use crate::dsl::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use heck::MixedCase;
@@ -117,6 +118,16 @@ where
         }
         if let Some(min) = bounds.minimum_number_of_items {
             map.serialize_entry("minItems", &min)?;
+        }
+        if let Some(ref items) = bounds.items {
+            match items {
+                ArrayItemObjectBounds::AllItems(property) => {
+                    map.serialize_entry("items", &property)?;
+                }
+                ArrayItemObjectBounds::RespectiveItems(properties) => {
+                    map.serialize_entry("items", &properties)?;
+                }
+            }
         }
     }
     Ok(())

@@ -12,7 +12,9 @@ TODOs:
   * lifetimes: remove unnecessary clones
   * most of the above are marked with `todo` or `fixme` in the code
   * validate `min/max` etc values cannot be negative, use `u64` instead of `i64`
-  
+  * fix debug formatting of serde values is errors - very unreadable right now
+  * have a type for `non-empty vec` and use it pretty much everywhere where `Option<Vec>` is used now
+   
 * docs
 * after adding support for basic features:do a sweep through the spec and add tests for edge cases etc
 * test edge cases - generate with property based tests

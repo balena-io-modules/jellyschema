@@ -60,13 +60,13 @@ where
     })
 }
 
-fn deserialize_property<E>(value: &Value) -> Result<Property, E>
+pub fn deserialize_property<E>(value: &Value) -> Result<Property, E>
 where
     E: Error,
 {
     let mapping = value
         .as_mapping()
-        .ok_or_else(|| Error::custom("property is not a yaml mapping"))?;
+        .ok_or_else(|| Error::custom(format!("property is not a yaml mapping - {:#?}", value)))?;
     let type_information = deserialize_object_type(&mapping)?;
 
     let display_information = serde_yaml::from_value(value.clone())

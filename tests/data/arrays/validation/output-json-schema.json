@@ -22,6 +22,14 @@
             "type": "array",
             "items": {
                 "type": "object",
+                "required": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "$$order": [
+                    "ssid",
+                    "passphrase"
+                ],
                 "properties": {
                     "ssid": {
                         "type": "string"
@@ -40,6 +48,14 @@
             "items": [
                 {
                     "type": "object",
+                    "required": [
+                        "ssid",
+                        "passphrase"
+                    ],
+                    "$$order": [
+                        "ssid",
+                        "passphrase"
+                    ],
                     "properties": {
                         "ssid": {
                             "type": "string"
@@ -52,6 +68,12 @@
                 },
                 {
                     "type": "object",
+                    "required": [
+                        "id"
+                    ],
+                    "$$order": [
+                        "id"
+                    ],
                     "properties": {
                         "id": {
                             "type": "string"
@@ -67,6 +89,14 @@
             "items": [
                 {
                     "type": "object",
+                    "required": [
+                        "ssid",
+                        "passphrase"
+                    ],
+                    "$$order": [
+                        "ssid",
+                        "passphrase"
+                    ],
                     "properties": {
                         "ssid": {
                             "type": "string"
@@ -79,6 +109,12 @@
                 },
                 {
                     "type": "object",
+                    "required": [
+                        "id"
+                    ],
+                    "$$order": [
+                        "id"
+                    ],
                     "properties": {
                         "id": {
                             "type": "string"
@@ -89,6 +125,14 @@
             "minItems": 1,
             "additionalItems": {
                 "type": "object",
+                "required": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "$$order": [
+                    "ssid",
+                    "passphrase"
+                ],
                 "properties": {
                     "ssid": {
                         "type": "string"
@@ -104,6 +148,14 @@
             "type": "array",
             "items": {
                 "type": "object",
+                "required": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "$$order": [
+                    "ssid",
+                    "passphrase"
+                ],
                 "properties": {
                     "ssid": {
                         "type": "string"
@@ -122,6 +174,14 @@
             "type": "array",
             "items": {
                 "type": "object",
+                "required": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "$$order": [
+                    "ssid",
+                    "passphrase"
+                ],
                 "properties": {
                     "ssid": {
                         "type": "string"

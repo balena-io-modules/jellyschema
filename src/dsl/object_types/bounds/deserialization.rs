@@ -1,3 +1,4 @@
+use crate::dsl::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::EnumerationValue;
@@ -6,7 +7,9 @@ use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::bounds::StringLength;
 use crate::dsl::object_types::bounds::StringObjectBounds;
 use crate::dsl::object_types::deserialization::deserialize_integer;
+use crate::dsl::schema::deserialization::deserialize_property;
 use crate::dsl::schema::DisplayInformation;
+use crate::dsl::schema::Property;
 use heck::MixedCase;
 use regex::Regex;
 use serde::de::Error;
@@ -109,15 +112,37 @@ pub fn deserialize_array_object_bounds<E>(mapping: &Mapping) -> Result<Option<Ar
 where
     E: Error,
 {
-    let maximum = deserialize_integer("maxItems", mapping)?;
-    let minimum = deserialize_integer("minItems", mapping)?;
-    if maximum.is_some() || minimum.is_some() {
+    let maximum_number_of_items = deserialize_integer("maxItems", mapping)?;
+    let minimum_number_of_items = deserialize_integer("minItems", mapping)?;
+    let items = deserialize_array_item_bounds(mapping)?;
+
+    if maximum_number_of_items.is_some() || minimum_number_of_items.is_some() || items.is_some() {
         return Ok(Some(ArrayObjectBounds {
-            minimum_number_of_items: minimum,
-            maximum_number_of_items: maximum,
+            minimum_number_of_items,
+            maximum_number_of_items,
+            items,
         }));
     }
     Ok(None)
+}
+
+fn deserialize_array_item_bounds<E>(mapping: &Mapping) -> Result<Option<ArrayItemObjectBounds>, E>
+where
+    E: Error,
+{
+    match mapping.get(&Value::from("items")) {
+        None => Ok(None),
+        Some(properties) => match properties {
+            Value::Mapping(_) => Ok(Some(ArrayItemObjectBounds::AllItems(deserialize_property(properties)?))),
+            Value::Sequence(sequence) => Ok(Some(ArrayItemObjectBounds::RespectiveItems(
+                sequence
+                    .iter()
+                    .map(|entry| deserialize_property(entry))
+                    .collect::<Result<Vec<Property>, E>>()?,
+            ))),
+            _ => Err(Error::custom("`items` must be either a schema or array of schemas")),
+        },
+    }
 }
 
 fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<Vec<EnumerationValue>>, E>
