@@ -1,0 +1,82 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Array validation",
+    "$$order": [
+        "wifiNetworks",
+        "mixedNetworks"
+    ],
+    "required": [
+        "wifiNetworks",
+        "mixedNetworks"
+    ],
+    "type": "object",
+    "properties": {
+        "wifiNetworks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "$$order": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "properties": {
+                    "ssid": {
+                        "type": "string"
+                    },
+                    "passphrase": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                }
+            },
+            "minItems": 1,
+            "maxItems": 2
+        },
+        "mixedNetworks": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "required": [
+                        "ssid",
+                        "passphrase"
+                    ],
+                    "$$order": [
+                        "ssid",
+                        "passphrase"
+                    ],
+                    "properties": {
+                        "ssid": {
+                            "type": "string"
+                        },
+                        "passphrase": {
+                            "type": "string",
+                            "writeOnly": true
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "id"
+                    ],
+                    "$$order": [
+                        "id"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ],
+            "minItems": 1,
+            "maxItems": 2
+        }
+    }
+}

@@ -1,4 +1,6 @@
 use crate::dsl::object_types::deserialization::deserialize_object_type;
+use crate::dsl::object_types::ObjectType;
+use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::Property;
 use crate::dsl::schema::PropertyEntry;
 use crate::dsl::schema::PropertyList;
@@ -8,8 +10,6 @@ use serde::Deserializer;
 use serde_yaml::Mapping;
 use serde_yaml::Sequence;
 use serde_yaml::Value;
-use crate::dsl::object_types::ObjectType;
-use crate::dsl::object_types::RawObjectType;
 
 pub fn deserialize_property_list<'de, D>(deserializer: D) -> Result<Option<PropertyList>, D::Error>
 where

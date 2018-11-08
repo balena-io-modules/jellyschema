@@ -1,6 +1,4 @@
 use crate::dsl::compiler::normalizer::Normalize;
-use crate::dsl::object_types::ObjectType;
-use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::PropertyEntry;
 use crate::dsl::schema::SourceSchema;
 
@@ -24,6 +22,5 @@ impl Normalize for PropertyEntry {
             }
             None => {}
         }
-
     }
 }
