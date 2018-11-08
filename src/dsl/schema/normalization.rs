@@ -25,8 +25,5 @@ impl Normalize for PropertyEntry {
             None => {}
         }
 
-        if self.property.types.is_none() {
-            self.property.types = Some(vec![ObjectType::Required(RawObjectType::Object)]);
-        }
     }
 }

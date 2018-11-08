@@ -8,6 +8,8 @@ use serde::Deserializer;
 use serde_yaml::Mapping;
 use serde_yaml::Sequence;
 use serde_yaml::Value;
+use crate::dsl::object_types::ObjectType;
+use crate::dsl::object_types::RawObjectType;
 
 pub fn deserialize_property_list<'de, D>(deserializer: D) -> Result<Option<PropertyList>, D::Error>
 where
@@ -67,7 +69,11 @@ where
     let mapping = value
         .as_mapping()
         .ok_or_else(|| Error::custom(format!("property is not a yaml mapping - {:#?}", value)))?;
-    let type_information = deserialize_object_type(&mapping)?;
+    let mut type_information = deserialize_object_type(&mapping)?;
+
+    if type_information.is_none() {
+        type_information = Some(vec![ObjectType::Required(RawObjectType::Object)]);
+    }
 
     let display_information = serde_yaml::from_value(value.clone())
         .map_err(|e| Error::custom(format!("cannot deserialize display information - {}", e)))?;
