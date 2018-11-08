@@ -140,6 +140,9 @@ where
                 }
             }
         }
+        if let Some(ref additional_items) = bounds.additional_items {
+            map.serialize_entry("additionalItems", additional_items)?;
+        }
     }
     Ok(())
 }

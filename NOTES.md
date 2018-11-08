@@ -39,6 +39,7 @@ Spec notes:
    String values MUST be one of the seven primitive types"
    - on the first reading not clear the difference between yaml types and dsl types
 * `max/min` vs `maximum/minimum` in names of the validations
+* is not specifying `items` in an array type okay ?
 
 Roadmap:
 * Create a playground application that would allow other people to play with the DSL
