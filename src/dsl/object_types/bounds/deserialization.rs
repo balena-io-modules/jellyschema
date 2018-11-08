@@ -1,3 +1,4 @@
+use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::EnumerationValue;
 use crate::dsl::object_types::bounds::IntegerBound;
@@ -102,6 +103,21 @@ where
         },
         None => Ok(None),
     }
+}
+
+pub fn deserialize_array_object_bounds<E>(mapping: &Mapping) -> Result<Option<ArrayObjectBounds>, E>
+where
+    E: Error,
+{
+    let maximum = deserialize_integer("maxItems", mapping)?;
+    let minimum = deserialize_integer("minItems", mapping)?;
+    if maximum.is_some() || minimum.is_some() {
+        return Ok(Some(ArrayObjectBounds {
+            minimum_number_of_items: minimum,
+            maximum_number_of_items: maximum,
+        }));
+    }
+    Ok(None)
 }
 
 fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<Vec<EnumerationValue>>, E>

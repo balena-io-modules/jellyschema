@@ -1,6 +1,7 @@
 {
     "$$version": 1,
     "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Array validation",
     "$$order": [
         "wifiNetworks",
         "mixedNetworks",
@@ -8,6 +9,14 @@
         "uniqueWifiNetworks",
         "uniqueSsidWifiNetworks"
     ],
+    "required": [
+        "wifiNetworks",
+        "mixedNetworks",
+        "mixedNetworksUnlimitedWifi",
+        "uniqueWifiNetworks",
+        "uniqueSsidWifiNetworks"
+    ],
+    "type": "object",
     "properties": {
         "wifiNetworks": {
             "type": "array",

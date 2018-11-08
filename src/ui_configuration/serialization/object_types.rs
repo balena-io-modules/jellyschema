@@ -10,6 +10,7 @@ use serde::Serialize;
 use serde::Serializer;
 use std::string::ToString;
 
+use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use heck::MixedCase;
 
@@ -44,11 +45,8 @@ where
             serialize_string_with_bounds(object_bounds, map)?;
         }
         RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
-        RawObjectType::Integer(object_bounds) => {
-            for bounds in object_bounds {
-                serialize_integer_bounds(bounds, map)?;
-            }
-        }
+        RawObjectType::Integer(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
+        RawObjectType::Array(object_bounds) => serialize_array_object_bounds(object_bounds, map)?,
     };
     Ok(())
 }
@@ -61,6 +59,7 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Password(_) => "string",
         RawObjectType::Hostname => "string",
         RawObjectType::Integer(_) => "integer",
+        RawObjectType::Array(_) => "array",
     }
 }
 
@@ -107,16 +106,34 @@ where
     Ok(())
 }
 
-fn serialize_integer_bounds<O, E, S>(bounds: &IntegerObjectBounds, map: &mut S) -> Result<(), E>
+fn serialize_array_object_bounds<O, E, S>(bounds: &Option<ArrayObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    serialize_integer_bound("maximum", &bounds.maximum, map)?;
-    serialize_integer_bound("minimum", &bounds.minimum, map)?;
+    if let Some(bounds) = bounds {
+        if let Some(max) = bounds.maximum_number_of_items {
+            map.serialize_entry("maxItems", &max)?;
+        }
+        if let Some(min) = bounds.minimum_number_of_items {
+            map.serialize_entry("minItems", &min)?;
+        }
+    }
+    Ok(())
+}
 
-    if let Some(multiple_of) = bounds.multiple_of {
-        map.serialize_entry("multipleOf", &multiple_of)?;
+fn serialize_integer_bounds<O, E, S>(bounds: &Option<IntegerObjectBounds>, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if let Some(bounds) = bounds {
+        serialize_integer_bound("maximum", &bounds.maximum, map)?;
+        serialize_integer_bound("minimum", &bounds.minimum, map)?;
+
+        if let Some(multiple_of) = bounds.multiple_of {
+            map.serialize_entry("multipleOf", &multiple_of)?;
+        }
     }
     Ok(())
 }

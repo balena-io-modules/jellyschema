@@ -19,6 +19,12 @@ pub struct IntegerObjectBounds {
     pub multiple_of: Option<i64>,
 }
 
+#[derive(Clone, Debug)]
+pub struct ArrayObjectBounds {
+    pub minimum_number_of_items: Option<i64>,
+    pub maximum_number_of_items: Option<i64>,
+}
+
 impl IntegerBound {
     pub fn inner(&self) -> &i64 {
         match self {

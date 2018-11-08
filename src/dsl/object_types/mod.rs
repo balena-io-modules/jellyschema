@@ -3,6 +3,7 @@ pub mod deserialization;
 mod normalization;
 mod validation;
 
+use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::bounds::StringObjectBounds;
@@ -21,6 +22,7 @@ pub enum RawObjectType {
     Password(Option<StringObjectBounds>),
     Hostname,
     Integer(Option<IntegerObjectBounds>),
+    Array(Option<ArrayObjectBounds>),
 }
 
 impl RawObjectType {
@@ -32,6 +34,7 @@ impl RawObjectType {
             RawObjectType::String(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),
             RawObjectType::Integer(bounds) => bounds.is_some(),
+            RawObjectType::Array(bounds) => bounds.is_some(),
         }
     }
 }
