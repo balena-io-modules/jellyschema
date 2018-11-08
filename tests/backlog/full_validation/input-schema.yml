@@ -24,3 +24,23 @@ properties:
         - *CELL_NETWORK
       minItems: 1
       maxItems: 2
+  - mixedNetworksUnlimitedWifi:
+      type: array
+      items:
+        - *WIFI_NETWORK
+        - *CELL_NETWORK
+      additionalItems: *WIFI_NETWORK
+      minItems: 1
+  - uniqueWifiNetworks:
+      type: array
+      items: *WIFI_NETWORK
+      minItems: 1
+      maxItems: 2
+      uniqueItems: true
+  - uniqueSsidWifiNetworks:
+      type: array
+      items: *WIFI_NETWORK
+      minItems: 1
+      maxItems: 2
+      uniqueItems:
+        - ssid

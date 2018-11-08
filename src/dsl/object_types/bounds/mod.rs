@@ -7,13 +7,14 @@ use crate::dsl::schema::Property;
 use regex::Regex;
 use serde_derive::Serialize;
 
-#[derive(Clone, Copy, Debug, Serialize)]
+// TODO: impl serialize separately, to not have serialization code in the `dsl` module
+#[derive(Clone, Debug, Serialize)]
 pub enum IntegerBound {
     Inclusive(i64),
     Exclusive(i64),
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct IntegerObjectBounds {
     pub minimum: Option<IntegerBound>,
     pub maximum: Option<IntegerBound>,
@@ -25,6 +26,7 @@ pub struct ArrayObjectBounds {
     pub minimum_number_of_items: Option<i64>,
     pub maximum_number_of_items: Option<i64>,
     pub items: Option<ArrayItemObjectBounds>,
+    pub unique_items: Option<bool>,
 }
 
 #[derive(Clone, Debug)]

@@ -129,6 +129,9 @@ where
                 }
             }
         }
+        if let Some(unique_items) = bounds.unique_items {
+            map.serialize_entry("uniqueItems", &unique_items)?;
+        }
     }
     Ok(())
 }

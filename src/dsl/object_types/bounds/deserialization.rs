@@ -115,15 +115,34 @@ where
     let maximum_number_of_items = deserialize_integer("maxItems", mapping)?;
     let minimum_number_of_items = deserialize_integer("minItems", mapping)?;
     let items = deserialize_array_item_bounds(mapping)?;
+    let unique_items = deserialize_array_unique_items_bounds(mapping)?;
 
     if maximum_number_of_items.is_some() || minimum_number_of_items.is_some() || items.is_some() {
         return Ok(Some(ArrayObjectBounds {
             minimum_number_of_items,
             maximum_number_of_items,
             items,
+            unique_items,
         }));
     }
     Ok(None)
+}
+
+fn deserialize_array_unique_items_bounds<E>(mapping: &Mapping) -> Result<Option<bool>, E>
+where
+    E: Error,
+{
+    match mapping.get(&Value::from("uniqueItems")) {
+        None => Ok(None),
+        Some(items) => match items {
+            Value::Bool(value) => Ok(Some(*value)),
+            Value::Sequence(_) => Ok(None),
+            _ => Err(Error::custom(format!(
+                "unsupported shape of the `uniqueItems` {:#?}",
+                items
+            ))),
+        },
+    }
 }
 
 fn deserialize_array_item_bounds<E>(mapping: &Mapping) -> Result<Option<ArrayItemObjectBounds>, E>

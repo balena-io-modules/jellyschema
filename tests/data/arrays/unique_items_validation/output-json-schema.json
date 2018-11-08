@@ -1,0 +1,66 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Array validation",
+    "$$order": [
+        "uniqueWifiNetworks",
+        "uniqueSsidWifiNetworks"
+    ],
+    "required": [
+        "uniqueWifiNetworks",
+        "uniqueSsidWifiNetworks"
+    ],
+    "type": "object",
+    "properties": {
+        "uniqueWifiNetworks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "$$order": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "properties": {
+                    "ssid": {
+                        "type": "string"
+                    },
+                    "passphrase": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                }
+            },
+            "uniqueItems": true
+        },
+        "uniqueSsidWifiNetworks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "$$order": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "properties": {
+                    "ssid": {
+                        "type": "string"
+                    },
+                    "passphrase": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                }
+            },
+            "$$uniqueItemProperties": [
+                "ssid"
+            ]
+        }
+    }
+}
