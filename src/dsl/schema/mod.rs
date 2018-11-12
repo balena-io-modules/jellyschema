@@ -1,21 +1,13 @@
 pub mod deserialization;
-mod normalization;
-mod validation;
 
 use crate::dsl::object_types::ObjectType;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug)]
 pub struct SourceSchema {
-    pub title: String,
     pub version: u64,
-    #[serde(
-        default,
-        deserialize_with = "crate::dsl::schema::deserialization::deserialize_property_list"
-    )]
-    #[serde(rename = "properties")]
-    pub property_list: Option<PropertyList>,
+    pub self_property: Option<Property>,
 }
 
 #[derive(Clone, Debug)]
@@ -37,7 +29,7 @@ pub struct Property {
     pub types: Option<Vec<ObjectType>>,
     pub display_information: DisplayInformation,
     pub property_list: Option<PropertyList>,
-    pub mapping: Option<serde_yaml::Mapping> // TODO: real mapping support
+    pub mapping: Option<serde_yaml::Mapping>, // TODO: real mapping support
 }
 
 #[derive(Clone, Default, Debug, Deserialize)]

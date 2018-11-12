@@ -36,29 +36,37 @@ impl Serialize for Property {
         S: Serializer,
     {
         let mut map = serializer.serialize_map(None)?;
-        for title in &self.display_information.title {
-            map.serialize_entry("title", &title)?;
-        }
-
-        if let Some(types) = &self.types {
-            if types.len() == 1 {
-                serialize_object_type(types[0].inner(), &mut map)?;
-            }
-            if types.len() > 1 {
-                serialize_type_array(types, &mut map)?;
-            }
-        }
-
-        if let Some(properties) = &self.property_list {
-            serialize_property_list(properties, &mut map)?;
-        }
-
-        if let Some(mapping) = &self.mapping {
-            map.serialize_entry("$$mapping", mapping)?;
-        }
-
+        serialize_property(&self, &mut map)?;
         map.end()
     }
+}
+
+pub fn serialize_property<O, E, S>(property: &Property, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    for title in &property.display_information.title {
+        map.serialize_entry("title", &title)?;
+    }
+
+    if let Some(types) = &property.types {
+        if types.len() == 1 {
+            serialize_object_type(types[0].inner(), map)?;
+        }
+        if types.len() > 1 {
+            serialize_type_array(types, map)?;
+        }
+    }
+
+    if let Some(properties) = &property.property_list {
+        serialize_property_list(properties, map)?;
+    }
+
+    if let Some(mapping) = &property.mapping {
+        map.serialize_entry("$$mapping", mapping)?;
+    }
+    Ok(())
 }
 
 fn serialize_type_array<O, E, S>(types: &[ObjectType], map: &mut S) -> Result<(), E>

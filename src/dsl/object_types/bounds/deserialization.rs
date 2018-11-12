@@ -17,7 +17,6 @@ use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-// fixme this function is not the best function ;)
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
     E: Error,
@@ -40,6 +39,17 @@ where
     if possible_values.is_some() && length.is_some() {
         return Err(Error::custom("cannot have both length set and enum/const bound"));
     }
+
+    let possible_values = possible_values.map(|mut list| {
+        list.iter_mut()
+            .map(|value| {
+                if value.display_information.title.is_none() {
+                    value.display_information.title = Some(value.value.clone());
+                }
+                value.clone()
+            })
+            .collect()
+    });
 
     let result = {
         if let Some(values) = possible_values {

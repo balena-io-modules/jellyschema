@@ -1,7 +1,5 @@
 pub mod bounds;
 pub mod deserialization;
-mod normalization;
-mod validation;
 
 use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;

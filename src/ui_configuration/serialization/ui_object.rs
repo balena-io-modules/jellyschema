@@ -8,8 +8,11 @@ use std::collections::HashMap;
 
 impl<'a> From<&'a SourceSchema> for UiObject<'a> {
     fn from(schema: &'a SourceSchema) -> Self {
-        match &schema.property_list {
-            Some(list) => list.into(),
+        match &schema.self_property {
+            Some(property) => match &property.property_list {
+                Some(list) => list.into(),
+                None => UiObject(HashMap::new()),
+            },
             None => UiObject(HashMap::new()),
         }
     }

@@ -1,30 +1,40 @@
+use crate::dsl::compiler::CompilationError;
 use crate::dsl::object_types::deserialization::deserialize_object_type;
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::Property;
 use crate::dsl::schema::PropertyEntry;
 use crate::dsl::schema::PropertyList;
+use crate::dsl::schema::SourceSchema;
 use serde::de::Error;
-use serde::Deserialize;
-use serde::Deserializer;
 use serde_yaml::Mapping;
-use serde_yaml::Sequence;
 use serde_yaml::Value;
 
-pub fn deserialize_property_list<'de, D>(deserializer: D) -> Result<Option<PropertyList>, D::Error>
-    where
-        D: Deserializer<'de>,
+pub fn deserialize_root<E>(schema: &Value) -> Result<SourceSchema, CompilationError>
+where
+    E: serde::de::Error,
 {
-    let maybe_sequence: Option<serde_yaml::Sequence> = Option::deserialize(deserializer)?;
-    match maybe_sequence {
-        Some(sequence) => Ok(Some(sequence_to_property_list(sequence)?)),
-        None => Ok(None),
-    }
+    let maybe_root = schema.as_mapping();
+    let version = match maybe_root {
+        Some(mapping) => Ok({
+            let version = mapping
+                .get(&Value::from("version"))
+                .ok_or_else(|| CompilationError::with_message("you must specify schema version"))?;
+            version
+                .as_u64()
+                .ok_or_else(|| CompilationError::with_message("version must be a positive integer"))?
+        }),
+        None => Err(CompilationError::with_message(
+            "root level schema needs to be a yaml mapping",
+        )),
+    }?;
+    let self_property = Some(deserialize_property::<serde_yaml::Error>(&schema)?);
+    Ok(SourceSchema { version, self_property })
 }
 
-fn sequence_to_property_list<E>(sequence: Sequence) -> Result<PropertyList, E>
-    where
-        E: Error,
+pub fn sequence_to_property_list<E>(sequence: &[Value]) -> Result<PropertyList, E>
+where
+    E: Error,
 {
     let mut property_names = vec![];
     let list_of_maybe_entries = sequence.into_iter().map(|value| {
@@ -46,8 +56,8 @@ fn sequence_to_property_list<E>(sequence: Sequence) -> Result<PropertyList, E>
 }
 
 fn mapping_to_property_entry<E>(mapping: &Mapping) -> Result<PropertyEntry, E>
-    where
-        E: Error,
+where
+    E: Error,
 {
     let (key, value) = mapping
         .into_iter()
@@ -63,8 +73,8 @@ fn mapping_to_property_entry<E>(mapping: &Mapping) -> Result<PropertyEntry, E>
 }
 
 pub fn deserialize_property<E>(value: &Value) -> Result<Property, E>
-    where
-        E: Error,
+where
+    E: Error,
 {
     let yaml_mapping = value
         .as_mapping()
@@ -82,7 +92,7 @@ pub fn deserialize_property<E>(value: &Value) -> Result<Property, E>
     let properties = match properties {
         None => None,
         Some(properties) => match properties {
-            Value::Sequence(sequence) => Some(sequence_to_property_list(sequence.to_vec())?),
+            Value::Sequence(sequence) => Some(sequence_to_property_list(&sequence.to_vec())?),
             _ => return Err(Error::custom("`properties` is not a yaml sequence")),
         },
     };
@@ -92,15 +102,14 @@ pub fn deserialize_property<E>(value: &Value) -> Result<Property, E>
         None => Ok(None),
         Some(mapping) => match mapping {
             Value::Mapping(mapping) => Ok(Some(mapping)),
-            _ => Err(Error::custom(format!("cannot deserialize mapping {:#?}", mapping)))
-        }
+            _ => Err(Error::custom(format!("cannot deserialize mapping {:#?}", mapping))),
+        },
     }?;
-    let mapping = mapping.map(|v| v.clone());
 
     Ok(Property {
         types: type_information,
         display_information,
         property_list: properties,
-        mapping,
+        mapping: mapping.cloned(),
     })
 }

@@ -1,6 +1,4 @@
 pub mod deserialization;
-mod normalization;
-mod validation;
 
 use crate::dsl::schema::DisplayInformation;
 use crate::dsl::schema::Property;

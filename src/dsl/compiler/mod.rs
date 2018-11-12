@@ -1,9 +1,4 @@
-pub mod normalizer;
-pub mod validator;
-
-use crate::dsl::compiler::normalizer::normalize;
-use crate::dsl::compiler::validator::validate;
-use crate::dsl::compiler::validator::ValidationError;
+use crate::dsl::schema::deserialization::deserialize_root;
 use crate::dsl::schema::SourceSchema;
 
 pub struct CompiledSchema {
@@ -15,10 +10,18 @@ pub struct CompilationError {
     message: String,
 }
 
-impl From<ValidationError> for CompilationError {
-    fn from(error: ValidationError) -> Self {
+impl CompilationError {
+    pub fn with_message(message: &str) -> Self {
         CompilationError {
-            message: error.into_message(),
+            message: message.to_string(),
+        }
+    }
+}
+
+impl From<serde_yaml::Error> for CompilationError {
+    fn from(source: serde_yaml::Error) -> Self {
+        CompilationError {
+            message: source.to_string(),
         }
     }
 }
@@ -33,41 +36,10 @@ impl CompiledSchema {
     }
 }
 
-pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, validator::ValidationError> {
-    let schema: SourceSchema = serde_yaml::from_value(schema)?;
-    let normalized_schema = normalize(schema).normalized();
-    let validated_schema = validate(normalized_schema)?;
-    Ok(CompiledSchema::with(validated_schema.validated()))
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_yaml::Mapping;
-
-    const SOME_TITLE: &str = "some title";
-
-    #[test]
-    fn pass_title_through() -> Result<(), validator::ValidationError> {
-        let schema = yaml_schema_with(SOME_TITLE, 1);
-
-        assert_eq!(compile(schema)?.compiled().title, SOME_TITLE);
-        Ok(())
-    }
-
-    #[test]
-    fn fail_on_missing_title() {
-        let mut schema = Mapping::new();
-        schema.insert("version".into(), 1.into());
-        let schema = serde_yaml::Value::Mapping(schema);
-
-        assert!(compile(schema).is_err());
-    }
-
-    fn yaml_schema_with(title: &str, version: u64) -> serde_yaml::Value {
-        let mut schema = Mapping::new();
-        schema.insert("title".into(), title.into());
-        schema.insert("version".into(), version.into());
-        serde_yaml::Value::Mapping(schema)
-    }
+// it really should present and API where this value is consumed,
+// TODO is to actually consume it
+#[allow(clippy::needless_pass_by_value)]
+pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, CompilationError> {
+    let schema = deserialize_root::<serde_yaml::Error>(&schema)?;
+    Ok(CompiledSchema::with(schema))
 }

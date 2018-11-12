@@ -1,16 +1,14 @@
-use crate::dsl::schema::PropertyList;
+use crate::dsl::schema::Property;
 use serde_derive::Serialize;
 use std::collections::HashMap;
+
 pub mod generator;
 mod serialization;
 
 pub struct JsonSchema<'a> {
     version: u64,
     schema_url: &'a str,
-    // FIXME: use RawObjectType and reuse type_spec, title and properties from Property
-    type_spec: String,
-    title: &'a str,
-    properties: Option<&'a PropertyList>,
+    root: Option<&'a Property>,
 }
 
 #[derive(Serialize)]
