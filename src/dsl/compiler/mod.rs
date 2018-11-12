@@ -1,5 +1,6 @@
 use crate::dsl::schema::deserialization::deserialize_root;
 use crate::dsl::schema::SourceSchema;
+use yaml_merge_keys::merge_keys_serde;
 
 pub struct CompiledSchema {
     schema: SourceSchema,
@@ -26,6 +27,14 @@ impl From<serde_yaml::Error> for CompilationError {
     }
 }
 
+impl From<yaml_merge_keys::Error> for CompilationError {
+    fn from(source: yaml_merge_keys::Error) -> Self {
+        CompilationError {
+            message: source.to_string(),
+        }
+    }
+}
+
 impl CompiledSchema {
     pub fn with(schema: SourceSchema) -> Self {
         CompiledSchema { schema }
@@ -36,10 +45,8 @@ impl CompiledSchema {
     }
 }
 
-// it really should present and API where this value is consumed,
-// TODO is to actually consume it
-#[allow(clippy::needless_pass_by_value)]
 pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, CompilationError> {
+    let schema = merge_keys_serde(schema)?;
     let schema = deserialize_root::<serde_yaml::Error>(&schema)?;
     Ok(CompiledSchema::with(schema))
 }

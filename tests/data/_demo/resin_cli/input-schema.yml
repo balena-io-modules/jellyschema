@@ -9,13 +9,13 @@ mapping:
       type: file
       format: json
       location:
-        <<: *BOOT_PARTITION
+        << : *BOOT_PARTITION
         path: /config.json
     resin_wifi:
       type: file
       format: ini
       location:
-        <<: *BOOT_PARTITION
+        << : *BOOT_PARTITION
         path: /system-connections/resin-wifi
 properties:
   - network:
