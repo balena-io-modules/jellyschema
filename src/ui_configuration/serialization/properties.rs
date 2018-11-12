@@ -49,9 +49,12 @@ impl Serialize for Property {
             }
         }
 
-        let property_list = &self.property_list;
-        if let Some(properties) = property_list {
+        if let Some(properties) = &self.property_list {
             serialize_property_list(properties, &mut map)?;
+        }
+
+        if let Some(mapping) = &self.mapping {
+            map.serialize_entry("$$mapping", mapping)?;
         }
 
         map.end()

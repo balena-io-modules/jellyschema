@@ -37,6 +37,7 @@ pub struct Property {
     pub types: Option<Vec<ObjectType>>,
     pub display_information: DisplayInformation,
     pub property_list: Option<PropertyList>,
+    pub mapping: Option<serde_yaml::Mapping> // TODO: real mapping support
 }
 
 #[derive(Clone, Default, Debug, Deserialize)]

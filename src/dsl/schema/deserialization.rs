@@ -12,8 +12,8 @@ use serde_yaml::Sequence;
 use serde_yaml::Value;
 
 pub fn deserialize_property_list<'de, D>(deserializer: D) -> Result<Option<PropertyList>, D::Error>
-where
-    D: Deserializer<'de>,
+    where
+        D: Deserializer<'de>,
 {
     let maybe_sequence: Option<serde_yaml::Sequence> = Option::deserialize(deserializer)?;
     match maybe_sequence {
@@ -23,8 +23,8 @@ where
 }
 
 fn sequence_to_property_list<E>(sequence: Sequence) -> Result<PropertyList, E>
-where
-    E: Error,
+    where
+        E: Error,
 {
     let mut property_names = vec![];
     let list_of_maybe_entries = sequence.into_iter().map(|value| {
@@ -46,8 +46,8 @@ where
 }
 
 fn mapping_to_property_entry<E>(mapping: &Mapping) -> Result<PropertyEntry, E>
-where
-    E: Error,
+    where
+        E: Error,
 {
     let (key, value) = mapping
         .into_iter()
@@ -63,13 +63,13 @@ where
 }
 
 pub fn deserialize_property<E>(value: &Value) -> Result<Property, E>
-where
-    E: Error,
+    where
+        E: Error,
 {
-    let mapping = value
+    let yaml_mapping = value
         .as_mapping()
         .ok_or_else(|| Error::custom(format!("property is not a yaml mapping - {:#?}", value)))?;
-    let mut type_information = deserialize_object_type(&mapping)?;
+    let mut type_information = deserialize_object_type(&yaml_mapping)?;
 
     if type_information.is_none() {
         type_information = Some(vec![ObjectType::Required(RawObjectType::Object)]);
@@ -78,7 +78,7 @@ where
     let display_information = serde_yaml::from_value(value.clone())
         .map_err(|e| Error::custom(format!("cannot deserialize display information - {}", e)))?;
 
-    let properties = mapping.get(&Value::from("properties"));
+    let properties = yaml_mapping.get(&Value::from("properties"));
     let properties = match properties {
         None => None,
         Some(properties) => match properties {
@@ -87,9 +87,20 @@ where
         },
     };
 
+    let mapping = yaml_mapping.get(&Value::from("mapping"));
+    let mapping = match mapping {
+        None => Ok(None),
+        Some(mapping) => match mapping {
+            Value::Mapping(mapping) => Ok(Some(mapping)),
+            _ => Err(Error::custom(format!("cannot deserialize mapping {:#?}", mapping)))
+        }
+    }?;
+    let mapping = mapping.map(|v| v.clone());
+
     Ok(Property {
         types: type_information,
         display_information,
         property_list: properties,
+        mapping,
     })
 }
