@@ -1,3 +1,4 @@
+This are implementation notes - a current scratchpad for the maintainers.
 
 Guidelines: 
 * deserialization bit should be as simple as possible, not much logic there
