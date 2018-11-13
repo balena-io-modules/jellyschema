@@ -1,10 +1,10 @@
-use crate::dsl::compiler::compile;
+use serde_json::Map;
+
 use crate::dsl::compiler::CompilationError;
+use crate::dsl::compiler::compile;
 use crate::dsl::compiler::CompiledSchema;
 use crate::ui_configuration::JsonSchema;
 use crate::ui_configuration::UiObject;
-
-use serde_json::Map;
 
 pub struct Generator {
     compiled_schema: CompiledSchema,

@@ -1,3 +1,7 @@
+use serde::de::Error;
+use serde_yaml::Mapping;
+use serde_yaml::Value;
+
 use crate::dsl::compiler::CompilationError;
 use crate::dsl::object_types::deserialization::deserialize_object_type;
 use crate::dsl::object_types::ObjectType;
@@ -6,9 +10,6 @@ use crate::dsl::schema::Property;
 use crate::dsl::schema::PropertyEntry;
 use crate::dsl::schema::PropertyList;
 use crate::dsl::schema::SourceSchema;
-use serde::de::Error;
-use serde_yaml::Mapping;
-use serde_yaml::Value;
 
 pub fn deserialize_root<E>(schema: &Value) -> Result<SourceSchema, CompilationError>
 where

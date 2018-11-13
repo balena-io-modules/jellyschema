@@ -1,3 +1,9 @@
+use heck::MixedCase;
+use regex::Regex;
+use serde::de::Error;
+use serde_yaml::Mapping;
+use serde_yaml::Value;
+
 use crate::dsl::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::ArrayUniqueItemBound;
@@ -11,11 +17,6 @@ use crate::dsl::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::deserialization::deserialize_property;
 use crate::dsl::schema::DisplayInformation;
 use crate::dsl::schema::Property;
-use heck::MixedCase;
-use regex::Regex;
-use serde::de::Error;
-use serde_yaml::Mapping;
-use serde_yaml::Value;
 
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where

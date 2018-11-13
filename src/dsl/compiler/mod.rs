@@ -1,6 +1,7 @@
+use yaml_merge_keys::merge_keys_serde;
+
 use crate::dsl::schema::deserialization::deserialize_root;
 use crate::dsl::schema::SourceSchema;
-use yaml_merge_keys::merge_keys_serde;
 
 pub struct CompiledSchema {
     schema: SourceSchema,

@@ -1,6 +1,8 @@
-use crate::dsl::schema::Property;
-use serde_derive::Serialize;
 use std::collections::HashMap;
+
+use serde_derive::Serialize;
+
+use crate::dsl::schema::Property;
 
 pub mod generator;
 mod serialization;

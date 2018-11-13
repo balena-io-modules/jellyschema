@@ -1,9 +1,10 @@
-pub mod deserialization;
+use regex::Regex;
+use serde_derive::Serialize;
 
 use crate::dsl::schema::DisplayInformation;
 use crate::dsl::schema::Property;
-use regex::Regex;
-use serde_derive::Serialize;
+
+pub mod deserialization;
 
 // TODO: impl serialize separately, to not have serialization code in the `dsl` module
 #[derive(Clone, Debug, Serialize)]

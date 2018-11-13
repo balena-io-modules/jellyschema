@@ -1,20 +1,21 @@
+use std::string::ToString;
+
+use heck::MixedCase;
+use serde::ser::Error;
+use serde::ser::SerializeMap;
+use serde::Serialize;
+use serde::Serializer;
+
+use crate::dsl::object_types::bounds::ArrayItemObjectBounds;
+use crate::dsl::object_types::bounds::ArrayObjectBounds;
+use crate::dsl::object_types::bounds::ArrayUniqueItemBound;
+use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::EnumerationValue;
 use crate::dsl::object_types::bounds::IntegerBound;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::bounds::StringLength;
 use crate::dsl::object_types::bounds::StringObjectBounds;
 use crate::dsl::object_types::RawObjectType;
-use serde::ser::Error;
-use serde::ser::SerializeMap;
-use serde::Serialize;
-use serde::Serializer;
-use std::string::ToString;
-
-use crate::dsl::object_types::bounds::ArrayItemObjectBounds;
-use crate::dsl::object_types::bounds::ArrayObjectBounds;
-use crate::dsl::object_types::bounds::ArrayUniqueItemBound;
-use crate::dsl::object_types::bounds::BooleanObjectBounds;
-use heck::MixedCase;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>

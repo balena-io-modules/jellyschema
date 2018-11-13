@@ -1,10 +1,10 @@
-pub mod bounds;
-pub mod deserialization;
-
 use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::object_types::bounds::StringObjectBounds;
+
+pub mod bounds;
+pub mod deserialization;
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {

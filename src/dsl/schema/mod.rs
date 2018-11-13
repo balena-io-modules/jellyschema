@@ -1,8 +1,9 @@
-pub mod deserialization;
-
-use crate::dsl::object_types::ObjectType;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
+
+use crate::dsl::object_types::ObjectType;
+
+pub mod deserialization;
 
 #[derive(Clone, Debug)]
 pub struct SourceSchema {
