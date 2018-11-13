@@ -11,6 +11,18 @@ The plan is to have this library be available to be used from Rust code but also
 The main entry point to the library is the `Generator` type and its `generate` type.
 It consumes [`serde_yaml`](https://crates.io/crates/serde_yaml) values and outputs a tuple of [`serde_json`](https://crates.io/crates/serde_json) values.
 
+Example of use:
+```rust
+let input_schema : serde_yaml::Value = serde_yaml::from_str(
+    include_str!("input-schema.yml")).
+    unwrap();
+
+let (json_schema, ui_object) = Generator::with(input_schema)?.generate();
+```
+
+For examples of input yaml DSL schemas please see the ones used in tests in [`tests/data`](./tests/data) directory.
+
+
 ## What is supported ?
 
 All basic types from the [main DSL specification](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md) are supported.
