@@ -3,8 +3,8 @@ use serde::Serialize;
 use serde::Serializer;
 
 use crate::dsl::schema::SourceSchema;
-use crate::ui_configuration::JsonSchema;
 use crate::ui_configuration::serialization::properties::serialize_property;
+use crate::ui_configuration::JsonSchema;
 
 const SCHEMA_URL: &str = "http://json-schema.org/draft-04/schema#";
 
