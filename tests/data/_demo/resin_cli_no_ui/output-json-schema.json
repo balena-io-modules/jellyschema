@@ -1,0 +1,124 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$$version": 1,
+    "title": "resin-cli demo",
+    "$$mapping": {
+        "targets": {
+            "resin_wifi": {
+                "type": "file",
+                "format": "ini",
+                "location": {
+                    "partition": 1,
+                    "path": "/system-connections/resin-wifi"
+                }
+            },
+            "config_json": {
+                "type": "file",
+                "format": "json",
+                "location": {
+                    "partition": 1,
+                    "path": "/config.json"
+                }
+            }
+        }
+    },
+    "type": "object",
+    "required": [
+        "network",
+        "advanced"
+    ],
+    "$$order": [
+        "network",
+        "advanced"
+    ],
+    "properties": {
+        "network": {
+            "title": "Network",
+            "required": [
+                "ssid",
+                "passphrase"
+            ],
+            "$$order": [
+                "ssid",
+                "passphrase"
+            ],
+            "type": "object",
+            "$$mapping": {
+                "target": "resin_wifi",
+                "template": {
+                    "connection": {
+                        "type": "wifi"
+                    },
+                    "wifi": {
+                        "hidden": true,
+                        "mode": "infrastructure"
+                    },
+                    "wifi-security": {
+                        "auth-alg": "open",
+                        "key-mgmt": "wpa-psk"
+                    },
+                    "ipv4": {
+                        "method": "auto"
+                    },
+                    "ipv6": {
+                        "method": "auto",
+                        "addr-gen-mode": "stable-privacy"
+                    }
+                }
+            },
+            "properties": {
+                "ssid": {
+                    "title": "Network SSID",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "$$mapping": {
+                        "target": "resin_wifi",
+                        "path": "wifi.ssid"
+                    }
+                },
+                "passphrase": {
+                    "title": "Network Key",
+                    "type": "string",
+                    "writeOnly": true,
+                    "minLength": 8,
+                    "$$mapping": {
+                        "target": "resin_wifi",
+                        "path": "wifi-security.psk"
+                    }
+                }
+            }
+        },
+        "advanced": {
+            "title": "Advanced",
+            "required": [
+                "hostname",
+                "persistentLogging"
+            ],
+            "$$order": [
+                "hostname",
+                "persistentLogging"
+            ],
+            "type": "object",
+            "properties": {
+                "hostname": {
+                    "title": "Device Hostname",
+                    "type": "string",
+                    "$$mapping": {
+                        "target": "config_json",
+                        "path": "hostname"
+                    }
+                },
+                "persistentLogging": {
+                    "title": "Do you want to enable persistent logging?",
+                    "type": "boolean",
+                    "default": false,
+                    "$$mapping": {
+                        "target": "config_json",
+                        "path": "persistentLogging"
+                    }
+                }
+            }
+        }
+    }
+}
