@@ -18,7 +18,6 @@ pub struct SchemaRoot {
 /// A first-class collection representing a list of `PropertyEntries`, has convenience methods exposed
 #[derive(Clone, Debug)]
 pub struct PropertyList {
-    property_names: Vec<String>, //a caching field used internally
     pub entries: Vec<PropertyEntry>,
 }
 
@@ -49,7 +48,10 @@ pub struct DisplayInformation {
 
 impl PropertyList {
     pub fn property_names(&self) -> Vec<&str> {
-        self.property_names.iter().map(|name| name.as_str()).collect()
+        self.entries
+            .iter()
+            .map(|property_entry| property_entry.name.as_str())
+            .collect()
     }
 
     pub fn required_property_names(&self) -> Vec<&str> {

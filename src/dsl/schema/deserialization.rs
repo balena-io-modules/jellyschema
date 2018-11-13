@@ -50,10 +50,7 @@ where
     let list: Result<Vec<_>, E> = list_of_maybe_entries.collect();
     let list = list?;
 
-    Ok(PropertyList {
-        entries: list,
-        property_names: property_names.clone(),
-    })
+    Ok(PropertyList { entries: list })
 }
 
 fn mapping_to_property_entry<E>(mapping: &Mapping) -> Result<PropertyEntry, E>
