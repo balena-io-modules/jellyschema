@@ -1,3 +1,5 @@
+//! Use `Generator::generate` to get `JSON Schema` and `UI Object` json from yaml DSL
+//!
 use serde_json::Map;
 
 use crate::dsl::schema::compiler::CompilationError;
@@ -6,8 +8,6 @@ use crate::dsl::schema::compiler::CompiledSchema;
 use crate::output::JsonSchema;
 use crate::output::UiObject;
 
-/// Use this generator to get `JSON Schema` and `UI Object` json from yaml DSL
-///
 pub struct Generator {
     compiled_schema: CompiledSchema,
 }

@@ -1,3 +1,4 @@
+//! This contains output (JSON and UI Schema) generation code and supporting types.
 use std::collections::HashMap;
 
 use serde_derive::Serialize;

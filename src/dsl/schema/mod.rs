@@ -7,6 +7,7 @@ use crate::dsl::schema::object_types::ObjectType;
 pub mod deserialization;
 pub mod compiler;
 pub mod object_types;
+
 /// Represents the root of the yaml DSL document
 #[derive(Clone, Debug)]
 pub struct SchemaRoot {
@@ -14,9 +15,10 @@ pub struct SchemaRoot {
     pub self_property: Option<Property>,
 }
 
+/// A first-class collection representing a list of `PropertyEntries`, has convenience methods exposed
 #[derive(Clone, Debug)]
 pub struct PropertyList {
-    property_names: Vec<String>,
+    property_names: Vec<String>, //a caching field used internally
     pub entries: Vec<PropertyEntry>,
 }
 
