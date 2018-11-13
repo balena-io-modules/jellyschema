@@ -13,11 +13,11 @@ pub struct Generator {
 }
 
 impl Generator {
-    pub fn with(yaml: serde_yaml::Value) -> Result<Self, CompilationError> {
+    pub fn with(yaml: serde_yaml::Value) -> Result<Generator, CompilationError> {
         Ok(Generator::new(compile(yaml)?))
     }
 
-    fn new(compiled_schema: CompiledSchema) -> Self {
+    fn new(compiled_schema: CompiledSchema) -> Generator {
         Generator { compiled_schema }
     }
 

@@ -20,7 +20,7 @@ pub struct CompilationError {
 }
 
 impl CompilationError {
-    pub fn with_message(message: &str) -> Self {
+    pub fn with_message(message: &str) -> CompilationError {
         CompilationError {
             message: message.to_string(),
         }
@@ -44,7 +44,7 @@ impl From<yaml_merge_keys::Error> for CompilationError {
 }
 
 impl CompiledSchema {
-    pub fn with(schema: SchemaRoot) -> Self {
+    pub fn with(schema: SchemaRoot) -> CompiledSchema {
         CompiledSchema { schema }
     }
 
