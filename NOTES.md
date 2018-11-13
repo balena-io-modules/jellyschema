@@ -13,9 +13,8 @@ TODOs:
   * validate `min/max` etc values cannot be negative, use `u64` instead of `i64`
   * fix debug formatting of serde values is errors - very unreadable right now
   * have a type for `non-empty vec` and use it pretty much everywhere where `Option<Vec>` is used now
-  * naming - is is called `ui object` or `ui schema` ?
-   
-* docs
+* naming - is is called `ui object` or `ui schema` ?
+* docs - add architecture diagram
 * after adding support for basic features:do a sweep through the spec and add tests for edge cases etc
 * test edge cases - generate with property based tests
 * add fuzzer (afl?) to see if there are no crashes on any input

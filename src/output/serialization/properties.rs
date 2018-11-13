@@ -2,8 +2,9 @@ use std::collections::HashMap;
 
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 
-use crate::dsl::object_types::ObjectType;
-use crate::dsl::schema::{Property, PropertyList};
+use crate::dsl::schema::object_types::ObjectType;
+use crate::dsl::schema::Property;
+use crate::dsl::schema::PropertyList;
 use crate::output::serialization::object_types::object_type_name;
 use crate::output::serialization::object_types::serialize_object_type;
 

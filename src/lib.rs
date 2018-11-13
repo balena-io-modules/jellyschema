@@ -5,7 +5,6 @@
 //! # Examples
 //!
 //! ```
-//! use balena_configuration_dsl::dsl::compiler::CompilationError;
 //! use balena_configuration_dsl::output::generator::Generator;
 //!
 //! let input_schema : serde_yaml::Value = serde_yaml::from_str(

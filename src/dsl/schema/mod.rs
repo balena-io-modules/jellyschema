@@ -1,10 +1,13 @@
+//! Top-level constructs representing the configuration DSL language
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-use crate::dsl::object_types::ObjectType;
+use crate::dsl::schema::object_types::ObjectType;
 
 pub mod deserialization;
-
+pub mod compiler;
+pub mod object_types;
+/// Represents the root of the yaml DSL document
 #[derive(Clone, Debug)]
 pub struct SchemaRoot {
     pub version: u64,
@@ -33,6 +36,7 @@ pub struct Property {
     pub mapping: Option<serde_yaml::Mapping>, // TODO: real mapping support
 }
 
+/// Represents [`SchemaAnnotations`](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#schema-annotations) from the spec
 #[derive(Clone, Default, Debug, Deserialize)]
 pub struct DisplayInformation {
     pub title: Option<String>,

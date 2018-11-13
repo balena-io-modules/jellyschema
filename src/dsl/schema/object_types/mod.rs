@@ -1,8 +1,9 @@
 //! A `type` is anything that can be specified after `type` keyword as in the spec
-use crate::dsl::object_types::bounds::ArrayObjectBounds;
-use crate::dsl::object_types::bounds::BooleanObjectBounds;
-use crate::dsl::object_types::bounds::IntegerObjectBounds;
-use crate::dsl::object_types::bounds::StringObjectBounds;
+
+use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
+use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 
 pub mod bounds;
 pub mod deserialization;

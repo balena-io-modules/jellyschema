@@ -4,18 +4,18 @@ use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-use crate::dsl::object_types::bounds::ArrayItemObjectBounds;
-use crate::dsl::object_types::bounds::ArrayObjectBounds;
-use crate::dsl::object_types::bounds::ArrayUniqueItemBound;
-use crate::dsl::object_types::bounds::BooleanObjectBounds;
-use crate::dsl::object_types::bounds::EnumerationValue;
-use crate::dsl::object_types::bounds::IntegerBound;
-use crate::dsl::object_types::bounds::IntegerObjectBounds;
-use crate::dsl::object_types::bounds::StringLength;
-use crate::dsl::object_types::bounds::StringObjectBounds;
-use crate::dsl::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::deserialization::deserialize_property;
 use crate::dsl::schema::DisplayInformation;
+use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
+use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
+use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
+use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::object_types::bounds::EnumerationValue;
+use crate::dsl::schema::object_types::bounds::IntegerBound;
+use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::schema::object_types::bounds::StringLength;
+use crate::dsl::schema::object_types::bounds::StringObjectBounds;
+use crate::dsl::schema::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::Property;
 
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
