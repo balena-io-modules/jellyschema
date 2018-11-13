@@ -2,7 +2,7 @@
 use regex::Regex;
 use serde_derive::Serialize;
 
-use crate::dsl::schema::DisplayInformation;
+use crate::dsl::schema::Annotations;
 use crate::dsl::schema::Property;
 
 pub mod deserialization;
@@ -71,14 +71,14 @@ pub enum BooleanObjectBounds {
 
 #[derive(Clone, Debug)]
 pub struct EnumerationValue {
-    pub display_information: DisplayInformation,
+    pub display_information: Annotations,
     pub value: String,
 }
 
 impl From<&str> for EnumerationValue {
     fn from(value: &str) -> Self {
         let value = value.to_string();
-        let display_information = DisplayInformation {
+        let display_information = Annotations {
             title: Some(value.clone()),
             help: None,
             warning: None,

@@ -106,8 +106,8 @@ where
 
     Ok(Property {
         types: type_information,
-        display_information,
-        property_list: properties,
+        annotations: display_information,
+        children: properties,
         mapping: mapping.cloned(),
     })
 }

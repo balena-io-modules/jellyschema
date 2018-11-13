@@ -30,17 +30,18 @@ pub struct NamedProperty {
     pub property: Property,
 }
 
+/// Everything that a schema at any level can represent, see schema and subschema in the spec
 #[derive(Clone, Debug)]
 pub struct Property {
     pub types: Option<Vec<ObjectType>>,
-    pub display_information: DisplayInformation,
-    pub property_list: Option<PropertyList>,
+    pub annotations: Annotations,
+    pub children: Option<PropertyList>,
     pub mapping: Option<serde_yaml::Mapping>, // TODO: real mapping support
 }
 
-/// Represents [`SchemaAnnotations`](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#schema-annotations) from the spec
+/// Represents [`SchemaAnnotations`](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#schema-annotations) from the spec minus the `default` keyword, that lives in the object bounds information
 #[derive(Clone, Default, Debug, Deserialize)]
-pub struct DisplayInformation {
+pub struct Annotations {
     pub title: Option<String>,
     pub help: Option<String>,
     pub warning: Option<String>,

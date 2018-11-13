@@ -5,7 +5,7 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 
 use crate::dsl::schema::deserialization::deserialize_property;
-use crate::dsl::schema::DisplayInformation;
+use crate::dsl::schema::Annotations;
 use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
@@ -259,7 +259,7 @@ where
         serde_yaml::from_value(value.clone())
             .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
     })?;
-    let display_information = DisplayInformation {
+    let display_information = Annotations {
         title: None,
         help: None,
         warning: None,
@@ -310,7 +310,7 @@ where
         },
     };
 
-    let display_information = DisplayInformation {
+    let display_information = Annotations {
         title,
         help: None,
         warning: None,

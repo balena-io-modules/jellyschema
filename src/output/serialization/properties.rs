@@ -49,7 +49,7 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    for title in &property.display_information.title {
+    for title in &property.annotations.title {
         map.serialize_entry("title", &title)?;
     }
 
@@ -62,7 +62,7 @@ where
         }
     }
 
-    if let Some(properties) = &property.property_list {
+    if let Some(properties) = &property.children {
         serialize_property_list(properties, map)?;
     }
 
