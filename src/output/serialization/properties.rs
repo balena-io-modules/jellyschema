@@ -13,9 +13,9 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    if !property_list.entries.is_empty() {
+    if !property_list.is_empty() {
         let mut properties_map = HashMap::new();
-        for property in &property_list.entries {
+        for property in property_list.entries() {
             properties_map.insert(&property.name, &property.property);
         }
         map.serialize_entry("properties", &properties_map)?;

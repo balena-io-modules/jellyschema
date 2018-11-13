@@ -22,7 +22,7 @@ impl<'a> From<&'a SchemaRoot> for UiObject<'a> {
 impl<'a> From<&'a PropertyList> for UiObject<'a> {
     fn from(list: &'a PropertyList) -> Self {
         let ui_object_entries: Vec<(&str, UiObjectProperty)> = list
-            .entries
+            .entries()
             .iter()
             .filter_map(|entry| {
                 let property: UiObjectProperty = entry.property.borrow().into();

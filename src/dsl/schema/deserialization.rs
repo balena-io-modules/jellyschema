@@ -7,7 +7,7 @@ use crate::dsl::schema::object_types::deserialization::deserialize_object_type;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::Property;
-use crate::dsl::schema::PropertyEntry;
+use crate::dsl::schema::NamedProperty;
 use crate::dsl::schema::PropertyList;
 use crate::dsl::schema::SchemaRoot;
 
@@ -53,7 +53,7 @@ where
     Ok(PropertyList { entries: list })
 }
 
-fn mapping_to_property_entry<E>(mapping: &Mapping) -> Result<PropertyEntry, E>
+fn mapping_to_property_entry<E>(mapping: &Mapping) -> Result<NamedProperty, E>
 where
     E: Error,
 {
@@ -64,7 +64,7 @@ where
     let key: String = serde_yaml::from_value(key.clone())
         .map_err(|e| Error::custom(format!("cannot deserialize property key - {}", e)))?;
     let value = deserialize_property(&value)?;
-    Ok(PropertyEntry {
+    Ok(NamedProperty {
         name: key,
         property: value,
     })

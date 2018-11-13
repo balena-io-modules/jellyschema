@@ -18,12 +18,13 @@ pub struct SchemaRoot {
 /// A first-class collection representing a list of `PropertyEntries`, has convenience methods exposed
 #[derive(Clone, Debug)]
 pub struct PropertyList {
-    pub entries: Vec<PropertyEntry>,
+    entries: Vec<NamedProperty>,
 }
 
+/// A named property, an entry in `PropertyList`
 // fixme move serialize implementation to the `output` module
 #[derive(Clone, Debug, Serialize)]
-pub struct PropertyEntry {
+pub struct NamedProperty {
     pub name: String,
     #[serde(flatten)]
     pub property: Property,
@@ -46,7 +47,17 @@ pub struct DisplayInformation {
     pub description: Option<String>,
 }
 
+// TODO: optimization: make the methods memoize the computed result
 impl PropertyList {
+    pub fn is_empty(&self) -> bool {
+        self.entries.is_empty()
+    }
+
+    pub fn entries(&self) -> &Vec<NamedProperty> {
+        &self.entries
+    }
+
+    /// Names of all properties
     pub fn property_names(&self) -> Vec<&str> {
         self.entries
             .iter()
@@ -54,6 +65,7 @@ impl PropertyList {
             .collect()
     }
 
+    /// Names of required properties only
     pub fn required_property_names(&self) -> Vec<&str> {
         self.entries
             .iter()
