@@ -3,8 +3,8 @@ use serde_json::Map;
 use crate::dsl::compiler::compile;
 use crate::dsl::compiler::CompilationError;
 use crate::dsl::compiler::CompiledSchema;
-use crate::ui_configuration::JsonSchema;
-use crate::ui_configuration::UiObject;
+use crate::output::JsonSchema;
+use crate::output::UiObject;
 
 pub struct Generator {
     compiled_schema: CompiledSchema,

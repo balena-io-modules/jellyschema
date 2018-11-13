@@ -17,7 +17,7 @@ pub struct PropertyList {
     pub entries: Vec<PropertyEntry>,
 }
 
-// fixme move serialize implementation to the `ui_configuration` module
+// fixme move serialize implementation to the `output` module
 #[derive(Clone, Debug, Serialize)]
 pub struct PropertyEntry {
     pub name: String,

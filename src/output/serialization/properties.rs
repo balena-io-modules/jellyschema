@@ -4,8 +4,8 @@ use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 
 use crate::dsl::object_types::ObjectType;
 use crate::dsl::schema::{Property, PropertyList};
-use crate::ui_configuration::serialization::object_types::object_type_name;
-use crate::ui_configuration::serialization::object_types::serialize_object_type;
+use crate::output::serialization::object_types::object_type_name;
+use crate::output::serialization::object_types::serialize_object_type;
 
 pub fn serialize_property_list<O, E, S>(property_list: &PropertyList, map: &mut S) -> Result<(), E>
 where

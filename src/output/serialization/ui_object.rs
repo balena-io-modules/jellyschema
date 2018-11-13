@@ -4,8 +4,8 @@ use std::collections::HashMap;
 use crate::dsl::schema::Property;
 use crate::dsl::schema::PropertyList;
 use crate::dsl::schema::SourceSchema;
-use crate::ui_configuration::UiObject;
-use crate::ui_configuration::UiObjectProperty;
+use crate::output::UiObject;
+use crate::output::UiObjectProperty;
 
 impl<'a> From<&'a SourceSchema> for UiObject<'a> {
     fn from(schema: &'a SourceSchema) -> Self {

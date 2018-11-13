@@ -13,10 +13,6 @@ It consumes [`serde_yaml`](https://crates.io/crates/serde_yaml) values and outpu
 
 Example of use:
 ```rust
-use serde_yaml;
-use serde_json;
-use balena_configuration_dsl::Generator;
-
 let input_schema : serde_yaml::Value = serde_yaml::from_str(
     include_str!("input-schema.yml")).
     unwrap();

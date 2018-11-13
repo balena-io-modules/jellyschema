@@ -50,10 +50,22 @@ where
     })
 }
 
+pub fn deserialize_integer<E>(name: &str, mapping: &Mapping) -> Result<Option<i64>, E>
+where
+    E: Error,
+{
+    let value = mapping.get(&Value::from(name));
+    value.map_or(Ok(None), |value| {
+        Ok(Some(value.as_i64().ok_or_else(|| {
+            Error::custom(format!("cannot deserialize {:#?} as integer", value))
+        })?))
+    })
+}
+
 impl RawObjectType {
     fn from<E>(value: &str, mapping: &Mapping) -> Result<Self, E>
-    where
-        E: Error,
+        where
+            E: Error,
     {
         let object_type = match value {
             "object" => RawObjectType::Object,
@@ -67,16 +79,4 @@ impl RawObjectType {
         };
         Ok(object_type)
     }
-}
-
-pub fn deserialize_integer<E>(name: &str, mapping: &Mapping) -> Result<Option<i64>, E>
-where
-    E: Error,
-{
-    let value = mapping.get(&Value::from(name));
-    value.map_or(Ok(None), |value| {
-        Ok(Some(value.as_i64().ok_or_else(|| {
-            Error::custom(format!("cannot deserialize {:#?} as integer", value))
-        })?))
-    })
 }
