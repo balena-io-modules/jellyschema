@@ -44,8 +44,8 @@ where
     let possible_values = possible_values.map(|mut list| {
         list.iter_mut()
             .map(|value| {
-                if value.display_information.title.is_none() {
-                    value.display_information.title = Some(value.value.clone());
+                if value.annotations.title.is_none() {
+                    value.annotations.title = Some(value.value.clone());
                 }
                 value.clone()
             })
@@ -259,7 +259,7 @@ where
         serde_yaml::from_value(value.clone())
             .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
     })?;
-    let display_information = Annotations {
+    let annotations = Annotations {
         title: None,
         help: None,
         warning: None,
@@ -267,10 +267,7 @@ where
     };
     match value {
         None => Ok(None),
-        Some(value) => Ok(Some(EnumerationValue {
-            value,
-            display_information,
-        })),
+        Some(value) => Ok(Some(EnumerationValue { value, annotations })),
     }
 }
 
@@ -310,14 +307,14 @@ where
         },
     };
 
-    let display_information = Annotations {
+    let annotations = Annotations {
         title,
         help: None,
         warning: None,
         description: None,
     };
     Ok(EnumerationValue {
-        display_information,
+        annotations,
         value: value.to_string(),
     })
 }

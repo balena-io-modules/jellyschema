@@ -80,8 +80,8 @@ where
         type_information = Some(vec![ObjectType::Required(RawObjectType::Object)]);
     }
 
-    let display_information = serde_yaml::from_value(value.clone())
-        .map_err(|e| Error::custom(format!("cannot deserialize display information - {}", e)))?;
+    let annotations = serde_yaml::from_value(value.clone())
+        .map_err(|e| Error::custom(format!("cannot deserialize schema annotations - {}", e)))?;
 
     let properties = yaml_mapping.get(&Value::from("properties"));
     let properties = match properties {
@@ -103,7 +103,7 @@ where
 
     Ok(Schema {
         types: type_information,
-        annotations: display_information,
+        annotations,
         children: properties,
         mapping: mapping.cloned(),
     })

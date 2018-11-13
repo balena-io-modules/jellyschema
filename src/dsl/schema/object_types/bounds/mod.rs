@@ -71,14 +71,14 @@ pub enum BooleanObjectBounds {
 
 #[derive(Clone, Debug)]
 pub struct EnumerationValue {
-    pub display_information: Annotations,
+    pub annotations: Annotations,
     pub value: String,
 }
 
 impl From<&str> for EnumerationValue {
     fn from(value: &str) -> Self {
         let value = value.to_string();
-        let display_information = Annotations {
+        let annotations = Annotations {
             title: Some(value.clone()),
             help: None,
             warning: None,
@@ -86,7 +86,7 @@ impl From<&str> for EnumerationValue {
         };
         EnumerationValue {
             value: value.clone(),
-            display_information,
+            annotations,
         }
     }
 }
