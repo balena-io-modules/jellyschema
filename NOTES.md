@@ -5,6 +5,7 @@ Guidelines:
 * serialization should have all the computation, the typesystem should be as small as possible though
 
 TODOs:
+* come up with a better and shorter name of the crate
 * low level code quality: 
   * make serde use consistent, right now there is a mix of attributes, `with` functions and `impl (De)serialize`
   * visibility: remove pub access where possible
