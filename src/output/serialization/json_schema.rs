@@ -2,9 +2,9 @@ use serde::ser::SerializeMap;
 use serde::Serialize;
 use serde::Serializer;
 
-use crate::dsl::schema::SchemaRoot;
+use crate::dsl::schema::DocumentRoot;
 use crate::output::JsonSchema;
-use crate::output::serialization::properties::serialize_property;
+use crate::output::serialization::properties::serialize_schema;
 
 const SCHEMA_URL: &str = "http://json-schema.org/draft-04/schema#";
 
@@ -17,18 +17,18 @@ impl<'a> Serialize for JsonSchema<'a> {
         map.serialize_entry("$schema", &self.schema_url)?;
         map.serialize_entry("$$version", &self.version)?;
 
-        if let Some(property) = self.root {
-            serialize_property(property, &mut map)?
+        if let Some(schema) = self.root {
+            serialize_schema(schema, &mut map)?
         }
 
         map.end()
     }
 }
 
-impl<'a> From<&'a SchemaRoot> for JsonSchema<'a> {
-    fn from(schema: &'a SchemaRoot) -> Self {
+impl<'a> From<&'a DocumentRoot> for JsonSchema<'a> {
+    fn from(schema: &'a DocumentRoot) -> Self {
         JsonSchema {
-            root: schema.self_property.as_ref(),
+            root: schema.schema.as_ref(),
             version: schema.version,
             schema_url: SCHEMA_URL,
         }

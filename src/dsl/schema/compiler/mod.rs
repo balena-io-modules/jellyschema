@@ -2,7 +2,7 @@
 use yaml_merge_keys::merge_keys_serde;
 
 use crate::dsl::schema::deserialization::deserialize_root;
-use crate::dsl::schema::SchemaRoot;
+use crate::dsl::schema::DocumentRoot;
 
 pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, CompilationError> {
     let schema = merge_keys_serde(schema)?;
@@ -11,7 +11,7 @@ pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, CompilationE
 }
 
 pub struct CompiledSchema {
-    schema: SchemaRoot,
+    schema: DocumentRoot,
 }
 
 #[derive(Debug)]
@@ -44,11 +44,11 @@ impl From<yaml_merge_keys::Error> for CompilationError {
 }
 
 impl CompiledSchema {
-    pub fn with(schema: SchemaRoot) -> CompiledSchema {
+    pub fn with(schema: DocumentRoot) -> CompiledSchema {
         CompiledSchema { schema }
     }
 
-    pub fn compiled(self) -> SchemaRoot {
+    pub fn compiled(self) -> DocumentRoot {
         self.schema
     }
 }

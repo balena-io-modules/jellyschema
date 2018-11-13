@@ -10,32 +10,32 @@ pub mod object_types;
 
 /// Represents the root of the yaml DSL document
 #[derive(Clone, Debug)]
-pub struct SchemaRoot {
+pub struct DocumentRoot {
     pub version: u64,
-    pub self_property: Option<Property>,
+    pub schema: Option<Schema>,
 }
 
-/// A first-class collection representing a list of `PropertyEntries`, has convenience methods exposed
+/// A first-class collection of `NamedSchema`'s, has convenience methods exposed
 #[derive(Clone, Debug)]
-pub struct PropertyList {
-    entries: Vec<NamedProperty>,
+pub struct NamedSchemaList {
+    entries: Vec<NamedSchema>,
 }
 
-/// A named property, an entry in `PropertyList`
+/// A schema with an associated name, an entry in `SchemaList`
 // fixme move serialize implementation to the `output` module
 #[derive(Clone, Debug, Serialize)]
-pub struct NamedProperty {
+pub struct NamedSchema {
     pub name: String,
     #[serde(flatten)]
-    pub property: Property,
+    pub schema: Schema,
 }
 
 /// Everything that a schema at any level can represent, see schema and subschema in the spec
 #[derive(Clone, Debug)]
-pub struct Property {
+pub struct Schema {
     pub types: Option<Vec<ObjectType>>,
     pub annotations: Annotations,
-    pub children: Option<PropertyList>,
+    pub children: Option<NamedSchemaList>,
     pub mapping: Option<serde_yaml::Mapping>, // TODO: real mapping support
 }
 
@@ -49,34 +49,32 @@ pub struct Annotations {
 }
 
 // TODO: optimization: make the methods memoize the computed result
-impl PropertyList {
+impl NamedSchemaList {
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
     }
 
-    pub fn entries(&self) -> &Vec<NamedProperty> {
+    pub fn entries(&self) -> &Vec<NamedSchema> {
         &self.entries
     }
 
-    /// Names of all properties
-    pub fn property_names(&self) -> Vec<&str> {
+    pub fn all_schema_names(&self) -> Vec<&str> {
         self.entries
             .iter()
-            .map(|property_entry| property_entry.name.as_str())
+            .map(|named_schema| named_schema.name.as_str())
             .collect()
     }
 
-    /// Names of required properties only
-    pub fn required_property_names(&self) -> Vec<&str> {
+    pub fn required_schema_names(&self) -> Vec<&str> {
         self.entries
             .iter()
-            .filter_map(|property_entry| match &property_entry.property.types {
+            .filter_map(|named_schema| match &named_schema.schema.types {
                 Some(type_list) => {
                     if type_list.iter().any(|type_spec| match type_spec {
                         ObjectType::Required(_) => true,
                         ObjectType::Optional(_) => false,
                     }) {
-                        Some(property_entry.name.as_str())
+                        Some(named_schema.name.as_str())
                     } else {
                         None
                     }

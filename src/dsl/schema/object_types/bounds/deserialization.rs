@@ -5,7 +5,7 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 
 use crate::dsl::schema::Annotations;
-use crate::dsl::schema::deserialization::deserialize_property;
+use crate::dsl::schema::deserialization::deserialize_schema;
 use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
@@ -16,7 +16,7 @@ use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::deserialization::deserialize_integer;
-use crate::dsl::schema::Property;
+use crate::dsl::schema::Schema;
 
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
@@ -142,14 +142,14 @@ where
     Ok(None)
 }
 
-fn deserialize_array_additional_items_bounds<E>(mapping: &Mapping) -> Result<Option<Property>, E>
+fn deserialize_array_additional_items_bounds<E>(mapping: &Mapping) -> Result<Option<Schema>, E>
 where
     E: Error,
 {
     match mapping.get(&Value::from("additionalItems")) {
         None => Ok(None),
         Some(properties) => match properties {
-            Value::Mapping(_) => Ok(Some(deserialize_property(properties)?)),
+            Value::Mapping(_) => Ok(Some(deserialize_schema(properties)?)),
             _ => Err(Error::custom("`additionalItems must be a schema`")),
         },
     }
@@ -196,12 +196,12 @@ where
     match mapping.get(&Value::from("items")) {
         None => Ok(None),
         Some(properties) => match properties {
-            Value::Mapping(_) => Ok(Some(ArrayItemObjectBounds::AllItems(deserialize_property(properties)?))),
+            Value::Mapping(_) => Ok(Some(ArrayItemObjectBounds::AllItems(deserialize_schema(properties)?))),
             Value::Sequence(sequence) => Ok(Some(ArrayItemObjectBounds::RespectiveItems(
                 sequence
                     .iter()
-                    .map(|entry| deserialize_property(entry))
-                    .collect::<Result<Vec<Property>, E>>()?,
+                    .map(|entry| deserialize_schema(entry))
+                    .collect::<Result<Vec<Schema>, E>>()?,
             ))),
             _ => Err(Error::custom("`items` must be either a schema or array of schemas")),
         },

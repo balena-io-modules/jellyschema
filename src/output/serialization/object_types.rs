@@ -123,11 +123,11 @@ where
         }
         if let Some(ref items) = bounds.items {
             match items {
-                ArrayItemObjectBounds::AllItems(property) => {
-                    map.serialize_entry("items", &property)?;
+                ArrayItemObjectBounds::AllItems(schema) => {
+                    map.serialize_entry("items", &schema)?;
                 }
-                ArrayItemObjectBounds::RespectiveItems(properties) => {
-                    map.serialize_entry("items", &properties)?;
+                ArrayItemObjectBounds::RespectiveItems(schemas) => {
+                    map.serialize_entry("items", &schemas)?;
                 }
             }
         }

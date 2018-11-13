@@ -31,7 +31,7 @@ Spec notes:
    - on the first reading not clear the difference between yaml types and dsl types
 * `max/min` vs `maximum/minimum` in names of the validations
 * is not specifying `items` in an array type okay ?
-
+* 'schema' is a very overloaded term - it may be hard to grasp what is meant byt 'schema' in different parts of the spec
 Roadmap:
 * Create a playground application that would allow other people to play with the DSL
 * when the spec is merged - mass-change links in the `README.md`

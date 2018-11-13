@@ -1,16 +1,16 @@
 use core::borrow::Borrow;
 use std::collections::HashMap;
 
-use crate::dsl::schema::Property;
-use crate::dsl::schema::PropertyList;
-use crate::dsl::schema::SchemaRoot;
+use crate::dsl::schema::DocumentRoot;
+use crate::dsl::schema::NamedSchemaList;
+use crate::dsl::schema::Schema;
 use crate::output::UiObject;
 use crate::output::UiObjectProperty;
 
-impl<'a> From<&'a SchemaRoot> for UiObject<'a> {
-    fn from(schema: &'a SchemaRoot) -> Self {
-        match &schema.self_property {
-            Some(property) => match &property.children {
+impl<'a> From<&'a DocumentRoot> for UiObject<'a> {
+    fn from(schema: &'a DocumentRoot) -> Self {
+        match &schema.schema {
+            Some(schema) => match &schema.children {
                 Some(list) => list.into(),
                 None => UiObject(HashMap::new()),
             },
@@ -19,15 +19,15 @@ impl<'a> From<&'a SchemaRoot> for UiObject<'a> {
     }
 }
 
-impl<'a> From<&'a PropertyList> for UiObject<'a> {
-    fn from(list: &'a PropertyList) -> Self {
+impl<'a> From<&'a NamedSchemaList> for UiObject<'a> {
+    fn from(list: &'a NamedSchemaList) -> Self {
         let ui_object_entries: Vec<(&str, UiObjectProperty)> = list
             .entries()
             .iter()
             .filter_map(|entry| {
-                let property: UiObjectProperty = entry.property.borrow().into();
+                let property: UiObjectProperty = entry.schema.borrow().into();
                 if !property.is_empty() {
-                    Some((entry.name.as_str(), entry.property.borrow().into()))
+                    Some((entry.name.as_str(), entry.schema.borrow().into()))
                 } else {
                     None
                 }
@@ -39,8 +39,8 @@ impl<'a> From<&'a PropertyList> for UiObject<'a> {
     }
 }
 
-impl<'a> From<&'a Property> for UiObjectProperty<'a> {
-    fn from(property: &'a Property) -> Self {
+impl<'a> From<&'a Schema> for UiObjectProperty<'a> {
+    fn from(property: &'a Schema) -> Self {
         UiObjectProperty {
             help: property.annotations.help.as_ref().map(|string| string.as_ref()),
             warning: property.annotations.warning.as_ref().map(|string| string.as_str()),

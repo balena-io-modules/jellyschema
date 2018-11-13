@@ -3,7 +3,7 @@ use regex::Regex;
 use serde_derive::Serialize;
 
 use crate::dsl::schema::Annotations;
-use crate::dsl::schema::Property;
+use crate::dsl::schema::Schema;
 
 pub mod deserialization;
 
@@ -27,7 +27,7 @@ pub struct ArrayObjectBounds {
     pub maximum_number_of_items: Option<i64>,
     pub items: Option<ArrayItemObjectBounds>,
     pub unique_items: Option<ArrayUniqueItemBound>,
-    pub additional_items: Option<Property>,
+    pub additional_items: Option<Schema>,
 }
 
 #[derive(Clone, Debug)]
@@ -38,8 +38,8 @@ pub enum ArrayUniqueItemBound {
 
 #[derive(Clone, Debug)]
 pub enum ArrayItemObjectBounds {
-    AllItems(Property),
-    RespectiveItems(Vec<Property>),
+    AllItems(Schema),
+    RespectiveItems(Vec<Schema>),
 }
 
 impl IntegerBound {
