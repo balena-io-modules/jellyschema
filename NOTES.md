@@ -1,6 +1,4 @@
 
-
-
 Guidelines: 
 * deserialization bit should be as simple as possible, not much logic there
 * serialization should have all the computation, the typesystem should be as small as possible though
@@ -23,14 +21,6 @@ TODOs:
 * use `valico` to validate the json schemas in tests
 * use `repo.yaml`
 
-Compiler phases:
-* phases (traits + eventually macros, see `Validate` trait): - effectively compilation-level state machine
-  * deserialize from yaml - in general this creates values, other phases have references to them
-  * normalize (e.g. copy title into value if needed)
-  * trim (e.g. strip empty objects)
-  * validate
-  * serialize
-
 
 Spec notes:
 * password field - should it have associated `UIObject` widget ?
@@ -43,3 +33,4 @@ Spec notes:
 
 Roadmap:
 * Create a playground application that would allow other people to play with the DSL
+* when the spec is merged - mass-change links in the `README.md`
