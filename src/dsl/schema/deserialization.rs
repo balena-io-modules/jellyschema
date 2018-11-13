@@ -3,11 +3,11 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 
 use crate::dsl::schema::compiler::CompilationError;
+use crate::dsl::schema::NamedProperty;
 use crate::dsl::schema::object_types::deserialization::deserialize_object_type;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::Property;
-use crate::dsl::schema::NamedProperty;
 use crate::dsl::schema::PropertyList;
 use crate::dsl::schema::SchemaRoot;
 

@@ -4,8 +4,8 @@ use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-use crate::dsl::schema::deserialization::deserialize_property;
 use crate::dsl::schema::Annotations;
+use crate::dsl::schema::deserialization::deserialize_property;
 use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
