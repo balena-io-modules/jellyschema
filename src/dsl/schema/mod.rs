@@ -6,7 +6,7 @@ use crate::dsl::object_types::ObjectType;
 pub mod deserialization;
 
 #[derive(Clone, Debug)]
-pub struct SourceSchema {
+pub struct SchemaRoot {
     pub version: u64,
     pub self_property: Option<Property>,
 }

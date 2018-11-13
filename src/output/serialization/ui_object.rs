@@ -3,12 +3,12 @@ use std::collections::HashMap;
 
 use crate::dsl::schema::Property;
 use crate::dsl::schema::PropertyList;
-use crate::dsl::schema::SourceSchema;
+use crate::dsl::schema::SchemaRoot;
 use crate::output::UiObject;
 use crate::output::UiObjectProperty;
 
-impl<'a> From<&'a SourceSchema> for UiObject<'a> {
-    fn from(schema: &'a SourceSchema) -> Self {
+impl<'a> From<&'a SchemaRoot> for UiObject<'a> {
+    fn from(schema: &'a SchemaRoot) -> Self {
         match &schema.self_property {
             Some(property) => match &property.property_list {
                 Some(list) => list.into(),

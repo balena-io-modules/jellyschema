@@ -64,8 +64,8 @@ where
 
 impl RawObjectType {
     fn from<E>(value: &str, mapping: &Mapping) -> Result<Self, E>
-        where
-            E: Error,
+    where
+        E: Error,
     {
         let object_type = match value {
             "object" => RawObjectType::Object,

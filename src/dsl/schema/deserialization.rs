@@ -9,9 +9,9 @@ use crate::dsl::object_types::RawObjectType;
 use crate::dsl::schema::Property;
 use crate::dsl::schema::PropertyEntry;
 use crate::dsl::schema::PropertyList;
-use crate::dsl::schema::SourceSchema;
+use crate::dsl::schema::SchemaRoot;
 
-pub fn deserialize_root<E>(schema: &Value) -> Result<SourceSchema, CompilationError>
+pub fn deserialize_root<E>(schema: &Value) -> Result<SchemaRoot, CompilationError>
 where
     E: serde::de::Error,
 {
@@ -30,7 +30,7 @@ where
         )),
     }?;
     let self_property = Some(deserialize_property::<serde_yaml::Error>(&schema)?);
-    Ok(SourceSchema { version, self_property })
+    Ok(SchemaRoot { version, self_property })
 }
 
 pub fn sequence_to_property_list<E>(sequence: &[Value]) -> Result<PropertyList, E>

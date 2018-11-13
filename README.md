@@ -14,7 +14,7 @@ It consumes [`serde_yaml`](https://crates.io/crates/serde_yaml) values and outpu
 Example of use:
 ```rust
 let input_schema : serde_yaml::Value = serde_yaml::from_str(
-    include_str!("input-schema.yml")).
+    include_str!("configuration.yml")).
     unwrap();
 
 let (json_schema, ui_object) = Generator::with(input_schema)?.generate();

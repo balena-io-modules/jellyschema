@@ -1,3 +1,4 @@
+//! A `type` is anything that can be specified after `type` keyword as in the spec
 use crate::dsl::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::object_types::bounds::BooleanObjectBounds;
 use crate::dsl::object_types::bounds::IntegerObjectBounds;

@@ -1,11 +1,13 @@
 use serde_json::Map;
 
-use crate::dsl::compiler::compile;
 use crate::dsl::compiler::CompilationError;
+use crate::dsl::compiler::compile;
 use crate::dsl::compiler::CompiledSchema;
 use crate::output::JsonSchema;
 use crate::output::UiObject;
 
+/// Use this generator to get `JSON Schema` and `UI Object` json from yaml DSL
+///
 pub struct Generator {
     compiled_schema: CompiledSchema,
 }

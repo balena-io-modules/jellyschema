@@ -1,3 +1,4 @@
+//! A `bound` is anything that restricts the instance value, please see `validation keywords` in the spec
 use regex::Regex;
 use serde_derive::Serialize;
 

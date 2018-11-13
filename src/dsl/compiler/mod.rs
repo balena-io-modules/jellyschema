@@ -1,8 +1,9 @@
 use yaml_merge_keys::merge_keys_serde;
 
 use crate::dsl::schema::deserialization::deserialize_root;
-use crate::dsl::schema::SourceSchema;
+use crate::dsl::schema::SchemaRoot;
 
+/// Compiles `serde_yaml`'s representation into a compiled schema that then can be used in `Generator`
 pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, CompilationError> {
     let schema = merge_keys_serde(schema)?;
     let schema = deserialize_root::<serde_yaml::Error>(&schema)?;
@@ -10,7 +11,7 @@ pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, CompilationE
 }
 
 pub struct CompiledSchema {
-    schema: SourceSchema,
+    schema: SchemaRoot,
 }
 
 #[derive(Debug)]
@@ -43,11 +44,11 @@ impl From<yaml_merge_keys::Error> for CompilationError {
 }
 
 impl CompiledSchema {
-    pub fn with(schema: SourceSchema) -> Self {
+    pub fn with(schema: SchemaRoot) -> Self {
         CompiledSchema { schema }
     }
 
-    pub fn compiled(self) -> SourceSchema {
+    pub fn compiled(self) -> SchemaRoot {
         self.schema
     }
 }
