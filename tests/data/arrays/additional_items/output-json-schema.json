@@ -1,0 +1,74 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Array validation",
+    "$$order": [
+        "mixedNetworksUnlimitedWifi"
+    ],
+    "required": [
+        "mixedNetworksUnlimitedWifi"
+    ],
+    "type": "object",
+    "properties": {
+        "mixedNetworksUnlimitedWifi": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "required": [
+                        "ssid",
+                        "passphrase"
+                    ],
+                    "$$order": [
+                        "ssid",
+                        "passphrase"
+                    ],
+                    "properties": {
+                        "ssid": {
+                            "type": "string"
+                        },
+                        "passphrase": {
+                            "type": "string",
+                            "writeOnly": true
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "id"
+                    ],
+                    "$$order": [
+                        "id"
+                    ],
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ],
+            "minItems": 1,
+            "additionalItems": {
+                "type": "object",
+                "required": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "$$order": [
+                    "ssid",
+                    "passphrase"
+                ],
+                "properties": {
+                    "ssid": {
+                        "type": "string"
+                    },
+                    "passphrase": {
+                        "type": "string",
+                        "writeOnly": true
+                    }
+                }
+            }
+        }
+    }
+}

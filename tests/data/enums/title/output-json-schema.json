@@ -1,0 +1,37 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "$$order": [
+        "longOne"
+    ],
+    "required": [
+        "longOne"
+    ],
+    "title": "Enum test",
+    "properties": {
+        "longOne": {
+            "type": "string",
+            "oneOf": [
+                {
+                    "title": "Balena Fin (CM3)",
+                    "enum": [
+                        "fincm3"
+                    ]
+                },
+                {
+                    "title": "Raspberry Pi 3",
+                    "enum": [
+                        "raspberrypi3"
+                    ]
+                },
+                {
+                    "title": "Raspberry Pi 2",
+                    "enum": [
+                        "raspberrypi2"
+                    ]
+                }
+            ]
+        }
+    }
+}

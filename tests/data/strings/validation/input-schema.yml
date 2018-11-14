@@ -1,0 +1,10 @@
+version: 1
+title: String validation
+properties:
+- ssid:
+    type: string
+    pattern: ^[a-zA-Z]{1,}$
+- password:
+    type: password
+    minLength: 8
+    maxLength: 32

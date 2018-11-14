@@ -1,0 +1,30 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$$order": [
+        "top"
+    ],
+    "required": [
+        "top"
+    ],
+    "title": "Nested properties",
+    "type": "object",
+    "properties": {
+        "top": {
+            "type": "object",
+            "title": "Top level property with no type specified",
+            "$$order": [
+                "second"
+            ],
+            "required": [
+                "second"
+            ],
+            "properties": {
+                "second": {
+                    "type": "string",
+                    "title": "Second level property"
+                }
+            }
+        }
+    }
+}

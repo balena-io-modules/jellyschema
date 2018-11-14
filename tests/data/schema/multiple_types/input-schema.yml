@@ -1,0 +1,5 @@
+version: 1
+title: Multiple types (one property)
+properties:
+- age:
+    type: [integer, string]

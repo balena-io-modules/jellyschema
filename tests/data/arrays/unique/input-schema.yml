@@ -1,0 +1,19 @@
+version: 1
+title: Array validation
+definitions:
+  wifiNetwork: &WIFI_NETWORK
+    properties:
+      - ssid:
+          type: string
+      - passphrase:
+          type: password
+properties:
+  - uniqueWifiNetworks:
+      type: array
+      items: *WIFI_NETWORK
+      uniqueItems: true
+  - uniqueSsidWifiNetworks:
+      type: array
+      items: *WIFI_NETWORK
+      uniqueItems:
+        - ssid

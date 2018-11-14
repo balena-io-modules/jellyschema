@@ -1,0 +1,37 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "$$order": [
+        "mediumOne"
+    ],
+    "required": [
+        "mediumOne"
+    ],
+    "title": "Enum test",
+    "properties": {
+        "mediumOne": {
+            "type": "string",
+            "oneOf": [
+                {
+                    "title": "fincm3",
+                    "enum": [
+                        "fincm3"
+                    ]
+                },
+                {
+                    "title": "raspberrypi3",
+                    "enum": [
+                        "raspberrypi3"
+                    ]
+                },
+                {
+                    "title": "raspberrypi2",
+                    "enum": [
+                        "raspberrypi2"
+                    ]
+                }
+            ]
+        }
+    }
+}

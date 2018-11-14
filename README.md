@@ -1,33 +1,36 @@
-# balena-configuration-dsl
+# Configuration DSL to JSON Schema
 
-This library serves as an entry point to the reconfiguration ecosystem.
+## What is it ?
 
-For the main usecase the API surface needs to be similar to (work in progress):
+This is is a Rust (edition 2018) library that is intended to be used as a translation mechanism between balena's configuration DSL and the JSON Schema and UI Schema..  
+The is not production ready yet, however it supports some real-life cases already.  
+The plan is to have this library be available to be used from Rust code but also as a Node module to be used from Node and in-browser code, through WASM.
 
-* [ ] Compiler (parse & validate YAML schema)
-  * Input - YAML schema
-  * Output - compiled schema + some internal caching structures probably - temporary named as `XYZ` type
+## How to use it ?
 
-* [ ] Generator
-  * Input - XYZ
-  * Output - XYZ, JSON Schema & uiObject
+The main entry point to the library is the `Generator` type and its `generate` type.
+It consumes [`serde_yaml`](https://crates.io/crates/serde_yaml) values and outputs a tuple of [`serde_json`](https://crates.io/crates/serde_json) values.
 
-* [ ] Targets extraction
-  * Input - XYZ
-  * Output - XYZ, list of targets (= config files/folders) to read
+Example of use:
+```rust
+let input_schema : serde_yaml::Value = serde_yaml::from_str(
+    include_str!("configuration.yml")).
+    unwrap();
 
-* [ ] Mapping from config files
-  * Input - raw file contents, XYZ, target names
-  * Output - XYZ, dry JSON (form data)
+let (json_schema, ui_object) = Generator::with(input_schema)?.generate();
+```
 
-* [ ] Mapping to config files
-  * Input - dry JSON (form data), XYZ
-  * Output - XYZ, raw file contents, target names
+For examples of input yaml DSL schemas please see the ones used in tests in [`tests/data`](./tests/data) directory.
 
-* [ ] Data validation (balena-data-validation)
-  * Input - dry JSON (form data), XYZ
-  * Output - XYZ, list of errors
 
-* [ ] Templating -> balena-templating
-  * Input - dry JSON (context), XYZ
-  * Output - XYZ, dry JSON [&& list of errors]
+## What is supported ?
+
+All basic types from the [main DSL specification](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md) are supported.
+The support is still pretty shallow, i.e. while the feature may be supported its edge cases are probably not supported.
+Please find a detailed list in the [SPEC_SUPPORT](./SPEC_SUPPORT.md) document.
+
+## Contributing
+
+Please see [implementors' notes](./NOTES.md) for the current scratchpad and TODOs.  
+This will be moved into Github issues.
+
