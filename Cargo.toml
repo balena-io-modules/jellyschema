@@ -14,6 +14,7 @@ serde_yaml = "0.7.5" # needs to be the same version as the one used by `yaml-mer
 yaml-merge-keys = {version= "0.2.1", features = ["serde_yaml"]}
 heck = "0.3"
 regex = "1.0"
+balena-temen = { git = "https://github.com/balena-io-modules/balena-temen.git", tag = "v0.0.8" }
 
 [dev-dependencies]
 pretty_assertions = "0.5"
