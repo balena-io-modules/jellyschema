@@ -1,4 +1,14 @@
 - commits:
+    - subject: Set change type for versionist
+      hash: 88f6cfc9b74d2f2a67e28cc4a54a93f391189523
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.2.0
+  date: 2018-11-14T11:37:09.036Z
+- commits:
     - subject: Add resin-cli demo test
       hash: 9acfddab2550538088c473391d077d7b8db9ec6e
       body: ''
