@@ -6,6 +6,9 @@ use crate::dsl::schema::DocumentRoot;
 use crate::output::JsonSchema;
 use crate::output::serialization::properties::serialize_schema;
 
+// we output Draft 4 of the Json Schema specification because the downstream consumers
+// of the JSON schema we produce fully support Draft 4, and not really Draft 7;
+// in general most of the tools and libraries on the internet understand Draft 4 but have some problems with Draft 7
 const SCHEMA_URL: &str = "http://json-schema.org/draft-04/schema#";
 
 impl<'a> Serialize for JsonSchema<'a> {
