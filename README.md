@@ -2,7 +2,7 @@
 
 ## What is it ?
 
-This is is a Rust (edition 2018) library that is intended to be used as a translation mechanism between the [configuration DSL](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md) and the `JSON + UI Schema` world.  
+This is is a Rust (edition 2018) library that is intended to be used as a translation mechanism between balena's configuration DSL and the JSON Schema and UI Schema..  
 The is not production ready yet, however it supports some real-life cases already.  
 The plan is to have this library be available to be used from Rust code but also as a Node module to be used from Node and in-browser code, through WASM.
 
