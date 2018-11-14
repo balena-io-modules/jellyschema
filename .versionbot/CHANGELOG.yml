@@ -1,4 +1,14 @@
 - commits:
+    - subject: 'Remove TODOs from the NOTES.md, transformed into github issues'
+      hash: 6457034aedce9597cbc30b2bfcb0fe499946f748
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.2.1
+  date: 2018-11-14T12:35:14.397Z
+- commits:
     - subject: Set change type for versionist
       hash: 88f6cfc9b74d2f2a67e28cc4a54a93f391189523
       body: ''
