@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update dependencies
+      hash: 74fbf3a274c4862dbd6076d76c6804c1688c3f35
+      body: |
+        New version of yaml-merge-keys was released that catches up with new
+        serde_yaml. Updated both dependencies.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.2.2
+  date: 2018-11-15T09:39:42.281Z
+- commits:
     - subject: 'Remove TODOs from the NOTES.md, transformed into github issues'
       hash: 6457034aedce9597cbc30b2bfcb0fe499946f748
       body: ''
