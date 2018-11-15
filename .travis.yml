@@ -7,10 +7,3 @@ install:
 
 script:
   - ci/test.sh
-
-notifications:
-  email:
-    - robert@balena.io
-    - cyryl@balena.io
-  on_success: change
-  on_failure: always
