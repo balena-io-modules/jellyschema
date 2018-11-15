@@ -1,6 +1,5 @@
 title: Simplest when condition
 version: 1
-definitions:
 properties:
   - showAllDevices:
       type: boolean
