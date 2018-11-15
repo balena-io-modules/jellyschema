@@ -1,4 +1,14 @@
 - commits:
+    - subject: Remove explicit travis notifications
+      hash: 6bbf9e9f8f52cdb674e20586563effb1bca0704b
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.2.3
+  date: 2018-11-15T10:16:23.517Z
+- commits:
     - subject: Update dependencies
       hash: 74fbf3a274c4862dbd6076d76c6804c1688c3f35
       body: |
