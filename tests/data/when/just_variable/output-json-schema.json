@@ -1,0 +1,53 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Simplest when condition",
+    "type": "object",
+    "properties": {
+        "showAllDevices": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "required": [
+        "showAllDevices"
+    ],
+    "$$order": [
+        "showAllDevices"
+    ],
+    "dependencies": {
+        "showAllDevices": {
+            "oneOf": [
+                {
+                    "properties": {
+                        "showAllDevices": {
+                            "enum": [
+                                false
+                            ]
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "showAllDevices": {
+                            "enum": [
+                                true
+                            ]
+                        },
+                        "deviceType": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "showAllDevices",
+                        "deviceType"
+                    ],
+                    "$$order": [
+                        "showAllDevices",
+                        "deviceType"
+                    ]
+                }
+            ]
+        }
+    }
+}
