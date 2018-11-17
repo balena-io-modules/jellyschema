@@ -1,4 +1,6 @@
 //! Top-level constructs representing the configuration DSL language
+use balena_temen::ast::Expression;
+use ego_tree::Tree;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -17,7 +19,7 @@ pub struct DocumentRoot {
 
 /// A first-class collection of `NamedSchema`'s, has convenience methods exposed
 #[derive(Clone, Debug)]
-pub struct NamedSchemaList {
+pub struct SchemaList {
     entries: Vec<NamedSchema>,
 }
 
@@ -35,8 +37,9 @@ pub struct NamedSchema {
 pub struct Schema {
     pub types: Option<Vec<ObjectType>>,
     pub annotations: Annotations,
-    pub children: Option<NamedSchemaList>,
+    pub children: Option<SchemaList>,
     pub mapping: Option<serde_yaml::Mapping>, // TODO: real mapping support
+    pub when: Option<Expression>,
 }
 
 /// Represents [`SchemaAnnotations`](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#schema-annotations) from the spec minus the `default` keyword, that lives in the object bounds information
@@ -49,7 +52,7 @@ pub struct Annotations {
 }
 
 // TODO: optimization: make the methods memoize the computed result
-impl NamedSchemaList {
+impl SchemaList {
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
     }

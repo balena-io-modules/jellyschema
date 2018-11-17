@@ -8,6 +8,7 @@ build = "build.rs"
 [dependencies]
 heck = "0.3"
 regex = "1.0"
+ego-tree = "0.5"
 
 serde = "1.0"
 serde_derive = "1.0"
@@ -15,9 +16,9 @@ serde_json = "1.0"
 serde_yaml = "0.8"
 yaml-merge-keys = {version= "0.3", features = ["serde_yaml"]}
 
-balena-temen = { git = "https://github.com/balena-io-modules/balena-temen.git", tag = "v0.0.8" }
+balena-temen = { git = "https://github.com/balena-io-modules/balena-temen.git", tag = "v0.0.11" }
 
 [dev-dependencies]
 pretty_assertions = "0.5"
-
+quickcheck = "0.7"
 

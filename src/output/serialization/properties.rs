@@ -2,13 +2,13 @@ use std::collections::HashMap;
 
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 
-use crate::dsl::schema::NamedSchemaList;
+use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::Schema;
 use crate::output::serialization::object_types::object_type_name;
 use crate::output::serialization::object_types::serialize_object_type;
 
-pub fn serialize_schema_list<O, E, S>(schema_list: &NamedSchemaList, map: &mut S) -> Result<(), E>
+pub fn serialize_schema_list<O, E, S>(schema_list: &SchemaList, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,

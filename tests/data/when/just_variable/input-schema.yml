@@ -5,4 +5,4 @@ properties:
       type: boolean
   - deviceType:
       type: string
-      when: showAllDevices == true
+      when: showAllDevices

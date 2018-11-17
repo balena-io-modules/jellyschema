@@ -2,7 +2,7 @@ use core::borrow::Borrow;
 use std::collections::HashMap;
 
 use crate::dsl::schema::DocumentRoot;
-use crate::dsl::schema::NamedSchemaList;
+use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::Schema;
 use crate::output::UiObject;
 use crate::output::UiObjectProperty;
@@ -19,8 +19,8 @@ impl<'a> From<&'a DocumentRoot> for UiObject<'a> {
     }
 }
 
-impl<'a> From<&'a NamedSchemaList> for UiObject<'a> {
-    fn from(list: &'a NamedSchemaList) -> Self {
+impl<'a> From<&'a SchemaList> for UiObject<'a> {
+    fn from(list: &'a SchemaList) -> Self {
         let ui_object_entries: Vec<(&str, UiObjectProperty)> = list
             .entries()
             .iter()

@@ -5,7 +5,7 @@ use serde_yaml::Value;
 use crate::dsl::schema::compiler::CompilationError;
 use crate::dsl::schema::DocumentRoot;
 use crate::dsl::schema::NamedSchema;
-use crate::dsl::schema::NamedSchemaList;
+use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::object_types::deserialization::deserialize_object_type;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
@@ -29,43 +29,108 @@ where
             "root level schema needs to be a yaml mapping",
         )),
     }?;
-    let schema = Some(deserialize_schema::<serde_yaml::Error>(&schema)?);
-    Ok(DocumentRoot { version, schema })
-}
 
-pub fn sequence_to_schema_list<E>(sequence: &[Value]) -> Result<NamedSchemaList, E>
-where
-    E: Error,
-{
-    let list_of_maybe_entries = sequence.into_iter().map(|value| {
-        let mapping = value
-            .as_mapping()
-            .ok_or_else(|| Error::custom(format!("cannot deserialize schema {:#?} as mapping", value)))?;
-        Ok(mapping_to_named_schema(mapping)?)
-    });
+    let schema = deserialize_schema::<serde_yaml::Error>(&schema)?;
 
-    let list: Result<Vec<_>, E> = list_of_maybe_entries.collect();
-    let list = list?;
+    let dependencies = dependencies_for_schema_list(schema.children.as_ref(), DependencyForest::empty())?;
 
-    Ok(NamedSchemaList { entries: list })
-}
+    eprintln!("{:#?}", dependencies);
 
-fn mapping_to_named_schema<E>(mapping: &Mapping) -> Result<NamedSchema, E>
-where
-    E: Error,
-{
-    let (key, value) = mapping
-        .into_iter()
-        .next()
-        .ok_or_else(|| Error::custom("cannot get first element of the sequence"))?;
-    let key: String = serde_yaml::from_value(key.clone())
-        .map_err(|e| Error::custom(format!("cannot deserialize named schema name - {}", e)))?;
-    let value = deserialize_schema(&value)?;
-    Ok(NamedSchema {
-        name: key,
-        schema: value,
+    Ok(DocumentRoot {
+        version,
+        schema: Some(schema),
     })
 }
+
+#[derive(Debug, Clone)]
+struct DependencyForest<'a> {
+    all: HashMap<&'a str, DependencyTree>,
+}
+
+#[derive(Debug, Clone)]
+struct DependencyTree {
+    tree: Vec<String>, // TODO: change into actual tree
+}
+
+impl DependencyTree {
+    fn start_with(identifiers: &Identifier) -> DependencyTree {
+        let mut result = vec![];
+        for identifier in &identifiers.values {
+            match identifier {
+                IdentifierValue::Name(name) => {
+                    result.push(name.clone());
+                }
+                _ => unimplemented!()
+            }
+        }
+        DependencyTree {
+            tree: result,
+        }
+    }
+
+    fn merge_with(self, expression: &Identifier) -> DependencyTree {
+        DependencyTree {
+            tree: vec![] //FIXME actually merge
+        }
+    }
+}
+
+impl<'a> DependencyForest<'a> {
+    fn empty() -> DependencyForest<'a> {
+        DependencyForest { all: HashMap::new() }
+    }
+
+    fn push(self, name: &'a str, depends_on: &'a Expression) -> DependencyForest<'a> {
+        let map = match self.all.get(name) {
+            None => {
+                let mut map = self.all.clone();
+                match depends_on.value {
+                    ExpressionValue::Identifier(ref identifiers) => {
+                        map.insert(name, DependencyTree::start_with(identifiers));
+                    }
+                    _ => unimplemented!() // TODO: support walking logical expressions
+                }
+
+                map
+            }
+            Some(previous) => {
+                let mut map = self.all.clone();
+                // map.insert(name, previous.clone().merge_with(depends_on));
+                map
+            }
+        };
+
+        DependencyForest { all: map }
+    }
+}
+
+fn dependencies_for_schema_list<'a>(
+    maybe_list: Option<&'a SchemaList>,
+    previous_tree: DependencyForest<'a>,
+) -> Result<DependencyForest<'a>, CompilationError> {
+    match maybe_list {
+        None => Ok(DependencyForest::empty()),
+        Some(list) => {
+            let mut tree = previous_tree;
+            for schema in list.entries() {
+                if let Some(when) = &schema.schema.when {
+                    tree = tree.push(&schema.name, &when);
+                }
+
+                if let Some(children) = &schema.schema.children {
+                    for named_child in children.entries() {
+                        tree = dependencies_for_schema_list(named_child.schema.children.as_ref(), tree)?;
+                    }
+                }
+            }
+            Ok(tree)
+        }
+    }
+}
+
+use balena_temen::ast::*;
+use std::collections::HashMap;
+use ego_tree::Tree;
 
 pub fn deserialize_schema<E>(value: &Value) -> Result<Schema, E>
 where
@@ -101,10 +166,57 @@ where
         },
     }?;
 
+    let when = yaml_mapping.get(&Value::from("when"));
+    let when = match when {
+        None => Ok(None),
+        Some(mapping) => match mapping {
+            Value::String(string) => {
+                Ok(Some(string.parse().map_err(|e| {
+                    Error::custom(format!("error parsing when expression: {}", e))
+                })?))
+            }
+            _ => Err(Error::custom(format!("unknown shape of `when`: {:#?}", mapping))),
+        },
+    };
     Ok(Schema {
         types: type_information,
         annotations,
         children: properties,
         mapping: mapping.cloned(),
+        when: when?,
+    })
+}
+
+fn sequence_to_schema_list<E>(sequence: &[Value]) -> Result<SchemaList, E>
+where
+    E: Error,
+{
+    let list_of_maybe_entries = sequence.into_iter().map(|value| {
+        let mapping = value
+            .as_mapping()
+            .ok_or_else(|| Error::custom(format!("cannot deserialize schema {:#?} as mapping", value)))?;
+        Ok(mapping_to_named_schema(mapping)?)
+    });
+
+    let list: Result<Vec<_>, E> = list_of_maybe_entries.collect();
+    let list = list?;
+
+    Ok(SchemaList { entries: list })
+}
+
+fn mapping_to_named_schema<E>(mapping: &Mapping) -> Result<NamedSchema, E>
+where
+    E: Error,
+{
+    let (key, value) = mapping
+        .into_iter()
+        .next()
+        .ok_or_else(|| Error::custom("cannot get first element of the sequence"))?;
+    let key: String = serde_yaml::from_value(key.clone())
+        .map_err(|e| Error::custom(format!("cannot deserialize named schema name - {}", e)))?;
+    let value = deserialize_schema(&value)?;
+    Ok(NamedSchema {
+        name: key,
+        schema: value,
     })
 }

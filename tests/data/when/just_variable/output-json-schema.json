@@ -5,8 +5,7 @@
     "type": "object",
     "properties": {
         "showAllDevices": {
-            "type": "boolean",
-            "default": false
+            "type": "boolean"
         }
     },
     "required": [
