@@ -32,6 +32,7 @@ where
 
     let schema = deserialize_schema::<serde_yaml::Error>(&schema)?;
 
+    // this is recursive already, should get the whole tree for all children schemas
     let dependencies = dependencies_for_schema_list(schema.children.as_ref(), DependencyForest::empty())?;
 
     eprintln!("{:#?}", dependencies);
@@ -39,12 +40,15 @@ where
     Ok(DocumentRoot {
         version,
         schema: Some(schema),
+        dependencies: Some(dependencies)
     })
 }
 
+/// structure representing the whole DAG of dependencies between the schemas
 #[derive(Debug, Clone)]
-struct DependencyForest<'a> {
-    all: HashMap<&'a str, DependencyTree>,
+pub struct DependencyForest {
+    // schema name -> its dependencies
+    all: HashMap<String, DependencyTree>,
 }
 
 #[derive(Debug, Clone)]
@@ -75,18 +79,18 @@ impl DependencyTree {
     }
 }
 
-impl<'a> DependencyForest<'a> {
-    fn empty() -> DependencyForest<'a> {
+impl DependencyForest {
+    fn empty() -> DependencyForest {
         DependencyForest { all: HashMap::new() }
     }
 
-    fn push(self, name: &'a str, depends_on: &'a Expression) -> DependencyForest<'a> {
+    fn push(self, name: &str, depends_on: &Expression) -> DependencyForest {
         let map = match self.all.get(name) {
             None => {
                 let mut map = self.all.clone();
                 match depends_on.value {
                     ExpressionValue::Identifier(ref identifiers) => {
-                        map.insert(name, DependencyTree::start_with(identifiers));
+                        map.insert(name.to_string(), DependencyTree::start_with(identifiers));
                     }
                     _ => unimplemented!() // TODO: support walking logical expressions
                 }
@@ -104,10 +108,10 @@ impl<'a> DependencyForest<'a> {
     }
 }
 
-fn dependencies_for_schema_list<'a>(
-    maybe_list: Option<&'a SchemaList>,
-    previous_tree: DependencyForest<'a>,
-) -> Result<DependencyForest<'a>, CompilationError> {
+fn dependencies_for_schema_list(
+    maybe_list: Option<&SchemaList>,
+    previous_tree: DependencyForest,
+) -> Result<DependencyForest, CompilationError> {
     match maybe_list {
         None => Ok(DependencyForest::empty()),
         Some(list) => {

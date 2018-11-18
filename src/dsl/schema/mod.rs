@@ -5,6 +5,7 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 use crate::dsl::schema::object_types::ObjectType;
+use crate::dsl::schema::deserialization::DependencyForest;
 
 pub mod deserialization;
 pub mod compiler;
@@ -15,6 +16,8 @@ pub mod object_types;
 pub struct DocumentRoot {
     pub version: u64,
     pub schema: Option<Schema>,
+    /// the whole dependency tree for all the subschemas. recursively
+    pub dependencies: Option<DependencyForest>
 }
 
 /// A first-class collection of `NamedSchema`'s, has convenience methods exposed
@@ -37,7 +40,9 @@ pub struct NamedSchema {
 pub struct Schema {
     pub types: Option<Vec<ObjectType>>,
     pub annotations: Annotations,
+    /// children of a schema are all schemas defined inside of this schema
     pub children: Option<SchemaList>,
+    /// this is th DSL mapping, to and from output formats (e.g. config files etc)
     pub mapping: Option<serde_yaml::Mapping>, // TODO: real mapping support
     pub when: Option<Expression>,
 }
