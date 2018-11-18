@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use serde_derive::Serialize;
 
 use crate::dsl::schema::Schema;
+use crate::dsl::schema::deserialization::DependencyForest;
 
 pub mod generator;
 mod serialization;
@@ -12,6 +13,7 @@ pub struct JsonSchema<'a> {
     version: u64,
     schema_url: &'a str,
     root: Option<&'a Schema>,
+    dependencies: Option<&'a DependencyForest>
 }
 
 #[derive(Serialize)]

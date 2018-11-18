@@ -7,6 +7,7 @@ use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::Schema;
 use crate::output::serialization::object_types::object_type_name;
 use crate::output::serialization::object_types::serialize_object_type;
+use crate::dsl::schema::deserialization::DependencyForest;
 
 pub fn serialize_schema_list<O, E, S>(schema_list: &SchemaList, map: &mut S) -> Result<(), E>
 where
@@ -33,18 +34,21 @@ where
     Ok(())
 }
 
+// FIXME: do not use trait implementation as it is hard to track where this is being called from
+
 impl Serialize for Schema {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
         let mut map = serializer.serialize_map(None)?;
-        serialize_schema(&self, &mut map)?;
+        // FIXME: investigate if we do not need dependencies from here
+        serialize_schema(&self, None, &mut map)?;
         map.end()
     }
 }
 
-pub fn serialize_schema<O, E, S>(schema: &Schema, map: &mut S) -> Result<(), E>
+pub fn serialize_schema<O, E, S>(schema: &Schema, dependencies: Option<&DependencyForest>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
