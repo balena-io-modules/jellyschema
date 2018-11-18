@@ -28,14 +28,13 @@ impl<'a> Serialize for JsonSchema<'a> {
     }
 }
 
-
 impl<'a> From<&'a DocumentRoot> for JsonSchema<'a> {
     fn from(schema: &'a DocumentRoot) -> Self {
         JsonSchema {
             root: schema.schema.as_ref(),
             version: schema.version,
             schema_url: SCHEMA_URL,
-            dependencies: schema.dependencies.as_ref()
+            dependencies: schema.dependencies.as_ref(),
         }
     }
 }

@@ -40,7 +40,7 @@ where
     Ok(DocumentRoot {
         version,
         schema: Some(schema),
-        dependencies: Some(dependencies)
+        dependencies: Some(dependencies),
     })
 }
 
@@ -49,6 +49,12 @@ where
 pub struct DependencyForest {
     // schema name -> its dependencies
     all: HashMap<String, DependencyTree>,
+}
+
+impl DependencyForest {
+    pub fn contains(&self, schema_name: &str) -> bool {
+        return self.all.contains_key(schema_name);
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -64,17 +70,15 @@ impl DependencyTree {
                 IdentifierValue::Name(name) => {
                     result.push(name.clone());
                 }
-                _ => unimplemented!()
+                _ => unimplemented!(),
             }
         }
-        DependencyTree {
-            tree: result,
-        }
+        DependencyTree { tree: result }
     }
 
     fn merge_with(self, expression: &Identifier) -> DependencyTree {
         DependencyTree {
-            tree: vec![] //FIXME actually merge
+            tree: vec![], //FIXME actually merge
         }
     }
 }
@@ -92,7 +96,7 @@ impl DependencyForest {
                     ExpressionValue::Identifier(ref identifiers) => {
                         map.insert(name.to_string(), DependencyTree::start_with(identifiers));
                     }
-                    _ => unimplemented!() // TODO: support walking logical expressions
+                    _ => unimplemented!(), // TODO: support walking logical expressions
                 }
 
                 map

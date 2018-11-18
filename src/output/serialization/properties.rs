@@ -9,7 +9,11 @@ use crate::output::serialization::object_types::object_type_name;
 use crate::output::serialization::object_types::serialize_object_type;
 use crate::dsl::schema::deserialization::DependencyForest;
 
-pub fn serialize_schema_list<O, E, S>(schema_list: &SchemaList, map: &mut S) -> Result<(), E>
+pub fn serialize_schema_list<O, E, S>(
+    schema_list: &SchemaList,
+    dependencies: Option<&DependencyForest>,
+    map: &mut S,
+) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
@@ -17,7 +21,17 @@ where
     if !schema_list.is_empty() {
         let mut properties_map = HashMap::new();
         for schema in schema_list.entries() {
-            properties_map.insert(&schema.name, &schema.schema);
+            // FIXME: extract, remove duplication, change into a `.map` or similar
+            // this block makes sure that we only output property name if it does not have any dependencies
+            if let Some(dependencies) = dependencies {
+                if dependencies.contains(&schema.name) {
+
+                } else {
+                    properties_map.insert(&schema.name, &schema.schema);
+                }
+            } else {
+                properties_map.insert(&schema.name, &schema.schema);
+            }
         }
         map.serialize_entry("properties", &properties_map)?;
     };
@@ -27,7 +41,7 @@ where
         map.serialize_entry("required", required)?;
     }
 
-    let names = &schema_list.all_schema_names();
+    let names = &schema_list.independent_schema_names();
     if !names.is_empty() {
         map.serialize_entry("$$order", names)?;
     }
@@ -67,7 +81,7 @@ where
     }
 
     if let Some(children) = &schema.children {
-        serialize_schema_list(children, map)?;
+        serialize_schema_list(children, dependencies, map)?;
     }
 
     if let Some(mapping) = &schema.mapping {

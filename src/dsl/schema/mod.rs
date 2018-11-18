@@ -17,7 +17,7 @@ pub struct DocumentRoot {
     pub version: u64,
     pub schema: Option<Schema>,
     /// the whole dependency tree for all the subschemas. recursively
-    pub dependencies: Option<DependencyForest>
+    pub dependencies: Option<DependencyForest>,
 }
 
 /// A first-class collection of `NamedSchema`'s, has convenience methods exposed
@@ -66,9 +66,11 @@ impl SchemaList {
         &self.entries
     }
 
-    pub fn all_schema_names(&self) -> Vec<&str> {
+    /// names of all schemas that do not depend on any other schema
+    pub fn independent_schema_names(&self) -> Vec<&str> {
         self.entries
             .iter()
+            .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
             .map(|named_schema| named_schema.name.as_str())
             .collect()
     }
@@ -76,6 +78,7 @@ impl SchemaList {
     pub fn required_schema_names(&self) -> Vec<&str> {
         self.entries
             .iter()
+            .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
             .filter_map(|named_schema| match &named_schema.schema.types {
                 Some(type_list) => {
                     if type_list.iter().any(|type_spec| match type_spec {

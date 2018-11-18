@@ -13,7 +13,7 @@ pub struct JsonSchema<'a> {
     version: u64,
     schema_url: &'a str,
     root: Option<&'a Schema>,
-    dependencies: Option<&'a DependencyForest>
+    dependencies: Option<&'a DependencyForest>,
 }
 
 #[derive(Serialize)]
