@@ -1,3 +1,6 @@
+use std::collections::HashMap;
+
+use balena_temen::ast::*;
 use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
@@ -5,11 +8,11 @@ use serde_yaml::Value;
 use crate::dsl::schema::compiler::CompilationError;
 use crate::dsl::schema::DocumentRoot;
 use crate::dsl::schema::NamedSchema;
-use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::object_types::deserialization::deserialize_object_type;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::Schema;
+use crate::dsl::schema::SchemaList;
 
 pub fn deserialize_root<E>(schema: &Value) -> Result<DocumentRoot, CompilationError>
 where
@@ -53,7 +56,7 @@ pub struct DependencyGraph {
 
 impl DependencyGraph {
     pub fn contains(&self, schema_name: &str) -> bool {
-        return self.all.contains_key(schema_name);
+        self.all.contains_key(schema_name)
     }
 
     pub fn dependencies_for(&self, schema_name: &str) -> Vec<&str> {
@@ -138,10 +141,6 @@ fn dependencies_for_schema_list(
         }
     }
 }
-
-use balena_temen::ast::*;
-use std::collections::HashMap;
-use ego_tree::Tree;
 
 pub fn deserialize_schema<E>(value: &Value) -> Result<Schema, E>
 where

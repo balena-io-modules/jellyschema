@@ -1,15 +1,11 @@
-use std::collections::HashMap;
-
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 
-use crate::dsl::schema::SchemaList;
+use crate::dsl::schema::deserialization::DependencyGraph;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::Schema;
+use crate::dsl::schema::SchemaList;
 use crate::output::serialization::object_types::object_type_name;
 use crate::output::serialization::object_types::serialize_object_type;
-use crate::dsl::schema::deserialization::DependencyGraph;
-use serde_yaml::Mapping;
-use serde_json::Value;
 use crate::output::serialization::when::serialize_schema_list_dependencies;
 
 pub fn serialize_schema_list<O, E, S>(

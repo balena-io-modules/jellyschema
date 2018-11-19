@@ -2,8 +2,8 @@ use core::borrow::Borrow;
 use std::collections::HashMap;
 
 use crate::dsl::schema::DocumentRoot;
-use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::Schema;
+use crate::dsl::schema::SchemaList;
 use crate::output::UiObject;
 use crate::output::UiObjectProperty;
 

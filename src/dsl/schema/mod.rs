@@ -1,12 +1,12 @@
 //! Top-level constructs representing the configuration DSL language
+use std::collections::HashMap;
+
 use balena_temen::ast::Expression;
-use ego_tree::Tree;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::deserialization::DependencyGraph;
-use std::collections::HashMap;
+use crate::dsl::schema::object_types::ObjectType;
 
 pub mod deserialization;
 pub mod compiler;
