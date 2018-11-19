@@ -8,6 +8,8 @@ use crate::dsl::schema::Schema;
 use crate::output::serialization::object_types::object_type_name;
 use crate::output::serialization::object_types::serialize_object_type;
 use crate::dsl::schema::deserialization::DependencyForest;
+use serde_yaml::Mapping;
+use serde_json::Value;
 
 pub fn serialize_schema_list<O, E, S>(
     schema_list: &SchemaList,
@@ -36,7 +38,37 @@ where
             let schema_dependencies = dependencies.dependencies_for(&schema.name);
 
             for dependency_name in schema_dependencies {
-                dependencies_map.insert(dependency_name, &schema.name);
+
+                // generate the `oneOf` list of possibilities
+                // there are only 2 possibilities for bool
+
+                // false - just the outer variable - schema name
+
+                // possibility [true, false]
+                let mut possibilities_exploded = vec![];
+                // false branch - just the false value
+                let mut all_variables_on_false_branch = HashMap::new();
+                let mut false_branch : HashMap<&str, Value> = HashMap::new();
+                let mut false_value = HashMap::new();
+                false_value.insert("enum", vec![false]);
+                false_branch.insert(dependency_name, to_value( &false_value )?);
+                all_variables_on_false_branch.insert("properties", false_branch);
+                possibilities_exploded.push(all_variables_on_false_branch);
+                // true branch - true value indicator + the dependent variable
+                let mut all_variables_on_true_branch = HashMap::new();
+                let mut true_branch : HashMap<&str, Value> = HashMap::new();
+                let mut true_value = HashMap::new();
+                true_value.insert("enum", vec![true]);
+                true_branch.insert(dependency_name, to_value( &true_value)?);
+                true_branch.insert(&schema.name, to_value( &schema.schema )? );
+
+                all_variables_on_true_branch.insert("properties", true_branch);
+                possibilities_exploded.push(all_variables_on_true_branch);
+
+
+                let mut one_of_wrapper = HashMap::new();
+                one_of_wrapper.insert("oneOf", possibilities_exploded);
+                dependencies_map.insert(dependency_name, one_of_wrapper);
             }
         }
     }
@@ -55,6 +87,15 @@ where
         map.serialize_entry("$$order", names)?;
     }
     Ok(())
+}
+
+fn to_value<T, E>(value: &T) -> Result<Value, E>
+where
+      T: Serialize,
+      E: Error
+{
+    serde_json::to_value( value ).
+        map_err(|e| Error::custom(format!("{:#?}", e)))
 }
 
 // FIXME: do not use trait implementation as it is hard to track where this is being called from
