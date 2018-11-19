@@ -16,7 +16,7 @@ if [ ! "$CI" == "true" ]; then
     # won't do nothing if the project was already compiled
     cargo clean
 fi
-cargo clippy
+cargo clippy --all-targets --all-features -- -D warnings
 cargo test
 cargo fmt -- --check
 
