@@ -1,10 +1,12 @@
 use std::collections::HashMap;
+
+use balena_temen::ast::Expression;
+use balena_temen::ast::ExpressionValue;
 use balena_temen::ast::Identifier;
 use balena_temen::ast::IdentifierValue;
-use balena_temen::ast::Expression;
-use crate::dsl::schema::SchemaList;
+
 use crate::dsl::schema::compiler::CompilationError;
-use balena_temen::ast::ExpressionValue;
+use crate::dsl::schema::SchemaList;
 
 // TODO: use actual DAG for representing the whole graph of dependencies between the schemas
 #[derive(Debug, Clone)]
