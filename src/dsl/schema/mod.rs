@@ -72,10 +72,7 @@ impl SchemaList {
 
     /// schema name -> Schema
     pub fn all_as_map(&self) -> HashMap<&str, &Schema> {
-       self.entries()
-            .iter()
-            .map(|schema| schema.unpack())
-            .collect()
+        self.entries().iter().map(|schema| schema.unpack()).collect()
     }
 
     pub fn entries(&self) -> &Vec<NamedSchema> {

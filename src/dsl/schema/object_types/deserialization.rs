@@ -74,7 +74,7 @@ impl RawObjectType {
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
             "boolean" => RawObjectType::Boolean(deserialize_boolean_object_bounds(mapping)?),
-            "array" => RawObjectType::Array(deserialize_array_object_bounds(mapping)?),
+            "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
             _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
         };
         Ok(object_type)

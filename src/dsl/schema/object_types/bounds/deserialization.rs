@@ -196,7 +196,9 @@ where
     match mapping.get(&Value::from("items")) {
         None => Ok(None),
         Some(properties) => match properties {
-            Value::Mapping(_) => Ok(Some(ArrayItemObjectBounds::AllItems(deserialize_schema(properties)?))),
+            Value::Mapping(_) => Ok(Some(ArrayItemObjectBounds::AllItems(Box::new(deserialize_schema(
+                properties,
+            )?)))),
             Value::Sequence(sequence) => Ok(Some(ArrayItemObjectBounds::RespectiveItems(
                 sequence
                     .iter()

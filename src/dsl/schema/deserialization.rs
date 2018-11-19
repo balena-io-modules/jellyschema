@@ -83,12 +83,7 @@ impl DependencyTree {
         }
         DependencyTree { tree: result }
     }
-
-    fn merge_with(self, expression: &Identifier) -> DependencyTree {
-        DependencyTree {
-            tree: vec![], //FIXME actually merge
-        }
-    }
+    // TODO: see if we need `merge_with` as well
 }
 
 impl DependencyGraph {
@@ -104,15 +99,15 @@ impl DependencyGraph {
                     ExpressionValue::Identifier(ref identifiers) => {
                         map.insert(name.to_string(), DependencyTree::start_with(identifiers));
                     }
-                    _ => unimplemented!(), // TODO: support walking logical expressions
+                    // TODO:
+                    _ => unimplemented!("walking logical expression that is not just one identifier"),
                 }
 
                 map
             }
-            Some(previous) => {
-                let mut map = self.all.clone();
-                // map.insert(name, previous.clone().merge_with(depends_on));
-                map
+            Some(_previous) => {
+                // TODO:
+                unimplemented!("merging with previously seen expression")
             }
         };
 

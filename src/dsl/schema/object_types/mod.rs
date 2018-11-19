@@ -17,7 +17,6 @@ pub enum ObjectType {
 #[derive(Clone, Debug)]
 // `ArrayObjectBounds` is either a Property or small array of properties, and we know it should remain small
 // TODO: look into above to see if anything can be done in the compilation time to ensure this
-#[allow(clippy::large_enum_variant)]
 pub enum RawObjectType {
     Object,
     Boolean(Option<BooleanObjectBounds>),
@@ -25,7 +24,7 @@ pub enum RawObjectType {
     Password(Option<StringObjectBounds>),
     Hostname,
     Integer(Option<IntegerObjectBounds>),
-    Array(Option<ArrayObjectBounds>),
+    Array(Box<Option<ArrayObjectBounds>>),
 }
 
 impl RawObjectType {
