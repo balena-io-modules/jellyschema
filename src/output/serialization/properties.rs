@@ -18,23 +18,32 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    if !schema_list.is_empty() {
-        let mut properties_map = HashMap::new();
-        for schema in schema_list.entries() {
-            // FIXME: extract, remove duplication, change into a `.map` or similar
-            // this block makes sure that we only output property name if it does not have any dependencies
-            if let Some(dependencies) = dependencies {
-                if dependencies.contains(&schema.name) {
+    let properties_map: HashMap<&str, &Schema> = schema_list
+        .independent_schemas()
+        .iter()
+        .map(|schema| (schema.name.as_ref(), &schema.schema))
+        .collect();
+    if !properties_map.is_empty() {
+        map.serialize_entry("properties", &properties_map)?;
+    }
 
-                } else {
-                    properties_map.insert(&schema.name, &schema.schema);
-                }
-            } else {
-                properties_map.insert(&schema.name, &schema.schema);
+    let mut dependencies_map = HashMap::new();
+    for schema in schema_list.dependent_schemas() {
+        let dependencies = dependencies.expect("inconsistency between schema list and dependency list");
+        if dependencies.contains(&schema.name) {
+            // get this schema's dependencies and print them out first
+            // i.e. inverse the tree
+            let schema_dependencies = dependencies.dependencies_for(&schema.name);
+
+            for dependency_name in schema_dependencies {
+                dependencies_map.insert(dependency_name, &schema.name);
             }
         }
-        map.serialize_entry("properties", &properties_map)?;
-    };
+    }
+
+    if !dependencies_map.is_empty() {
+        map.serialize_entry("dependencies", &dependencies_map)?;
+    }
 
     let required = &schema_list.required_schema_names();
     if !required.is_empty() {
@@ -49,7 +58,6 @@ where
 }
 
 // FIXME: do not use trait implementation as it is hard to track where this is being called from
-
 impl Serialize for Schema {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where

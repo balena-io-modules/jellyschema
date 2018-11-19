@@ -66,6 +66,20 @@ impl SchemaList {
         &self.entries
     }
 
+    pub fn dependent_schemas(&self) -> Vec<&NamedSchema> {
+        self.entries
+            .iter()
+            .filter(|named_schema| named_schema.schema.when.is_some()) // TODO: see if this is enough
+            .collect()
+    }
+
+    pub fn independent_schemas(&self) -> Vec<&NamedSchema> {
+        self.entries
+            .iter()
+            .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
+            .collect()
+    }
+
     /// names of all schemas that do not depend on any other schema
     pub fn independent_schema_names(&self) -> Vec<&str> {
         self.entries

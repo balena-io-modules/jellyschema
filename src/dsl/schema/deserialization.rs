@@ -55,6 +55,14 @@ impl DependencyForest {
     pub fn contains(&self, schema_name: &str) -> bool {
         return self.all.contains_key(schema_name);
     }
+
+    pub fn dependencies_for(&self, schema_name: &str) -> Vec<&str> {
+        if self.contains(schema_name) {
+            self.all[schema_name].tree.iter().map(|name| name.as_ref()).collect()
+        } else {
+            vec![]
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
