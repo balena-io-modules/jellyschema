@@ -33,7 +33,7 @@ where
     let schema = deserialize_schema::<serde_yaml::Error>(&schema)?;
 
     // this is recursive already, should get the whole tree for all children schemas
-    let dependencies = dependencies_for_schema_list(schema.children.as_ref(), DependencyForest::empty())?;
+    let dependencies = dependencies_for_schema_list(schema.children.as_ref(), DependencyGraph::empty())?;
 
     eprintln!("{:#?}", dependencies);
 
@@ -46,12 +46,12 @@ where
 
 /// structure representing the whole DAG of dependencies between the schemas
 #[derive(Debug, Clone)]
-pub struct DependencyForest {
+pub struct DependencyGraph {
     // schema name -> its dependencies
     all: HashMap<String, DependencyTree>,
 }
 
-impl DependencyForest {
+impl DependencyGraph {
     pub fn contains(&self, schema_name: &str) -> bool {
         return self.all.contains_key(schema_name);
     }
@@ -91,12 +91,12 @@ impl DependencyTree {
     }
 }
 
-impl DependencyForest {
-    fn empty() -> DependencyForest {
-        DependencyForest { all: HashMap::new() }
+impl DependencyGraph {
+    fn empty() -> DependencyGraph {
+        DependencyGraph { all: HashMap::new() }
     }
 
-    fn push(self, name: &str, depends_on: &Expression) -> DependencyForest {
+    fn push(self, name: &str, depends_on: &Expression) -> DependencyGraph {
         let map = match self.all.get(name) {
             None => {
                 let mut map = self.all.clone();
@@ -116,16 +116,16 @@ impl DependencyForest {
             }
         };
 
-        DependencyForest { all: map }
+        DependencyGraph { all: map }
     }
 }
 
 fn dependencies_for_schema_list(
     maybe_list: Option<&SchemaList>,
-    previous_tree: DependencyForest,
-) -> Result<DependencyForest, CompilationError> {
+    previous_tree: DependencyGraph,
+) -> Result<DependencyGraph, CompilationError> {
     match maybe_list {
-        None => Ok(DependencyForest::empty()),
+        None => Ok(DependencyGraph::empty()),
         Some(list) => {
             let mut tree = previous_tree;
             for schema in list.entries() {

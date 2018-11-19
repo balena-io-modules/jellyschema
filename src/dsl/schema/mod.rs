@@ -5,7 +5,8 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 use crate::dsl::schema::object_types::ObjectType;
-use crate::dsl::schema::deserialization::DependencyForest;
+use crate::dsl::schema::deserialization::DependencyGraph;
+use std::collections::HashMap;
 
 pub mod deserialization;
 pub mod compiler;
@@ -17,7 +18,7 @@ pub struct DocumentRoot {
     pub version: u64,
     pub schema: Option<Schema>,
     /// the whole dependency tree for all the subschemas. recursively
-    pub dependencies: Option<DependencyForest>,
+    pub dependencies: Option<DependencyGraph>,
 }
 
 /// A first-class collection of `NamedSchema`'s, has convenience methods exposed
@@ -56,10 +57,25 @@ pub struct Annotations {
     pub description: Option<String>,
 }
 
+impl NamedSchema {
+    /// Unpacks named schema into (name, schema)
+    pub fn unpack(&self) -> (&str, &Schema) {
+        (self.name.as_ref(), &self.schema)
+    }
+}
+
 // TODO: optimization: make the methods memoize the computed result
 impl SchemaList {
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
+    }
+
+    /// schema name -> Schema
+    pub fn all_as_map(&self) -> HashMap<&str, &Schema> {
+       self.entries()
+            .iter()
+            .map(|schema| schema.unpack())
+            .collect()
     }
 
     pub fn entries(&self) -> &Vec<NamedSchema> {
@@ -77,6 +93,14 @@ impl SchemaList {
         self.entries
             .iter()
             .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
+            .collect()
+    }
+
+    /// schema name -> Schema
+    pub fn independent_as_map(&self) -> HashMap<&str, &Schema> {
+        self.independent_schemas()
+            .iter()
+            .map(|schema| schema.unpack())
             .collect()
     }
 
