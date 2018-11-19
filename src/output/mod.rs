@@ -3,8 +3,8 @@ use std::collections::HashMap;
 
 use serde_derive::Serialize;
 
-use crate::dsl::schema::deserialization::DependencyGraph;
 use crate::dsl::schema::Schema;
+use crate::dsl::schema::when::DependencyGraph;
 
 pub mod generator;
 mod serialization;

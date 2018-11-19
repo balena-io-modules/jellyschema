@@ -5,12 +5,13 @@ use balena_temen::ast::Expression;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-use crate::dsl::schema::deserialization::DependencyGraph;
 use crate::dsl::schema::object_types::ObjectType;
+use crate::dsl::schema::when::DependencyGraph;
 
 pub mod deserialization;
 pub mod compiler;
 pub mod object_types;
+pub mod when;
 
 /// Represents the root of the yaml DSL document
 #[derive(Clone, Debug)]
