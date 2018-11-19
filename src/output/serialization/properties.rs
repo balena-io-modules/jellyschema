@@ -47,24 +47,37 @@ where
                 // possibility [true, false]
                 let mut possibilities_exploded = vec![];
                 // false branch - just the false value
-                let mut all_variables_on_false_branch = HashMap::new();
+                let mut all_variables_on_false_branch : HashMap<&str, Value> = HashMap::new();
                 let mut false_branch : HashMap<&str, Value> = HashMap::new();
                 let mut false_value = HashMap::new();
                 false_value.insert("enum", vec![false]);
                 false_branch.insert(dependency_name, to_value( &false_value )?);
-                all_variables_on_false_branch.insert("properties", false_branch);
+                all_variables_on_false_branch.insert("properties", to_value(&false_branch)?);
+                let mut required = vec![];
+                required.push(dependency_name);
+                all_variables_on_false_branch.insert("required", to_value(&required)?);
+                let mut order = vec![];
+                order.push(dependency_name);
+                all_variables_on_false_branch.insert("$$order", to_value(&order)?);
                 possibilities_exploded.push(all_variables_on_false_branch);
                 // true branch - true value indicator + the dependent variable
-                let mut all_variables_on_true_branch = HashMap::new();
+                let mut all_variables_on_true_branch :HashMap<&str, Value> = HashMap::new();
                 let mut true_branch : HashMap<&str, Value> = HashMap::new();
                 let mut true_value = HashMap::new();
                 true_value.insert("enum", vec![true]);
                 true_branch.insert(dependency_name, to_value( &true_value)?);
                 true_branch.insert(&schema.name, to_value( &schema.schema )? );
 
-                all_variables_on_true_branch.insert("properties", true_branch);
+                all_variables_on_true_branch.insert("properties", to_value(& true_branch)?);
+                let mut required = vec![];
+                required.push(dependency_name);
+                required.push(&schema.name);
+                all_variables_on_true_branch.insert("required", to_value(&required)?);
+                let mut order = vec![];
+                order.push(dependency_name);
+                order.push(&schema.name);
+                all_variables_on_true_branch.insert("$$order", to_value(&order)?);
                 possibilities_exploded.push(all_variables_on_true_branch);
-
 
                 let mut one_of_wrapper = HashMap::new();
                 one_of_wrapper.insert("oneOf", possibilities_exploded);

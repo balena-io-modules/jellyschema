@@ -24,7 +24,13 @@
                                 false
                             ]
                         }
-                    }
+                    },
+                    "required": [
+                        "showAllDevices"
+                    ],
+                    "$$order": [
+                        "showAllDevices"
+                    ]
                 },
                 {
                     "properties": {
