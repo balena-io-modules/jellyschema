@@ -19,5 +19,4 @@ balena-temen = { git = "https://github.com/balena-io-modules/balena-temen.git", 
 
 [dev-dependencies]
 pretty_assertions = "0.5"
-quickcheck = "0.7"
 

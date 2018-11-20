@@ -38,8 +38,8 @@ where
 
         for dependency_name in schema_dependencies {
             let mut possibilities = vec![];
-            possibilities.push(wrapper(&false_branch(dependency_name)?)?);
-            possibilities.push(wrapper(&true_branch(&schema, dependency_name)?)?);
+            possibilities.push(json_friendly(&false_branch(dependency_name)?)?);
+            possibilities.push(json_friendly(&true_branch(&schema, dependency_name)?)?);
 
             let mut one_of_wrapper = HashMap::new();
             one_of_wrapper.insert("oneOf", possibilities);
@@ -57,8 +57,7 @@ fn false_branch<E>(dependency_name: &str) -> Result<Branch, E>
 where
     E: Error,
 {
-    let branch = branch_with_value(false, dependency_name)?;
-    Ok(branch)
+    Ok(branch_with_value(false, dependency_name)?)
 }
 
 fn true_branch<'a, E>(schema: &'a NamedSchema, dependency_name: &'a str) -> Result<Branch<'a>, E>
@@ -94,7 +93,7 @@ where
     })
 }
 
-fn wrapper<'a, E>(branch: &Branch) -> Result<HashMap<&'a str, Value>, E>
+fn json_friendly<'a, E>(branch: &Branch) -> Result<HashMap<&'a str, Value>, E>
 where
     E: Error,
 {
