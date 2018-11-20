@@ -8,7 +8,6 @@ build = "build.rs"
 [dependencies]
 heck = "0.3"
 regex = "1.0"
-ego-tree = "0.5"
 
 serde = "1.0"
 serde_derive = "1.0"
