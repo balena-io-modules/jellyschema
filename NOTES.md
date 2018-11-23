@@ -4,6 +4,8 @@ Guidelines:
 * deserialization bit should be as simple as possible, not much logic there
 * serialization should have all the computation, the typesystem should be as small as possible though
 
+Temen notes:
+* not immediately obvious that `Identifier` can be multiple identifiers
 Spec notes:
 * sometimes JSON is represented as yaml in the spec - I found it harder to scan the spec for the relevant examples this way
 * "The value of this keyword MUST be either a string or an array. If it is an array, elements of the array MUST be strings and MUST be unique." 

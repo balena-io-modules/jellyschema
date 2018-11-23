@@ -12,7 +12,5 @@
 //!
 //! let (json_schema, ui_object) = Generator::with(input_schema).unwrap().generate();
 //! ```
-use serde_derive::Deserialize;
-
 pub mod dsl;
 pub mod output;
