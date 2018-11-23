@@ -33,7 +33,7 @@ pub fn dependencies_for_schema_list(
             let mut tree = previous_tree;
             for schema in list.entries() {
                 if let Some(when) = &schema.schema.when {
-                    tree = tree.push(&schema.name, &when);
+                    tree = tree.push(&schema.name, &when)?;
                 }
 
                 if let Some(children) = &schema.schema.children {
@@ -66,42 +66,42 @@ impl DependencyGraph {
         DependencyGraph { all: HashMap::new() }
     }
 
-    fn push(self, name: &str, depends_on: &Expression) -> DependencyGraph {
+    fn push(self, name: &str, depends_on: &Expression) -> Result<DependencyGraph, CompilationError> {
         let map = match self.all.get(name) {
             None => {
                 let mut map = self.all.clone();
                 match depends_on.value {
                     ExpressionValue::Identifier(ref identifiers) => {
-                        map.insert(name.to_string(), DependencyTree::start_with(identifiers));
+                        map.insert(name.to_string(), DependencyTree::start_with(identifiers)?);
                     }
                     // TODO:
-                    _ => unimplemented!("walking logical expression that is not just one identifier"),
+                    _ => return Err(CompilationError::with_message("walking logical expression that is more than a single identifier"))
                 }
 
                 map
             }
             Some(_previous) => {
                 // TODO:
-                unimplemented!("merging with previously seen expression")
+                return Err(CompilationError::with_message("merging with previously seen expression in not supported yet"))
             }
         };
 
-        DependencyGraph { all: map }
+        Ok(DependencyGraph { all: map })
     }
 }
 
 impl DependencyTree {
-    fn start_with(identifiers: &Identifier) -> DependencyTree {
+    fn start_with(identifiers: &Identifier) -> Result<DependencyTree, CompilationError> {
         let mut result = vec![];
         for identifier in &identifiers.values {
             match identifier {
                 IdentifierValue::Name(name) => {
                     result.push(name.clone());
-                }
-                _ => unimplemented!(),
+                },
+                _ => return Err(CompilationError::with_message("unimplemented"))
             }
         }
-        DependencyTree { tree: result }
+        Ok(DependencyTree { tree: result })
     }
     // TODO: see if we need `merge_with` as well
 }
