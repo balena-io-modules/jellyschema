@@ -48,7 +48,7 @@ Please find a detailed list below - presented in the order they appear in the sp
 * [X] `properties` - 'recursive' schemas are supported
 
 [Keywords for applying subschemas conditionally](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#keywords-for-applying-subschemas-conditionally)
-* [ ] `when`
+* [ ] `when` - very rudimentary support, only single-identifier boolean conditions
 * [ ] `merge`
 * [ ] `overwrite`
 
