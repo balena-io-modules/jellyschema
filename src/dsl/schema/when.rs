@@ -75,14 +75,20 @@ impl DependencyGraph {
                         map.insert(name.to_string(), DependencyTree::start_with(identifiers)?);
                     }
                     // TODO:
-                    _ => return Err(CompilationError::with_message("walking logical expression that is more than a single identifier"))
+                    _ => {
+                        return Err(CompilationError::with_message(
+                            "walking logical expression that is more than a single identifier",
+                        ))
+                    }
                 }
 
                 map
             }
             Some(_previous) => {
                 // TODO:
-                return Err(CompilationError::with_message("merging with previously seen expression in not supported yet"))
+                return Err(CompilationError::with_message(
+                    "merging with previously seen expression in not supported yet",
+                ));
             }
         };
 
@@ -97,8 +103,8 @@ impl DependencyTree {
             match identifier {
                 IdentifierValue::Name(name) => {
                     result.push(name.clone());
-                },
-                _ => return Err(CompilationError::with_message("unimplemented"))
+                }
+                _ => return Err(CompilationError::with_message("unimplemented")),
             }
         }
         Ok(DependencyTree { tree: result })
