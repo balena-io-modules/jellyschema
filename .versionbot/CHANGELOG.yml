@@ -1,4 +1,14 @@
 - commits:
+    - subject: Add balena-temen as dependency
+      hash: 0eba7719e21898ba7e43ef9e6b000b4cee124bee
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.2.4
+  date: 2018-11-23T15:03:10.243Z
+- commits:
     - subject: Remove explicit travis notifications
       hash: 6bbf9e9f8f52cdb674e20586563effb1bca0704b
       body: ''
