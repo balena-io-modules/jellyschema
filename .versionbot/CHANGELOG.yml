@@ -1,4 +1,42 @@
 - commits:
+    - subject: Add interactive example of usage in the browser
+      hash: d01446b04ad9c0ddf824087df58d6bcba6ef84d1
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add headlesss browsers to CI environment
+      hash: 55527ea34ad9fd7328ca1338dac5049cd2c4b643
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Expose UI generation function as WASM function
+      hash: 43a1de825c25f94c2919a2029ba2037ec5541af3
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Port wasm build over from temen
+      hash: 1a870211fdf90b38c07b07badf633b9228d85691
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add node.js as dependency
+      hash: 89332d1a3f821c605bbebbb1ac84d397a3bd6db7
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.2.5
+  date: 2018-11-26T13:25:49.788Z
+- commits:
     - subject: Add balena-temen as dependency
       hash: 0eba7719e21898ba7e43ef9e6b000b4cee124bee
       body: ''
