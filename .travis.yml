@@ -1,9 +1,18 @@
-language: rust
+language: generic
 
-cache: cargo
+cache:
+  directories:
+  - /home/travis/.cargo/
+  - target/
+  timeout: 1000
 
 install:
-  - ci/install.sh
+- ci/install.sh
 
 script:
-  - ci/test.sh
+- ci/test.sh
+
+addons:
+  firefox: latest
+  chrome: stable
+
