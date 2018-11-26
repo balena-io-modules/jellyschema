@@ -10,7 +10,6 @@ source "${HOME}/.cargo/env"
 TESTS_DIRECTORY=tests
 
 echo "Linting yaml schemas"
-
 find "$TESTS_DIRECTORY" -iname *.yml -exec yamllint {} +
 
 echo "Linting JSONSchemas"

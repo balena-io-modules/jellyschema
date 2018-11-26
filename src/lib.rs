@@ -14,3 +14,5 @@
 //! ```
 pub mod dsl;
 pub mod output;
+#[cfg(target_arch = "wasm32")]
+mod wasm;
