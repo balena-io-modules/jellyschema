@@ -4,6 +4,12 @@ version = "0.2.5"
 authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
 build = "build.rs"
+maintenance = { status = "actively-developed" }
+license = "Apache-2.0"
+repository = "https://github.com/balena-io-modules/balena-cdsl/"
+description = ""
+categories = ["config", "encoding", "wasm"]
+readme = "README.md"
 
 [dependencies]
 heck = "0.3"
