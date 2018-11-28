@@ -1,4 +1,16 @@
 - commits:
+    - subject: Initial release
+      hash: 5624f23d0bd661194b740c4758404e4c5224e874
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.2.6
+  date: 2018-11-28T13:14:29.905Z
+- commits:
     - subject: Add interactive example of usage in the browser
       hash: d01446b04ad9c0ddf824087df58d6bcba6ef84d1
       body: ''
