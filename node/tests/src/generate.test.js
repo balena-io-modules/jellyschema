@@ -1,8 +1,8 @@
-const dsl = require('balena-configuration-dsl');
+const cdsl = require('balena-cdsl');
 
 test('compilation of empty schema', () => {
     expect(
-        dsl.generate_ui(`
+        cdsl.generate_ui(`
             version: 1
             title: Empty schema
         ` )

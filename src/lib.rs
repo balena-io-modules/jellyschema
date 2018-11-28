@@ -5,7 +5,7 @@
 //! # Examples
 //!
 //! ```
-//! use balena_configuration_dsl::output::generator::Generator;
+//! use balena_cdsl::output::generator::Generator;
 //!
 //! let input_schema : serde_yaml::Value = serde_yaml::from_str(
 //! include_str!("../tests/data/schema/empty/input-schema.yml")).unwrap();

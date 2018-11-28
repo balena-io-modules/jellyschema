@@ -1,4 +1,4 @@
-import * as dsl from "balena-configuration-dsl";
+import * as cdsl from "balena-cdsl";
 
 const initialValue = `
 title: resin-cli demo
@@ -81,7 +81,7 @@ $source.value = initialValue;
 const evaluate = () => {
     try {
         const value = $source.value;
-        const result = dsl.generate_ui(value);
+        const result = cdsl.generate_ui(value);
         $result.innerText = stringify(result)
     } catch (error) {
         console.error(error)

@@ -11,7 +11,7 @@
     },
     "author": "Cyryl Płotnicki <cyryl@balena.io>, Robert Vojta <robert@balena.io>",
     "dependencies": {
-        "balena-configuration-dsl": "file:../../target/npm/pkg"
+        "balena-cdsl": "file:../../target/npm/pkg"
     },
     "devDependencies": {
         "hello-wasm-pack": "^0.1.0",

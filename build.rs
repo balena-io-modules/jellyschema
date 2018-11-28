@@ -55,8 +55,8 @@ fn start_module(test_file: &mut File, name: &str) -> Result<(), Error> {
         test_file,
         r#"
 mod {name} {{
-    use balena_configuration_dsl::dsl::schema::compiler::CompilationError;
-    use balena_configuration_dsl::output::generator::Generator;
+    use balena_cdsl::dsl::schema::compiler::CompilationError;
+    use balena_cdsl::output::generator::Generator;
     use pretty_assertions::assert_eq;
 
         "#,

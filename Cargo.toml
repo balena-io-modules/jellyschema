@@ -1,5 +1,5 @@
 [package]
-name = "balena-configuration-dsl"
+name = "balena-cdsl"
 version = "0.2.5"
 authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
