@@ -1,4 +1,16 @@
 - commits:
+    - subject: Add missing description
+      hash: 8566bd1e28a0eebccf11c51b60e579630010217d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.2.7
+  date: 2018-11-28T14:38:19.448Z
+- commits:
     - subject: Initial release
       hash: 5624f23d0bd661194b740c4758404e4c5224e874
       body: ''
