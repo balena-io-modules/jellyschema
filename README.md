@@ -16,6 +16,10 @@ Provides facilities to:
 * transform configuration DSL into the JSON Schema & UI Object Schema with custom extensions
 * parse configuration DSL
 
+Current crate status is _experimental_. It's because the API is evolving, we're not fully using
+it yet and we will probably move the transformation functionality to another crate in the future.
+This crate will become a simple configuration DSL parser and nothing else.
+
 ## Goal
 
 `balena-cdsl` crate is one small piece of the [balena.io] configuration project. This project has
