@@ -112,7 +112,7 @@ will be happy to help.
 
 ## License
 
-`balena-temen` is open source software, and may be redistributed under the terms specified in
+`balena-cdsl` is open source software, and may be redistributed under the terms specified in
 the [license].
 
 [balena.io]: https://www.balena.io/
