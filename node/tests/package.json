@@ -1,7 +1,7 @@
 {
     "name": "node-integration-tests",
     "scripts": {
-        "test": "jest"
+        "test": "jest --env node"
     },
     "dependencies": {
         "balena-cdsl": "file:../../target/npm/pkg"
