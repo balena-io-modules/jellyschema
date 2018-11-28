@@ -1,36 +1,128 @@
-# Configuration DSL to JSON Schema
+# balena cdsl
 
-## What is it ?
+[![Build Status](https://travis-ci.org/balena-io-modules/balena-cdsl.svg?branch=master)](https://travis-ci.org/balena-io-modules/balena-cdsl)
+[![Current Release](https://img.shields.io/github/tag/balena-io-modules/balena-cdsl.svg?style=flat-square)](https://github.com/balena-io-modules/balena-cdsl/tags)
+[![License](https://img.shields.io/github/license/balena-io-modules/balena-cdsl.svg?style=flat-square)](https://github.com/balena-io-modules/balena-cdsl/blob/master/LICENSE)
+[![Issues](https://img.shields.io/github/issues/balena-io-modules/balena-cdsl.svg?style=flat-square)](https://github.com/balena-io-modules/balena-cdsl/issues)
 
-This is is a Rust (edition 2018) library that is intended to be used as a translation mechanism between balena's configuration DSL and the JSON Schema and UI Schema..  
-The is not production ready yet, however it supports some real-life cases already.  
-The plan is to have this library be available to be used from Rust code but also as a Node module to be used from Node and in-browser code, through WASM.
+<div align="center">
+  <sub>an open source :satellite: project by <a href="https://www.balena.io">balena.io</a></sub>
+</div>
 
-## How to use it ?
+A configuration DSL.
 
-The main entry point to the library is the `Generator` type and its `generate` type.
-It consumes [`serde_yaml`](https://crates.io/crates/serde_yaml) values and outputs a tuple of [`serde_json`](https://crates.io/crates/serde_json) values.
+Provides facilities to:
 
-Example of use:
+* transform configuration DSL into the JSON Schema & UI Object Schema with custom extensions
+* parse configuration DSL
+
+Current crate status is _experimental_. It's because the API is evolving, we're not fully using
+it yet and we will probably move the transformation functionality to another crate in the future.
+This crate will become a simple configuration DSL parser and nothing else.
+
+## Goal
+
+`balena-cdsl` crate is one small piece of the [balena.io] configuration project. This project has
+no public / open specification yet, but we're working on it and it will be public once finished.
+
+## Supported platforms
+
+This library is written in the Rust language and can be used:
+
+* directly, as a [Rust crate]
+* as an isomorphic [NPM package] (NodeJS & browser)
+
+## Documentation
+
+* [API documentation]
+
+## Usage
+
+### Rust
+
+Add as a dependency to your `Cargo.toml`:
+
+```
+[dependencies]
+balena-cdsl = "0.2"
+```
+
+Evaluate simple JSON:
+
 ```rust
-let input_schema : serde_yaml::Value = serde_yaml::from_str(
+let input_schema: serde_yaml::Value = serde_yaml::from_str(
     include_str!("configuration.yml")).
     unwrap();
 
 let (json_schema, ui_object) = Generator::with(input_schema)?.generate();
 ```
 
-For examples of input yaml DSL schemas please see the ones used in tests in [`tests/data`](./tests/data) directory.
+### Javascript
 
+Install via npm
 
-## What is supported ?
+```
+npm install --save balena-cdsl
+```
 
-All basic types from the [main DSL specification](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md) are supported.
-The support is still pretty shallow, i.e. while the feature may be supported its edge cases are probably not supported.
-Please find a detailed list in the [SPEC_SUPPORT](./SPEC_SUPPORT.md) document.
+Generate simple JSON Schema & UI Object Schema:
 
-## Contributing
+```js
+const cdsl = require('balena-cdsl');
 
-Please see [implementors' notes](./NOTES.md) for the current scratchpad and TODOs.  
-This will be moved into Github issues.
+const initialValue = `
+title: demo
+version: 1
+properties:
+  - network:
+      title: Network
+      properties:
+        - ssid:
+            title: Network SSID
+            type: string
+            minLength: 1
+            maxLength: 32
+        - passphrase:
+            title: Network Key
+            type: password
+            minLength: 8
+`;
 
+console.log(cdsl.generate_ui(initialValue));
+```
+
+An example of using this module in nodeJS is available in the `examples/node` folder:
+
+```bash
+cd examples/node
+npm install
+npm start
+```
+
+An example of using this module in the browser is available in the `examples/browser` folder:
+
+```bash
+cd examples/browser
+npm install
+npm start
+```
+
+Open `localhost:8080` in your browser.
+
+## Support
+
+If you're having any problem, please [raise an issue] on GitHub or [contact us], and the [balena.io] team
+will be happy to help.
+
+## License
+
+`balena-cdsl` is open source software, and may be redistributed under the terms specified in
+the [license].
+
+[balena.io]: https://www.balena.io/
+[contact us]: https://forums.balena.io/
+[raise an issue]: https://github.com/balena-io-modules/balena-cdsl/issues/new
+[API documentation]: https://docs.rs/balena-cdsl/latest/balena_cdsl/
+[license]: https://github.com/balena-io-modules/balena-cdsl/blob/master/LICENSE
+[Rust crate]: https://crates.io/crates/balena-cdsl
+[NPM package]: https://www.npmjs.com/package/balena-cdsl

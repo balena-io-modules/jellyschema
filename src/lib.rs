@@ -1,17 +1,41 @@
-//! This is is a Rust (edition 2018) library that is intended to be used as a translation mechanism between the [configuration DSL](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md) and the `JSON + UI Schema` world.
-//! The is not production ready yet, however it supports some real-life cases already.
-//! The plan is to have this library be available to be used from Rust code but also as a Node module to be used from Node and in-browser code, through WASM.
+//! [balena] **c**onfiguration **dsl**
+//!
+//! A crate that provides facilities to:
+//!
+//! * transform configuration DSL into the JSON Schema & UI Object Schema with custom extensions
+//! * parse configuration DSL
+//!
+//! # Versioning
+//!
+//! This crate is being actively developed and it does NOT follow [Semantic Versioning] yet.
+//! It will follow semantic versioning when it reaches version 1.0.
+//!
+//! MINOR version changes denotes incompatible API changes and PATCH version changes denotes
+//! both new functionality in a backwards-compatible manner and backwards-compatible bug fixes.
 //!
 //! # Examples
 //!
-//! ```
-//! use balena_configuration_dsl::output::generator::Generator;
+//! ## Generate JSON Schema & UI Object
 //!
-//! let input_schema : serde_yaml::Value = serde_yaml::from_str(
-//! include_str!("../tests/data/schema/empty/input-schema.yml")).unwrap();
+//! ```
+//! use balena_cdsl::output::generator::Generator;
+//! use serde_yaml::*;
+//!
+//! let dsl = r#"
+//!   version: 1
+//!   properties:
+//!     - name:
+//!         type: string
+//!         help: You should type your name here
+//! "#;
+//!
+//! let input_schema: serde_yaml::Value = serde_yaml::from_str(dsl).unwrap();
 //!
 //! let (json_schema, ui_object) = Generator::with(input_schema).unwrap().generate();
 //! ```
+//!
+//! [balena]: https://www.balena.io
+//! [Semantic Versioning]: https://semver.org/
 pub mod dsl;
 pub mod output;
 #[cfg(target_arch = "wasm32")]

@@ -1,4 +1,4 @@
-//! This contains output (JSON and UI Schema) generation code and supporting types.
+//! A module containing output generator for the JSON Schema & UI Object
 use std::collections::HashMap;
 
 use serde_derive::Serialize;
@@ -9,6 +9,7 @@ use crate::dsl::schema::when::DependencyGraph;
 pub mod generator;
 mod serialization;
 
+/// JSON Schema wrapper
 pub struct JsonSchema<'a> {
     version: u64,
     schema_url: &'a str,
@@ -16,6 +17,7 @@ pub struct JsonSchema<'a> {
     dependencies: Option<&'a DependencyGraph>,
 }
 
+/// UI Object wrapper
 #[derive(Serialize)]
 pub struct UiObject<'a>(HashMap<&'a str, UiObjectProperty<'a>>);
 
@@ -36,6 +38,7 @@ struct UiObjectProperty<'a> {
 }
 
 impl<'a> UiObjectProperty<'a> {
+    /// Checks if an UI Object is empty
     pub fn is_empty(&self) -> bool {
         self.help.is_none() && self.warning.is_none() && self.description.is_none()
     }

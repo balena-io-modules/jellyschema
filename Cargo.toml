@@ -1,31 +1,53 @@
 [package]
-name = "balena-configuration-dsl"
+name = "balena-cdsl"
 version = "0.2.5"
 authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
 build = "build.rs"
-
-[dependencies]
-heck = "0.3"
-regex = "1.0"
-
-serde = "1.0"
-serde_derive = "1.0"
-serde_json = "1.0"
-serde_yaml = "0.8"
-yaml-merge-keys = {version= "0.3", features = ["serde_yaml"]}
-
-balena-temen = "0.0.16"
-
-[dev-dependencies]
-pretty_assertions = "0.5"
-
-[target.wasm32-unknown-unknown.dependencies]
-wasm-bindgen= { version="0.2", features = ["serde-serialize"] }
-console_error_panic_hook = "0.1"
-
-[target.wasm32-unknown-unknown.dev-dependencies]
-wasm-bindgen-test = "0.2"
+maintenance = { status = "experimental" }
+license = "Apache-2.0"
+repository = "https://github.com/balena-io-modules/balena-cdsl/"
+description = ""
+categories = ["config", "encoding", "wasm"]
+readme = "README.md"
 
 [lib]
 crate-type = ["lib", "cdylib"]
+
+[dependencies.balena-temen]
+version = "0.0.16"
+
+[dependencies.heck]
+version = "0.3"
+
+[dependencies.regex]
+version = "1.0"
+
+[dependencies.serde]
+version = "1.0"
+
+[dependencies.serde_derive]
+version = "1.0"
+
+[dependencies.serde_json]
+version = "1.0"
+
+[dependencies.serde_yaml]
+version = "0.8"
+
+[dependencies.yaml-merge-keys]
+version= "0.3"
+features = ["serde_yaml"]
+
+[dev-dependencies.pretty_assertions]
+version = "0.5"
+
+[target.wasm32-unknown-unknown.dependencies.wasm-bindgen]
+version = "0.2"
+features = ["serde-serialize"]
+
+[target.wasm32-unknown-unknown.dependencies.console_error_panic_hook]
+version = "0.1"
+
+[target.wasm32-unknown-unknown.dev-dependencies.wasm-bindgen-test]
+version = "0.2"

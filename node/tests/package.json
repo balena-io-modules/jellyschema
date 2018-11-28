@@ -1,10 +1,10 @@
 {
     "name": "node-integration-tests",
     "scripts": {
-        "test": "jest"
+        "test": "jest --env node"
     },
     "dependencies": {
-        "balena-configuration-dsl": "file:../../target/npm/pkg"
+        "balena-cdsl": "file:../../target/npm/pkg"
     },
     "devDependencies": {
         "jest": "^23.6.0"

@@ -1,0 +1,9 @@
+{
+    "name": "balena-temen-node-example",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "balena-cdsl": "0"
+    }
+}
