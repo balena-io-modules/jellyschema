@@ -7,7 +7,7 @@ build = "build.rs"
 maintenance = { status = "experimental" }
 license = "Apache-2.0"
 repository = "https://github.com/balena-io-modules/balena-cdsl/"
-description = ""
+description = "Configuration DSL"
 categories = ["config", "encoding", "wasm"]
 readme = "README.md"
 
