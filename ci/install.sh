@@ -23,6 +23,9 @@ echo "NodeJS version $(node --version)"
 echo "Installing jest..."
 npm install -g jest
 
+echo "Installing ajv..."
+npm install -g ajv
+
 echo "Installing wasm-pack..."
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh -s -- -f
 
