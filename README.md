@@ -35,6 +35,7 @@ This library is written in the Rust language and can be used:
 ## Documentation
 
 * [API documentation]
+* [Changelog]
 
 ## Usage
 
@@ -126,3 +127,4 @@ the [license].
 [license]: https://github.com/balena-io-modules/balena-cdsl/blob/master/LICENSE
 [Rust crate]: https://crates.io/crates/balena-cdsl
 [NPM package]: https://www.npmjs.com/package/balena-cdsl
+[Changelog]: https://github.com/balena-io-modules/balena-cdsl/blob/master/CHANGELOG.md
