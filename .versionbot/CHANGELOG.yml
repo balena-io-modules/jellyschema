@@ -1,4 +1,36 @@
 - commits:
+    - subject: 'Remove -preview suffix for clippy, rustfmt'
+      hash: 4b029bf0c89c3b5efcbf1bd34f5e84ea85460d95
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+    - subject: Add changelog link to readme
+      hash: f7c8c0206f6e7408c018c0aa75cd4df0d06c63bb
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+    - subject: Replace wasm32 triplet with target_arch
+      hash: b5abd267934185629f45d41db0b3d3e5875f03b4
+      body: >
+        Recommended way to do this where we’re not limiting wasm32 to
+        wasm32-unknown-unknown only.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.2.8
+  date: 2018-12-06T09:38:21.183Z
+- commits:
     - subject: Add missing description
       hash: 8566bd1e28a0eebccf11c51b60e579630010217d
       body: ''
