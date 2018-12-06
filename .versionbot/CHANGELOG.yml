@@ -1,4 +1,17 @@
 - commits:
+    - subject: Do not require jest to be installed globally
+      hash: 5b32af0bb109595663d8c50148e983b0b987c18c
+      body: |
+        npm, when running tests pulls in binaries provided by dependencies into
+        scope, so the jest binary should be there already, without the need to
+        be installed globally on the machine.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.2.9
+  date: 2018-12-06T12:37:27.370Z
+- commits:
     - subject: 'Remove -preview suffix for clippy, rustfmt'
       hash: 4b029bf0c89c3b5efcbf1bd34f5e84ea85460d95
       body: ''
