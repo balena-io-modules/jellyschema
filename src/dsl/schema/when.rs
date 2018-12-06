@@ -78,7 +78,7 @@ impl DependencyGraph {
                     _ => {
                         return Err(CompilationError::with_message(
                             "walking logical expression that is more than a single identifier",
-                        ))
+                        ));
                     }
                 }
 
