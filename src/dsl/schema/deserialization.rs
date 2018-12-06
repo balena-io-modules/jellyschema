@@ -104,7 +104,7 @@ fn sequence_to_schema_list<E>(sequence: &[Value]) -> Result<SchemaList, E>
 where
     E: Error,
 {
-    let list_of_maybe_entries = sequence.into_iter().map(|value| {
+    let list_of_maybe_entries = sequence.iter().map(|value| {
         let mapping = value
             .as_mapping()
             .ok_or_else(|| Error::custom(format!("cannot deserialize schema {:#?} as mapping", value)))?;
