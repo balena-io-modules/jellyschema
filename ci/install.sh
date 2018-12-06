@@ -20,9 +20,6 @@ nvm install
 nvm use
 echo "NodeJS version $(node --version)"
 
-echo "Installing jest..."
-npm install -g jest
-
 echo "Installing wasm-pack..."
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh -s -- -f
 
