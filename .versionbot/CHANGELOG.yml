@@ -1,4 +1,16 @@
 - commits:
+    - subject: Rust toolchain stable
+      hash: 01cc343280f1e2af6d38f5ef1acb4ced4d7654fa
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.2.10
+  date: 2018-12-06T18:27:34.411Z
+- commits:
     - subject: Do not require jest to be installed globally
       hash: 5b32af0bb109595663d8c50148e983b0b987c18c
       body: |
