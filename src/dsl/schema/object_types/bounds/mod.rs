@@ -39,7 +39,7 @@ pub enum ArrayUniqueItemBound {
 #[derive(Clone, Debug)]
 pub enum ArrayItemObjectBounds {
     AllItems(Box<Schema>),
-    RespectiveItems(Vec<Schema>),
+    AnyItems(Vec<Schema>),
 }
 
 impl IntegerBound {
