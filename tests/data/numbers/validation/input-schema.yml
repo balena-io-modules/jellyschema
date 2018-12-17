@@ -4,5 +4,5 @@ properties:
 - multiplesOfTen:
     type: integer
     multipleOf: 10
-    minimum: 10
-    exclusiveMaximum: 100
+    min: 10
+    exclusiveMax: 100
