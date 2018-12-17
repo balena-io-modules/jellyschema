@@ -1,4 +1,19 @@
 - commits:
+    - subject: New multiple `items` semantics
+      hash: 2ba7e14c2a1b0ff7dc2554a941771a50523865cd
+      body: |
+        Add support for new `items` semantics - when multiple item schemas are
+        defined - emit `anyOf` to make JSON schema validate data against any of
+        such schemas instead of all of them in the given order.
+
+        Fixes #27
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.5.0
+  date: 2018-12-17T14:04:13.137Z
+- commits:
     - subject: Remove support for `additionalItems` keyword
       hash: ae584c19dad7cc14cbd2a4bca4f1675a8e327341
       body: >
