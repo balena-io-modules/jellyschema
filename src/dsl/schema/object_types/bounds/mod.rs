@@ -27,7 +27,6 @@ pub struct ArrayObjectBounds {
     pub maximum_number_of_items: Option<i64>,
     pub items: Option<ArrayItemObjectBounds>,
     pub unique_items: Option<ArrayUniqueItemBound>,
-    pub additional_items: Option<Schema>,
 }
 
 #[derive(Clone, Debug)]

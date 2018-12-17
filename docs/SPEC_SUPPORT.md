@@ -39,7 +39,6 @@ Please find a detailed list below - presented in the order they appear in the sp
 
 [Validation keywords for arrays](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#validation-keywords-for-arrays)
 * [X] `items` - both flavours (one item and consecutive items)
-* [X] `additionalItems`
 * [X] `maxItems`
 * [X] `minItems`
 * [X] `uniqueItems` - both flavours (flag or an array)
