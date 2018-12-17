@@ -16,6 +16,7 @@ use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::RawObjectType;
+use std::collections::HashMap;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -126,8 +127,10 @@ where
                 ArrayItemObjectBounds::AllItems(schema) => {
                     map.serialize_entry("items", &schema)?;
                 }
-                ArrayItemObjectBounds::RespectiveItems(schemas) => {
-                    map.serialize_entry("items", &schemas)?;
+                ArrayItemObjectBounds::AnyItems(schemas) => {
+                    let mut wrapper = HashMap::new();
+                    wrapper.insert("oneOf", schemas);
+                    map.serialize_entry("items", &wrapper)?;
                 }
             }
         }

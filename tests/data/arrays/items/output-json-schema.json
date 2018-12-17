@@ -39,42 +39,44 @@
         },
         "mixedNetworks": {
             "type": "array",
-            "items": [
-                {
-                    "type": "object",
-                    "required": [
-                        "ssid",
-                        "passphrase"
-                    ],
-                    "$$order": [
-                        "ssid",
-                        "passphrase"
-                    ],
-                    "properties": {
-                        "ssid": {
-                            "type": "string"
-                        },
-                        "passphrase": {
-                            "type": "string",
-                            "writeOnly": true
+            "items": {
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "required": [
+                            "ssid",
+                            "passphrase"
+                        ],
+                        "$$order": [
+                            "ssid",
+                            "passphrase"
+                        ],
+                        "properties": {
+                            "ssid": {
+                                "type": "string"
+                            },
+                            "passphrase": {
+                                "type": "string",
+                                "writeOnly": true
+                            }
+                        }
+                    },
+                    {
+                        "type": "object",
+                        "required": [
+                            "id"
+                        ],
+                        "$$order": [
+                            "id"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            }
                         }
                     }
-                },
-                {
-                    "type": "object",
-                    "required": [
-                        "id"
-                    ],
-                    "$$order": [
-                        "id"
-                    ],
-                    "properties": {
-                        "id": {
-                            "type": "string"
-                        }
-                    }
-                }
-            ],
+                ]
+            },
             "minItems": 1,
             "maxItems": 2
         }

@@ -184,7 +184,7 @@ where
             Value::Mapping(_) => Ok(Some(ArrayItemObjectBounds::AllItems(Box::new(deserialize_schema(
                 properties,
             )?)))),
-            Value::Sequence(sequence) => Ok(Some(ArrayItemObjectBounds::RespectiveItems(
+            Value::Sequence(sequence) => Ok(Some(ArrayItemObjectBounds::AnyItems(
                 sequence
                     .iter()
                     .map(|entry| deserialize_schema(entry))
