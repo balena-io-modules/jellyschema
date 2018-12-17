@@ -128,7 +128,6 @@ where
     let minimum_number_of_items = deserialize_integer("minItems", mapping)?;
     let items = deserialize_array_item_bounds(mapping)?;
     let unique_items = deserialize_array_unique_items_bounds(mapping)?;
-    let additional_items = deserialize_array_additional_items_bounds(mapping)?;
 
     if maximum_number_of_items.is_some() || minimum_number_of_items.is_some() || items.is_some() {
         return Ok(Some(ArrayObjectBounds {
@@ -136,23 +135,9 @@ where
             maximum_number_of_items,
             items,
             unique_items,
-            additional_items,
         }));
     }
     Ok(None)
-}
-
-fn deserialize_array_additional_items_bounds<E>(mapping: &Mapping) -> Result<Option<Schema>, E>
-where
-    E: Error,
-{
-    match mapping.get(&Value::from("additionalItems")) {
-        None => Ok(None),
-        Some(properties) => match properties {
-            Value::Mapping(_) => Ok(Some(deserialize_schema(properties)?)),
-            _ => Err(Error::custom("`additionalItems must be a schema`")),
-        },
-    }
 }
 
 fn deserialize_array_unique_items_bounds<E>(mapping: &Mapping) -> Result<Option<ArrayUniqueItemBound>, E>

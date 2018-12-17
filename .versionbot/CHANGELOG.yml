@@ -1,4 +1,17 @@
 - commits:
+    - subject: Remove support for `additionalItems` keyword
+      hash: ae584c19dad7cc14cbd2a4bca4f1675a8e327341
+      body: >
+        As per
+        [changes](https://github.com/balena-io/balena/compare/832f5551127dd8e1e82fa082bea97fc4db81c3ce...5006321063c1c771809bcb39e74b3575a0db652e)
+        to the DSL spec
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.4.0
+  date: 2018-12-17T13:08:47.132Z
+- commits:
     - subject: Switch to beta toolchain
       hash: 6f9dfe61117a40f13b4280bb77b55726de6486d3
       body: |
