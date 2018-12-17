@@ -1,4 +1,22 @@
 - commits:
+    - subject: Make sure that we can only use `1` as a version number
+      hash: e26709c211ced0395a4ab37ef78fd57b861459b0
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Make the top level schema version optional
+      hash: d59e116387186675c71eb84ded566e02207443ac
+      body: |
+        With default to 1
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.6.0
+  date: 2018-12-17T16:37:44.668Z
+- commits:
     - subject: New multiple `items` semantics
       hash: 2ba7e14c2a1b0ff7dc2554a941771a50523865cd
       body: |
