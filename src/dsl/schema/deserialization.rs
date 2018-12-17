@@ -13,10 +13,7 @@ use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::when::dependencies_for_schema_list;
 use crate::dsl::schema::when::DependencyGraph;
 
-pub fn deserialize_root<E>(schema: &Value) -> Result<DocumentRoot, CompilationError>
-where
-    E: serde::de::Error,
-{
+pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {
     let maybe_root = schema.as_mapping();
     const DEFAULT_VERSION: u64 = 1;
     let version = match maybe_root {
@@ -38,6 +35,13 @@ where
     }?
     .unwrap_or(DEFAULT_VERSION);
 
+    if version != DEFAULT_VERSION {
+        return Err(CompilationError::with_message(&format!(
+            "invalid version number '{}' specified",
+            version
+        )));
+    }
+
     let schema = deserialize_schema::<serde_yaml::Error>(&schema)?;
 
     // this is recursive already, should get the whole tree for all children schemas
@@ -51,6 +55,7 @@ where
         dependencies: Some(dependencies),
     })
 }
+
 pub fn deserialize_schema<E>(value: &Value) -> Result<Schema, E>
 where
     E: Error,
@@ -138,4 +143,37 @@ where
         name: key,
         schema: value,
     })
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn fails_on_unknown_version_number() {
+        let schema = serde_yaml::from_str(
+            r#"
+        version: 2
+        "#,
+        )
+        .unwrap();
+
+        let deserialized: Result<DocumentRoot, CompilationError> = deserialize_root(&schema);
+
+        assert!(deserialized.err().is_some());
+    }
+
+    #[test]
+    fn passes_on_known_version_number() {
+        let schema = serde_yaml::from_str(
+            r#"
+        version: 1
+        "#,
+        )
+        .unwrap();
+
+        let deserialized: Result<DocumentRoot, CompilationError> = deserialize_root(&schema);
+        assert!(deserialized.ok().is_some());
+    }
 }

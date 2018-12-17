@@ -6,7 +6,7 @@ use crate::dsl::schema::DocumentRoot;
 
 pub fn compile(schema: serde_yaml::Value) -> Result<CompiledSchema, CompilationError> {
     let schema = merge_keys_serde(schema)?;
-    let schema = deserialize_root::<serde_yaml::Error>(&schema)?;
+    let schema = deserialize_root(&schema)?;
     Ok(CompiledSchema::with(schema))
 }
 
