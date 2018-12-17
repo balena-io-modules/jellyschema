@@ -129,7 +129,7 @@ where
                 }
                 ArrayItemObjectBounds::AnyItems(schemas) => {
                     let mut wrapper = HashMap::new();
-                    wrapper.insert("anyOf", schemas);
+                    wrapper.insert("oneOf", schemas);
                     map.serialize_entry("items", &wrapper)?;
                 }
             }
