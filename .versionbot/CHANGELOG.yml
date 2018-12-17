@@ -1,4 +1,33 @@
 - commits:
+    - subject: Switch to beta toolchain
+      hash: 6f9dfe61117a40f13b4280bb77b55726de6486d3
+      body: |
+        As problems with wasm compilation on stable
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Normalize min/max property names according to the new spec.
+      hash: 01c58e34268102c304e0609cf2f20b8d87f4e75e
+      body: >
+        This is a breaking change of the DSL schema, as per [spec
+        change](https://github.com/balena-io/balena/compare/832f5551127dd8e1e82fa082bea97fc4db81c3ce...5006321063c1c771809bcb39e74b3575a0db652e)
+
+
+        `maximum` -> `max`
+
+        `minimum` -> `min`
+
+        `exclusiveMaximum` -> `exclusiveMax`
+
+        `exclusiveMinimum` -> `exclusiveMin`
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.3.0
+  date: 2018-12-17T12:04:58.094Z
+- commits:
     - subject: Rust toolchain stable
       hash: 01cc343280f1e2af6d38f5ef1acb4ced4d7654fa
       body: ''
