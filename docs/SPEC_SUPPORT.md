@@ -27,10 +27,10 @@ Please find a detailed list below - presented in the order they appear in the sp
 
 [Validation keywords for numeric instances](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#validation-keywords-for-numeric-instances-number-and-integer)
 * [X] `multipleOf`
-* [X] `maximum`
-* [X] `exclusiveMaximum`
-* [X] `minimum`
-* [X] `exclusiveMinimum`
+* [X] `max`
+* [X] `exclusiveMax`
+* [X] `min`
+* [X] `exclusiveMin`
 
 [Validation keywords for strings](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#validation-keywords-for-strings)
 * [X] `maxLength`

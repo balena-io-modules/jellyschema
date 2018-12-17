@@ -87,8 +87,8 @@ pub fn deserialize_integer_bounds<E>(mapping: &Mapping) -> Result<Option<Integer
 where
     E: Error,
 {
-    let maximum = deserialize_integer_bound("maximum", mapping)?;
-    let minimum = deserialize_integer_bound("minimum", mapping)?;
+    let maximum = deserialize_integer_bound("max", mapping)?;
+    let minimum = deserialize_integer_bound("min", mapping)?;
     let multiple_of = deserialize_integer("multipleOf", mapping)?;
 
     if maximum.is_some() || minimum.is_some() || multiple_of.is_some() {
