@@ -18,19 +18,25 @@ where
     E: serde::de::Error,
 {
     let maybe_root = schema.as_mapping();
+    const DEFAULT_VERSION: u64 = 1;
     let version = match maybe_root {
         Some(mapping) => Ok({
-            let version = mapping
-                .get(&Value::from("version"))
-                .ok_or_else(|| CompilationError::with_message("you must specify schema version"))?;
-            version
-                .as_u64()
-                .ok_or_else(|| CompilationError::with_message("version must be a positive integer"))?
+            let version = mapping.get(&Value::from("version"));
+
+            match version {
+                Some(version) => Some(
+                    version
+                        .as_u64()
+                        .ok_or_else(|| CompilationError::with_message("version must be a positive integer"))?,
+                ),
+                None => None,
+            }
         }),
         None => Err(CompilationError::with_message(
             "root level schema needs to be a yaml mapping",
         )),
-    }?;
+    }?
+    .unwrap_or(DEFAULT_VERSION);
 
     let schema = deserialize_schema::<serde_yaml::Error>(&schema)?;
 

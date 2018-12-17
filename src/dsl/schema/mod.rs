@@ -18,7 +18,7 @@ pub mod when;
 pub struct DocumentRoot {
     pub version: u64,
     pub schema: Option<Schema>,
-    /// the whole dependency tree for all the subschemas. recursively
+    /// the whole dependency tree for all the subschemas. Recursively. Used for `when` conditions
     pub dependencies: Option<DependencyGraph>,
 }
 
