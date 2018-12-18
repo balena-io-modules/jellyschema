@@ -3,10 +3,12 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "$$order": [
-        "mediumOne"
+        "mediumOne",
+        "cores"
     ],
     "required": [
-        "mediumOne"
+        "mediumOne",
+        "cores"
     ],
     "title": "Enum test",
     "properties": {
@@ -29,6 +31,23 @@
                     "title": "raspberrypi2",
                     "enum": [
                         "raspberrypi2"
+                    ]
+                }
+            ]
+        },
+        "cores": {
+            "type": "integer",
+            "oneOf": [
+                {
+                    "title": "Single",
+                    "enum": [
+                        1
+                    ]
+                },
+                {
+                    "title": "Quad",
+                    "enum": [
+                        4
                     ]
                 }
             ]

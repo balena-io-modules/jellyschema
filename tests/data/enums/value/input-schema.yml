@@ -1,9 +1,17 @@
 version: 1
 title: Enum test
 properties:
-- mediumOne:
-    type: string
-    enum:
-    - value: fincm3
-    - value: raspberrypi3
-    - value: raspberrypi2
+  - mediumOne:
+      type: string
+      enum:
+        - value: fincm3
+        - value: raspberrypi3
+        - value: raspberrypi2
+
+  - cores:
+      type: integer
+      enum:
+        - value: 1
+          title: Single
+        - value: 4
+          title: Quad

@@ -1,9 +1,9 @@
 version: 1
 title: Enum test
 properties:
-- shortOne:
-    type: string
-    enum:
-    - fincm3
-    - raspberrypi3
-    - raspberrypi2
+  - shortOne:
+      type: string
+      enum:
+        - fincm3
+        - raspberrypi3
+        - raspberrypi2

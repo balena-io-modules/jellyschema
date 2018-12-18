@@ -8,18 +8,24 @@ use crate::dsl::schema::Schema;
 pub mod deserialization;
 mod enums;
 
-// TODO: impl serialize separately, to not have serialization code in the `dsl` module
-#[derive(Clone, Debug, Serialize)]
-pub enum IntegerBound {
-    Inclusive(i64),
-    Exclusive(i64),
+#[derive(Clone, Debug)]
+pub enum StringObjectBounds {
+    List(Vec<EnumerationValue>),
+    Pattern(Regex),
+    Length(StringLength),
 }
 
 #[derive(Clone, Debug)]
-pub struct IntegerObjectBounds {
+pub struct IntegerValueConditionObjectBounds {
     pub minimum: Option<IntegerBound>,
     pub maximum: Option<IntegerBound>,
     pub multiple_of: Option<i64>,
+}
+
+#[derive(Clone, Debug)]
+pub enum IntegerObjectBounds {
+    Conditions(IntegerValueConditionObjectBounds),
+    List(Vec<EnumerationValue>),
 }
 
 #[derive(Clone, Debug)]
@@ -42,6 +48,13 @@ pub enum ArrayItemObjectBounds {
     AnyItems(Vec<Schema>),
 }
 
+// TODO: impl serialize separately, to not have serialization code in the `dsl` module
+#[derive(Clone, Debug, Serialize)]
+pub enum IntegerBound {
+    Inclusive(i64),
+    Exclusive(i64),
+}
+
 impl IntegerBound {
     pub fn inner(&self) -> &i64 {
         match self {
@@ -55,13 +68,6 @@ impl IntegerBound {
 pub struct StringLength {
     pub minimum: Option<i64>,
     pub maximum: Option<i64>,
-}
-
-#[derive(Clone, Debug)]
-pub enum StringObjectBounds {
-    PossibleValues(Vec<EnumerationValue>),
-    Pattern(Regex),
-    Length(StringLength),
 }
 
 #[derive(Clone, Debug)]

@@ -16,6 +16,7 @@ use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::Schema;
+use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
 
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
@@ -33,7 +34,7 @@ where
     }
     let result = {
         if let Some(values) = possible_values {
-            Some(StringObjectBounds::PossibleValues(values))
+            Some(StringObjectBounds::List(values))
         } else if let Some(pattern) = pattern {
             Some(StringObjectBounds::Pattern(pattern))
         } else if let Some(length) = length {
@@ -69,16 +70,30 @@ where
     let maximum = deserialize_integer_bound("max", mapping)?;
     let minimum = deserialize_integer_bound("min", mapping)?;
     let multiple_of = deserialize_integer("multipleOf", mapping)?;
+    let possible_values = deserialize_enumeration(&mapping)?;
+    let integer_bound_present = maximum.is_some() || minimum.is_some() || multiple_of.is_some();
 
-    if maximum.is_some() || minimum.is_some() || multiple_of.is_some() {
-        Ok(Some(IntegerObjectBounds {
-            minimum,
-            maximum,
-            multiple_of,
-        }))
-    } else {
-        Ok(None)
+    if integer_bound_present && possible_values.is_some() {
+        return Err(Error::custom(
+            "cannot have both min/max/multiple bounds set and enum/const bound set at the same time",
+        ));
     }
+
+    if integer_bound_present {
+        return Ok(Some(IntegerObjectBounds::Conditions(
+            IntegerValueConditionObjectBounds {
+                minimum,
+                maximum,
+                multiple_of,
+            },
+        )));
+    }
+
+    if let Some(values) = possible_values {
+        return Ok(Some(IntegerObjectBounds::List(values)));
+    }
+
+    Ok(None)
 }
 
 pub fn deserialize_boolean_object_bounds<E>(mapping: &Mapping) -> Result<Option<BooleanObjectBounds>, E>
