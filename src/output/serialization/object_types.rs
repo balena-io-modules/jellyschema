@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::string::ToString;
 
 use heck::MixedCase;
@@ -16,7 +17,6 @@ use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::RawObjectType;
-use std::collections::HashMap;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>

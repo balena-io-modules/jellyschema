@@ -6,6 +6,7 @@ use crate::dsl::schema::Annotations;
 use crate::dsl::schema::Schema;
 
 pub mod deserialization;
+mod enums;
 
 // TODO: impl serialize separately, to not have serialization code in the `dsl` module
 #[derive(Clone, Debug, Serialize)]
