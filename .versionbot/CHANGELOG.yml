@@ -1,4 +1,21 @@
 - commits:
+    - subject: Add support for enum values on integers
+      hash: 4afb41199ab4da12338e69a7b9cc00b0f873b71f
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Extract generic enumeration deserialization
+      hash: e606b5bd7c54e0f071366a3833e49fa99f7fed58
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.2
+  date: 2018-12-18T12:41:55.663Z
+- commits:
     - subject: Update temen dependency
       hash: 139e193368a5380de93f064981220df366f78b95
       body: ''
