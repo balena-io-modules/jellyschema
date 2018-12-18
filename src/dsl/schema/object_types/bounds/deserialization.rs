@@ -22,36 +22,16 @@ pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<S
 where
     E: Error,
 {
-    let enumeration_values = deserialize_enumeration_values(&mapping)?;
-    let constant_value = deserialize_constant_value(&mapping)?.map(|value| vec![value]);
+    let possible_values = deserialize_enumeration(&mapping)?;
+
     let pattern = deserialize_pattern(&mapping)?;
     let length = deserialize_length_bounds(&mapping)?;
-
-    if (enumeration_values.is_some()) && constant_value.is_some() {
-        return Err(Error::custom("cannot have both enum and const defined"));
-    }
-
-    let possible_values = enumeration_values.or(constant_value);
-
     if possible_values.is_some() && pattern.is_some() {
         return Err(Error::custom("cannot have both pattern set and enum/const bound"));
     }
-
     if possible_values.is_some() && length.is_some() {
         return Err(Error::custom("cannot have both length set and enum/const bound"));
     }
-
-    let possible_values = possible_values.map(|mut list| {
-        list.iter_mut()
-            .map(|value| {
-                if value.annotations.title.is_none() {
-                    value.annotations.title = Some(value.value.clone());
-                }
-                value.clone()
-            })
-            .collect()
-    });
-
     let result = {
         if let Some(values) = possible_values {
             Some(StringObjectBounds::PossibleValues(values))
@@ -65,6 +45,29 @@ where
     };
 
     Ok(result)
+}
+
+fn deserialize_enumeration<E>(mapping: &Mapping) -> Result<Option<Vec<EnumerationValue>>, E>
+where
+    E: Error,
+{
+    let enumeration_values = deserialize_enumeration_values(&mapping)?;
+    let constant_value = deserialize_constant_value(&mapping)?.map(|value| vec![value]);
+    if (enumeration_values.is_some()) && constant_value.is_some() {
+        return Err(Error::custom("cannot have both enum and const defined"));
+    }
+    let possible_values = enumeration_values.or(constant_value);
+    let possible_values = possible_values.map(|mut list| {
+        list.iter_mut()
+            .map(|value| {
+                if value.annotations.title.is_none() {
+                    value.annotations.title = value.value.as_str().map(|s| s.to_string());
+                }
+                value.clone()
+            })
+            .collect()
+    });
+    Ok(possible_values)
 }
 
 pub fn deserialize_length_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
@@ -275,11 +278,7 @@ where
 {
     let value = mapping
         .get(&Value::from("value"))
-        .map(|value| match value {
-            Value::String(string) => Ok(string),
-            _ => Err(Error::custom(format!("enum value `{:#?}` must be a string", value))),
-        })
-        .ok_or_else(|| Error::custom("when the enumeration is a mapping - expected 'value' to be present"))??;
+        .ok_or_else(|| Error::custom("when the enumeration is a mapping - expected 'value' to be present"))?;
 
     let title = mapping.get(&Value::from("title")).map(|value| match value {
         Value::String(string) => Ok(string),
@@ -302,7 +301,7 @@ where
     };
     Ok(EnumerationValue {
         annotations,
-        value: value.to_string(),
+        value: value.clone(),
     })
 }
 

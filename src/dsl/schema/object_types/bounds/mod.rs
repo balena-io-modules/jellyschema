@@ -71,7 +71,7 @@ pub enum BooleanObjectBounds {
 #[derive(Clone, Debug)]
 pub struct EnumerationValue {
     pub annotations: Annotations,
-    pub value: String,
+    pub value: serde_yaml::Value,
 }
 
 impl From<&str> for EnumerationValue {
@@ -84,7 +84,7 @@ impl From<&str> for EnumerationValue {
             description: None,
         };
         EnumerationValue {
-            value: value.clone(),
+            value: value.into(),
             annotations,
         }
     }
