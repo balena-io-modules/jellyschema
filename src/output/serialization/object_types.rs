@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::string::ToString;
 
 use heck::MixedCase;
@@ -16,7 +17,6 @@ use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::RawObjectType;
-use std::collections::HashMap;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -154,11 +154,15 @@ where
     S: SerializeMap<Ok = O, Error = E>,
 {
     if let Some(bounds) = bounds {
-        serialize_integer_bound("maximum", &bounds.maximum, map)?;
-        serialize_integer_bound("minimum", &bounds.minimum, map)?;
-
-        if let Some(multiple_of) = bounds.multiple_of {
-            map.serialize_entry("multipleOf", &multiple_of)?;
+        match bounds {
+            IntegerObjectBounds::Conditions(conditions) => {
+                serialize_integer_bound("maximum", &conditions.maximum, map)?;
+                serialize_integer_bound("minimum", &conditions.minimum, map)?;
+                if let Some(multiple_of) = conditions.multiple_of {
+                    map.serialize_entry("multipleOf", &multiple_of)?;
+                }
+            }
+            IntegerObjectBounds::List(list) => serialize_enum_bounds(list, map)?,
         }
     }
     Ok(())
@@ -170,15 +174,22 @@ where
     S: SerializeMap<Ok = O, Error = E>,
 {
     match string_bounds {
-        StringObjectBounds::PossibleValues(values) => {
-            if values.len() == 1 {
-                serialize_singular_constant_value(&values[0], map)?;
-            } else {
-                serialize_multiple_enum_values(&values, map)?;
-            }
-        }
+        StringObjectBounds::List(values) => serialize_enum_bounds(values, map)?,
         StringObjectBounds::Pattern(pattern) => map.serialize_entry("pattern", pattern.as_str())?,
         StringObjectBounds::Length(length) => serialize_length_bounds(length, map)?,
+    }
+    Ok(())
+}
+
+fn serialize_enum_bounds<O, E, S>(values: &[EnumerationValue], map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if values.len() == 1 {
+        serialize_singular_constant_value(&values[0], map)?;
+    } else {
+        serialize_multiple_enum_values(&values, map)?;
     }
     Ok(())
 }

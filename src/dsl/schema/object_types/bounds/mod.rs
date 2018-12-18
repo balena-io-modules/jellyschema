@@ -6,19 +6,26 @@ use crate::dsl::schema::Annotations;
 use crate::dsl::schema::Schema;
 
 pub mod deserialization;
+mod enums;
 
-// TODO: impl serialize separately, to not have serialization code in the `dsl` module
-#[derive(Clone, Debug, Serialize)]
-pub enum IntegerBound {
-    Inclusive(i64),
-    Exclusive(i64),
+#[derive(Clone, Debug)]
+pub enum StringObjectBounds {
+    List(Vec<EnumerationValue>),
+    Pattern(Regex),
+    Length(StringLength),
 }
 
 #[derive(Clone, Debug)]
-pub struct IntegerObjectBounds {
+pub struct IntegerValueConditionObjectBounds {
     pub minimum: Option<IntegerBound>,
     pub maximum: Option<IntegerBound>,
     pub multiple_of: Option<i64>,
+}
+
+#[derive(Clone, Debug)]
+pub enum IntegerObjectBounds {
+    Conditions(IntegerValueConditionObjectBounds),
+    List(Vec<EnumerationValue>),
 }
 
 #[derive(Clone, Debug)]
@@ -41,6 +48,13 @@ pub enum ArrayItemObjectBounds {
     AnyItems(Vec<Schema>),
 }
 
+// TODO: impl serialize separately, to not have serialization code in the `dsl` module
+#[derive(Clone, Debug, Serialize)]
+pub enum IntegerBound {
+    Inclusive(i64),
+    Exclusive(i64),
+}
+
 impl IntegerBound {
     pub fn inner(&self) -> &i64 {
         match self {
@@ -57,13 +71,6 @@ pub struct StringLength {
 }
 
 #[derive(Clone, Debug)]
-pub enum StringObjectBounds {
-    PossibleValues(Vec<EnumerationValue>),
-    Pattern(Regex),
-    Length(StringLength),
-}
-
-#[derive(Clone, Debug)]
 pub enum BooleanObjectBounds {
     DefaultValue(bool),
 }
@@ -71,7 +78,7 @@ pub enum BooleanObjectBounds {
 #[derive(Clone, Debug)]
 pub struct EnumerationValue {
     pub annotations: Annotations,
-    pub value: String,
+    pub value: serde_yaml::Value,
 }
 
 impl From<&str> for EnumerationValue {
@@ -84,7 +91,7 @@ impl From<&str> for EnumerationValue {
             description: None,
         };
         EnumerationValue {
-            value: value.clone(),
+            value: value.into(),
             annotations,
         }
     }

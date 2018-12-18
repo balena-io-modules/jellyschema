@@ -4,57 +4,37 @@ use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-use crate::dsl::schema::Annotations;
 use crate::dsl::schema::deserialization::deserialize_schema;
 use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
 use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
-use crate::dsl::schema::object_types::bounds::EnumerationValue;
+use crate::dsl::schema::object_types::bounds::enums::deserialize_enumeration;
 use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::Schema;
+use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
 
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
     E: Error,
 {
-    let enumeration_values = deserialize_enumeration_values(&mapping)?;
-    let constant_value = deserialize_constant_value(&mapping)?.map(|value| vec![value]);
+    let possible_values = deserialize_enumeration(&mapping)?;
+
     let pattern = deserialize_pattern(&mapping)?;
     let length = deserialize_length_bounds(&mapping)?;
-
-    if (enumeration_values.is_some()) && constant_value.is_some() {
-        return Err(Error::custom("cannot have both enum and const defined"));
-    }
-
-    let possible_values = enumeration_values.or(constant_value);
-
     if possible_values.is_some() && pattern.is_some() {
         return Err(Error::custom("cannot have both pattern set and enum/const bound"));
     }
-
     if possible_values.is_some() && length.is_some() {
         return Err(Error::custom("cannot have both length set and enum/const bound"));
     }
-
-    let possible_values = possible_values.map(|mut list| {
-        list.iter_mut()
-            .map(|value| {
-                if value.annotations.title.is_none() {
-                    value.annotations.title = Some(value.value.clone());
-                }
-                value.clone()
-            })
-            .collect()
-    });
-
     let result = {
         if let Some(values) = possible_values {
-            Some(StringObjectBounds::PossibleValues(values))
+            Some(StringObjectBounds::List(values))
         } else if let Some(pattern) = pattern {
             Some(StringObjectBounds::Pattern(pattern))
         } else if let Some(length) = length {
@@ -90,16 +70,30 @@ where
     let maximum = deserialize_integer_bound("max", mapping)?;
     let minimum = deserialize_integer_bound("min", mapping)?;
     let multiple_of = deserialize_integer("multipleOf", mapping)?;
+    let possible_values = deserialize_enumeration(&mapping)?;
+    let integer_bound_present = maximum.is_some() || minimum.is_some() || multiple_of.is_some();
 
-    if maximum.is_some() || minimum.is_some() || multiple_of.is_some() {
-        Ok(Some(IntegerObjectBounds {
-            minimum,
-            maximum,
-            multiple_of,
-        }))
-    } else {
-        Ok(None)
+    if integer_bound_present && possible_values.is_some() {
+        return Err(Error::custom(
+            "cannot have both min/max/multiple bounds set and enum/const bound set at the same time",
+        ));
     }
+
+    if integer_bound_present {
+        return Ok(Some(IntegerObjectBounds::Conditions(
+            IntegerValueConditionObjectBounds {
+                minimum,
+                maximum,
+                multiple_of,
+            },
+        )));
+    }
+
+    if let Some(values) = possible_values {
+        return Ok(Some(IntegerObjectBounds::List(values)));
+    }
+
+    Ok(None)
 }
 
 pub fn deserialize_boolean_object_bounds<E>(mapping: &Mapping) -> Result<Option<BooleanObjectBounds>, E>
@@ -195,30 +189,6 @@ where
     }
 }
 
-fn deserialize_enumeration_values<E>(mapping: &Mapping) -> Result<Option<Vec<EnumerationValue>>, E>
-where
-    E: Error,
-{
-    let enum_key = Value::from("enum");
-    match mapping.get(&enum_key) {
-        Some(mapping) => match mapping {
-            Value::Sequence(sequence) => {
-                let result = sequence
-                    .iter()
-                    .map(|definition| enumeration_definition_to_enumeration_value(definition))
-                    .collect::<Result<Vec<EnumerationValue>, E>>()?;
-                if !result.is_empty() {
-                    Ok(Some(result))
-                } else {
-                    Ok(None)
-                }
-            }
-            _ => Err(Error::custom(format!("enum `{:#?}` is not a sequence", mapping))),
-        },
-        None => Ok(None),
-    }
-}
-
 fn deserialize_pattern<E>(mapping: &Mapping) -> Result<Option<Regex>, E>
 where
     E: Error,
@@ -235,75 +205,6 @@ where
         },
         None => Ok(None),
     }
-}
-
-fn deserialize_constant_value<E>(mapping: &Mapping) -> Result<Option<EnumerationValue>, E>
-where
-    E: Error,
-{
-    let constant_key = Value::from("const");
-    let value = mapping.get(&constant_key).map_or(Ok(None), |value| {
-        serde_yaml::from_value(value.clone())
-            .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
-    })?;
-    let annotations = Annotations {
-        title: None,
-        help: None,
-        warning: None,
-        description: None,
-    };
-    match value {
-        None => Ok(None),
-        Some(value) => Ok(Some(EnumerationValue { value, annotations })),
-    }
-}
-
-fn enumeration_definition_to_enumeration_value<E>(definition: &Value) -> Result<EnumerationValue, E>
-where
-    E: Error,
-{
-    match definition {
-        Value::String(string) => Ok(string.as_str().into()),
-        Value::Mapping(mapping) => Ok(mapping_to_enumeration_value(mapping)?),
-        _ => Err(Error::custom(format!("no idea how to deserialize {:#?}", definition))),
-    }
-}
-
-fn mapping_to_enumeration_value<E>(mapping: &Mapping) -> Result<EnumerationValue, E>
-where
-    E: Error,
-{
-    let value = mapping
-        .get(&Value::from("value"))
-        .map(|value| match value {
-            Value::String(string) => Ok(string),
-            _ => Err(Error::custom(format!("enum value `{:#?}` must be a string", value))),
-        })
-        .ok_or_else(|| Error::custom("when the enumeration is a mapping - expected 'value' to be present"))??;
-
-    let title = mapping.get(&Value::from("title")).map(|value| match value {
-        Value::String(string) => Ok(string),
-        _ => Err(Error::custom(format!("enum title `{:#?}` must be a string", value))),
-    });
-
-    let title = match title {
-        None => None,
-        Some(result) => match result {
-            Ok(value) => Some(value.to_string()),
-            Err(e) => return Err(e),
-        },
-    };
-
-    let annotations = Annotations {
-        title,
-        help: None,
-        warning: None,
-        description: None,
-    };
-    Ok(EnumerationValue {
-        annotations,
-        value: value.to_string(),
-    })
 }
 
 fn deserialize_integer_bound<E>(name: &str, mapping: &Mapping) -> Result<Option<IntegerBound>, E>
