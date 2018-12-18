@@ -1,4 +1,14 @@
 - commits:
+    - subject: Update temen dependency
+      hash: 139e193368a5380de93f064981220df366f78b95
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.1
+  date: 2018-12-18T09:56:40.013Z
+- commits:
     - subject: Make sure that we can only use `1` as a version number
       hash: e26709c211ced0395a4ab37ef78fd57b861459b0
       body: ''
