@@ -44,6 +44,7 @@ where
         RawObjectType::Object => {}
         RawObjectType::Boolean(object_bounds) => serialize_boolean_with_bounds(object_bounds, map)?,
         RawObjectType::String(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
+        RawObjectType::Text(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => {
             map.serialize_entry("writeOnly", &true)?;
             serialize_string_with_bounds(object_bounds, map)?;
@@ -60,6 +61,7 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Object => "object",
         RawObjectType::Boolean(_) => "boolean",
         RawObjectType::String(_) => "string",
+        RawObjectType::Text(_) => "string",
         RawObjectType::Password(_) => "string",
         RawObjectType::Hostname => "string",
         RawObjectType::Integer(_) => "integer",

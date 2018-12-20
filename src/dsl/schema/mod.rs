@@ -56,6 +56,13 @@ pub struct Annotations {
     pub help: Option<String>,
     pub warning: Option<String>,
     pub description: Option<String>,
+    pub widget: Option<Widget>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Widget {
+    Textarea,
 }
 
 impl NamedSchema {

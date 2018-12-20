@@ -70,6 +70,7 @@ impl RawObjectType {
         let object_type = match value {
             "object" => RawObjectType::Object,
             "string" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
+            "text" => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
             "hostname" => RawObjectType::Hostname,
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),

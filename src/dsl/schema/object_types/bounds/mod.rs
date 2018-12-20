@@ -89,6 +89,7 @@ impl From<&str> for EnumerationValue {
             help: None,
             warning: None,
             description: None,
+            widget: None,
         };
         EnumerationValue {
             value: value.into(),

@@ -41,10 +41,19 @@ impl<'a> From<&'a SchemaList> for UiObject<'a> {
 
 impl<'a> From<&'a Schema> for UiObjectProperty<'a> {
     fn from(property: &'a Schema) -> Self {
+        let help = string_option_as_ref(&property.annotations.help);
+        let warning = string_option_as_ref(&property.annotations.warning);
+        let description = string_option_as_ref(&property.annotations.description);
+        let widget = property.annotations.widget.as_ref();
         UiObjectProperty {
-            help: property.annotations.help.as_ref().map(|string| string.as_ref()),
-            warning: property.annotations.warning.as_ref().map(|string| string.as_str()),
-            description: property.annotations.description.as_ref().map(|string| string.as_ref()),
+            help,
+            warning,
+            description,
+            widget,
         }
     }
+}
+
+fn string_option_as_ref(option: &Option<String>) -> Option<&str> {
+    option.as_ref().map(|string| string.as_ref())
 }

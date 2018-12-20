@@ -1,0 +1,19 @@
+{
+    "justwarning": {
+        "ui:warning": "Warning!"
+    },
+    "justhelp": {
+        "ui:help": "Hello help"
+    },
+    "justdescription": {
+        "ui:description": "Lorem ipsum dolor sit amet"
+    },
+    "alltogether": {
+        "ui:warning": "Warning!",
+        "ui:help": "Hello help",
+        "ui:description": "Lorem ipsum dolor sit amet"
+    },
+    "text": {
+        "ui:widget": "textarea"
+    }
+}
