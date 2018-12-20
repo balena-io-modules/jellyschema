@@ -1,4 +1,14 @@
 - commits:
+    - subject: Unknown types are treated as `text` by default
+      hash: 634541f04d952cf4db06e565c732386cc3c82449
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.4
+  date: 2018-12-20T17:10:18.474Z
+- commits:
     - subject: Disable travis cache
       hash: 69b83032559ac93305e767e124740cb6edc2de0b
       body: |
