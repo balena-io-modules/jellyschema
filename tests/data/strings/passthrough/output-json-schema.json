@@ -1,0 +1,60 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Types with same definitions as in JSONSchema",
+    "$$order": [
+        "datetime",
+        "date",
+        "time",
+        "hostname",
+        "email",
+        "ipv4",
+        "ipv6",
+        "uri"
+    ],
+    "required": [
+        "datetime",
+        "date",
+        "time",
+        "hostname",
+        "email",
+        "ipv4",
+        "ipv6",
+        "uri"
+    ],
+    "properties": {
+        "datetime": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "date": {
+            "type": "string",
+            "format": "date"
+        },
+        "time": {
+            "type": "string",
+            "format": "time"
+        },
+        "hostname": {
+            "type": "string",
+            "format": "hostname"
+        },
+        "email": {
+            "type": "string",
+            "format": "email"
+        },
+        "ipv4": {
+            "type": "string",
+            "format": "ipv4"
+        },
+        "ipv6": {
+            "type": "string",
+            "format": "ipv6"
+        },
+        "uri": {
+            "type": "string",
+            "format": "uri"
+        }
+    }
+}

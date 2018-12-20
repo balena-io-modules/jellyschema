@@ -1,0 +1,19 @@
+version: 1
+title: Types with same definitions as in JSONSchema
+properties:
+  - datetime:
+      type: datetime
+  - date:
+      type: date
+  - time:
+      type: time
+  - hostname:
+      type: hostname
+  - email:
+      type: email
+  - ipv4:
+      type: ipv4
+  - ipv6:
+      type: ipv6
+  - uri:
+      type: uri
