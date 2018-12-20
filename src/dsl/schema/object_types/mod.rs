@@ -25,6 +25,7 @@ pub enum RawObjectType {
     Password(Option<StringObjectBounds>),
     Hostname,
     Integer(Option<IntegerObjectBounds>),
+    Number(Option<IntegerObjectBounds>),
     Array(Box<Option<ArrayObjectBounds>>),
 }
 
@@ -38,6 +39,7 @@ impl RawObjectType {
             RawObjectType::Text(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),
             RawObjectType::Integer(bounds) => bounds.is_some(),
+            RawObjectType::Number(bounds) => bounds.is_some(),
             RawObjectType::Array(bounds) => bounds.is_some(),
         }
     }

@@ -51,6 +51,7 @@ where
         }
         RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
         RawObjectType::Integer(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
+        RawObjectType::Number(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
         RawObjectType::Array(object_bounds) => serialize_array_object_bounds(object_bounds, map)?,
     };
     Ok(())
@@ -65,6 +66,7 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Password(_) => "string",
         RawObjectType::Hostname => "string",
         RawObjectType::Integer(_) => "integer",
+        RawObjectType::Number(_) => "number",
         RawObjectType::Array(_) => "array",
     }
 }

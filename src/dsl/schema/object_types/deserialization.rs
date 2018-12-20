@@ -73,6 +73,7 @@ impl RawObjectType {
             "text" => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
             "hostname" => RawObjectType::Hostname,
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
+            "number" => RawObjectType::Number(deserialize_integer_bounds(mapping)?),
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
             "boolean" => RawObjectType::Boolean(deserialize_boolean_object_bounds(mapping)?),
             "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
