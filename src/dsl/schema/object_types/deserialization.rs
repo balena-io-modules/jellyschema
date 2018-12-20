@@ -97,7 +97,7 @@ impl RawObjectType {
             "ipv4" => RawObjectType::IPV4,
             "ipv6" => RawObjectType::IPV6,
             "uri" => RawObjectType::URI,
-            _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
+            _ => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
         };
         Ok(object_type)
     }
