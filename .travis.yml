@@ -1,11 +1,5 @@
 language: generic
 
-cache:
-  directories:
-    - /home/travis/.cargo/
-    - target/
-  timeout: 1000
-
 install:
   - ci/install.sh
 
