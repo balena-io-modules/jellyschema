@@ -27,6 +27,8 @@ pub enum RawObjectType {
     Number(Option<IntegerObjectBounds>),
     Array(Box<Option<ArrayObjectBounds>>),
 
+    Port(Option<IntegerObjectBounds>),
+
     Datetime,
     Date,
     Time,
@@ -55,6 +57,7 @@ impl RawObjectType {
             RawObjectType::Password(bounds) => bounds.is_some(),
             RawObjectType::Integer(bounds) => bounds.is_some(),
             RawObjectType::Number(bounds) => bounds.is_some(),
+            RawObjectType::Port(bounds) => bounds.is_some(),
             RawObjectType::Array(bounds) => bounds.is_some(),
         }
     }

@@ -1,0 +1,10 @@
+version: 1
+title: String validation
+properties:
+- port:
+    type: port
+
+- customport:
+    type: port
+    min: 1024
+    max: 2048

@@ -63,6 +63,21 @@ where
     }
 }
 
+pub fn deserialize_integer_bounds_with_defaults<E>(
+    defaults: IntegerObjectBounds,
+    mapping: &Mapping,
+) -> Result<IntegerObjectBounds, E>
+where
+    E: Error,
+{
+    let bounds = deserialize_integer_bounds(mapping)?;
+
+    match bounds {
+        None => Ok(defaults),
+        Some(bounds) => Ok(bounds.with_defaults(defaults)),
+    }
+}
+
 pub fn deserialize_integer_bounds<E>(mapping: &Mapping) -> Result<Option<IntegerObjectBounds>, E>
 where
     E: Error,
