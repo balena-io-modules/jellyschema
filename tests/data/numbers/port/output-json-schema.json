@@ -1,0 +1,26 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "String validation",
+    "$$order": [
+        "port",
+        "customport"
+    ],
+    "required": [
+        "port",
+        "customport"
+    ],
+    "properties": {
+        "port": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 65535
+        },
+        "customport": {
+            "type": "number",
+            "minimum": 1024,
+            "maximum": 2048
+        }
+    }
+}

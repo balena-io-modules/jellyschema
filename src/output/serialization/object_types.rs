@@ -44,13 +44,24 @@ where
         RawObjectType::Object => {}
         RawObjectType::Boolean(object_bounds) => serialize_boolean_with_bounds(object_bounds, map)?,
         RawObjectType::String(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
+        RawObjectType::Text(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => {
             map.serialize_entry("writeOnly", &true)?;
             serialize_string_with_bounds(object_bounds, map)?;
         }
-        RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
         RawObjectType::Integer(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
+        RawObjectType::Number(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
+        RawObjectType::Port(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
         RawObjectType::Array(object_bounds) => serialize_array_object_bounds(object_bounds, map)?,
+
+        RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
+        RawObjectType::Datetime => map.serialize_entry("format", "date-time")?,
+        RawObjectType::Date => map.serialize_entry("format", "date")?,
+        RawObjectType::Time => map.serialize_entry("format", "time")?,
+        RawObjectType::Email => map.serialize_entry("format", "email")?,
+        RawObjectType::IPV4 => map.serialize_entry("format", "ipv4")?,
+        RawObjectType::IPV6 => map.serialize_entry("format", "ipv6")?,
+        RawObjectType::URI => map.serialize_entry("format", "uri")?,
     };
     Ok(())
 }
@@ -60,10 +71,21 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Object => "object",
         RawObjectType::Boolean(_) => "boolean",
         RawObjectType::String(_) => "string",
+        RawObjectType::Text(_) => "string",
         RawObjectType::Password(_) => "string",
-        RawObjectType::Hostname => "string",
         RawObjectType::Integer(_) => "integer",
+        RawObjectType::Number(_) => "number",
+        RawObjectType::Port(_) => "number",
         RawObjectType::Array(_) => "array",
+
+        RawObjectType::Hostname => "string",
+        RawObjectType::Datetime => "string",
+        RawObjectType::Date => "string",
+        RawObjectType::Time => "string",
+        RawObjectType::Email => "string",
+        RawObjectType::IPV4 => "string",
+        RawObjectType::IPV6 => "string",
+        RawObjectType::URI => "string",
     }
 }
 

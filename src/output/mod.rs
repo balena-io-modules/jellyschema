@@ -5,6 +5,7 @@ use serde_derive::Serialize;
 
 use crate::dsl::schema::Schema;
 use crate::dsl::schema::when::DependencyGraph;
+use crate::dsl::schema::Widget;
 
 pub mod generator;
 mod serialization;
@@ -29,17 +30,19 @@ impl<'a> UiObject<'a> {
 
 #[derive(Serialize)]
 struct UiObjectProperty<'a> {
-    #[serde(rename = "ui:help")]
+    #[serde(rename = "ui:help", skip_serializing_if = "Option::is_none")]
     help: Option<&'a str>,
-    #[serde(rename = "ui:warning")]
+    #[serde(rename = "ui:warning", skip_serializing_if = "Option::is_none")]
     warning: Option<&'a str>,
-    #[serde(rename = "ui:description")]
+    #[serde(rename = "ui:description", skip_serializing_if = "Option::is_none")]
     description: Option<&'a str>,
+    #[serde(rename = "ui:widget", skip_serializing_if = "Option::is_none")]
+    widget: Option<&'a Widget>,
 }
 
 impl<'a> UiObjectProperty<'a> {
     /// Checks if an UI Object is empty
     pub fn is_empty(&self) -> bool {
-        self.help.is_none() && self.warning.is_none() && self.description.is_none()
+        self.help.is_none() && self.warning.is_none() && self.description.is_none() && self.widget.is_none()
     }
 }

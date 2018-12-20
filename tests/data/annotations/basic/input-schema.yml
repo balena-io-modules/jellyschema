@@ -1,0 +1,22 @@
+version: 1
+title: UISchema annotations
+properties:
+- justtitle:
+    type: string
+    title: Just title
+- justhelp:
+    type: string
+    help: Hello help
+- justwarning:
+    type: string
+    warning: Warning!
+- justdescription:
+    type: string
+    description: Lorem ipsum dolor sit amet
+- alltogether:
+    type: string
+    help: Hello help
+    warning: Warning!
+    description: Lorem ipsum dolor sit amet
+- text:
+    type: text

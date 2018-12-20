@@ -89,6 +89,7 @@ where
         help: None,
         warning: None,
         description: None,
+        widget: None,
     };
     Ok(EnumerationValue {
         annotations,
@@ -110,6 +111,7 @@ where
         help: None,
         warning: None,
         description: None,
+        widget: None,
     };
     match value {
         None => Ok(None),

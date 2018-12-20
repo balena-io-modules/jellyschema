@@ -6,8 +6,12 @@ use crate::dsl::schema::object_types::bounds::deserialization::deserialize_array
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_boolean_object_bounds;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_string_object_bounds;
+use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
+use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
+use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds_with_defaults;
+use crate::dsl::schema::object_types::bounds::IntegerBound;
 
 pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<Vec<ObjectType>>, E>
 where
@@ -70,11 +74,29 @@ impl RawObjectType {
         let object_type = match value {
             "object" => RawObjectType::Object,
             "string" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
-            "hostname" => RawObjectType::Hostname,
+            "text" => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
+            "number" => RawObjectType::Number(deserialize_integer_bounds(mapping)?),
+            "port" => {
+                let defaults = IntegerValueConditionObjectBounds {
+                    minimum: Some(IntegerBound::Inclusive(0)),
+                    maximum: Some(IntegerBound::Inclusive(65535)),
+                    multiple_of: None,
+                };
+                let defaults = IntegerObjectBounds::Conditions(defaults);
+                RawObjectType::Port(Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?))
+            }
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
             "boolean" => RawObjectType::Boolean(deserialize_boolean_object_bounds(mapping)?),
             "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
+            "hostname" => RawObjectType::Hostname,
+            "datetime" => RawObjectType::Datetime,
+            "date" => RawObjectType::Date,
+            "time" => RawObjectType::Time,
+            "email" => RawObjectType::Email,
+            "ipv4" => RawObjectType::IPV4,
+            "ipv6" => RawObjectType::IPV6,
+            "uri" => RawObjectType::URI,
             _ => return Err(Error::custom(format!("unknown object type `{}`", value))),
         };
         Ok(object_type)

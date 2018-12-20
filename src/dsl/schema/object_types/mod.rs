@@ -21,10 +21,22 @@ pub enum RawObjectType {
     Object,
     Boolean(Option<BooleanObjectBounds>),
     String(Option<StringObjectBounds>),
+    Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),
-    Hostname,
     Integer(Option<IntegerObjectBounds>),
+    Number(Option<IntegerObjectBounds>),
     Array(Box<Option<ArrayObjectBounds>>),
+
+    Port(Option<IntegerObjectBounds>),
+
+    Datetime,
+    Date,
+    Time,
+    Hostname,
+    Email,
+    IPV4,
+    IPV6,
+    URI,
 }
 
 impl RawObjectType {
@@ -32,10 +44,20 @@ impl RawObjectType {
         match self {
             RawObjectType::Object => false,
             RawObjectType::Hostname => false,
+            RawObjectType::Datetime => false,
+            RawObjectType::Date => false,
+            RawObjectType::Time => false,
+            RawObjectType::Email => false,
+            RawObjectType::IPV4 => false,
+            RawObjectType::IPV6 => false,
+            RawObjectType::URI => false,
             RawObjectType::Boolean(bounds) => bounds.is_some(),
             RawObjectType::String(bounds) => bounds.is_some(),
+            RawObjectType::Text(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),
             RawObjectType::Integer(bounds) => bounds.is_some(),
+            RawObjectType::Number(bounds) => bounds.is_some(),
+            RawObjectType::Port(bounds) => bounds.is_some(),
             RawObjectType::Array(bounds) => bounds.is_some(),
         }
     }

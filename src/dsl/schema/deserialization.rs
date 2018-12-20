@@ -12,6 +12,8 @@ use crate::dsl::schema::Schema;
 use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::when::dependencies_for_schema_list;
 use crate::dsl::schema::when::DependencyGraph;
+use crate::dsl::schema::Annotations;
+use crate::dsl::schema::Widget;
 
 pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {
     let maybe_root = schema.as_mapping();
@@ -47,8 +49,6 @@ pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError
     // this is recursive already, should get the whole tree for all children schemas
     let dependencies = dependencies_for_schema_list(schema.children.as_ref(), DependencyGraph::empty())?;
 
-    eprintln!("{:#?}", dependencies);
-
     Ok(DocumentRoot {
         version,
         schema: Some(schema),
@@ -71,6 +71,8 @@ where
 
     let annotations = serde_yaml::from_value(value.clone())
         .map_err(|e| Error::custom(format!("cannot deserialize schema annotations - {}", e)))?;
+
+    let annotations = annotations_from_type(annotations, &type_information);
 
     let properties = yaml_mapping.get(&Value::from("properties"));
     let properties = match properties {
@@ -109,6 +111,21 @@ where
         mapping: mapping.cloned(),
         when: when?,
     })
+}
+
+fn annotations_from_type(old_annotations: Annotations, type_information: &Option<Vec<ObjectType>>) -> Annotations {
+    let mut widget = old_annotations.widget;
+    if let Some(type_info) = type_information {
+        for object_type in type_info {
+            if let RawObjectType::Text(_) = object_type.inner() {
+                widget = Some(Widget::Textarea)
+            }
+        }
+    }
+    Annotations {
+        widget,
+        ..old_annotations
+    }
 }
 
 fn sequence_to_schema_list<E>(sequence: &[Value]) -> Result<SchemaList, E>

@@ -64,6 +64,25 @@ impl IntegerBound {
     }
 }
 
+impl IntegerObjectBounds {
+    pub fn with_defaults(self, defaults: IntegerObjectBounds) -> IntegerObjectBounds {
+        if let IntegerObjectBounds::Conditions(old) = self.clone() {
+            if let IntegerObjectBounds::Conditions(default) = defaults {
+                let new_conditions = IntegerValueConditionObjectBounds {
+                    minimum: old.clone().minimum.or(default.minimum),
+                    maximum: old.clone().maximum.or(default.maximum),
+                    multiple_of: old.clone().multiple_of.or(default.multiple_of),
+                };
+                IntegerObjectBounds::Conditions(new_conditions)
+            } else {
+                self
+            }
+        } else {
+            self
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct StringLength {
     pub minimum: Option<i64>,
@@ -89,6 +108,7 @@ impl From<&str> for EnumerationValue {
             help: None,
             warning: None,
             description: None,
+            widget: None,
         };
         EnumerationValue {
             value: value.into(),
