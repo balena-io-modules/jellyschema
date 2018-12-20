@@ -1,4 +1,46 @@
 - commits:
+    - subject: Disable travis cache
+      hash: 69b83032559ac93305e767e124740cb6edc2de0b
+      body: |
+        The cache has grown too big to provide any speedup - temporary disabling
+        the whole cache.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add support for `port` type
+      hash: 9a829aceead06ed7ccb316d6f2bb96d3a9425bb9
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add definitions for types that are passthrough to JSONSchema types.
+      hash: 05f0b28b3d08589e3f7fcbd65b4354d03040e0c3
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add `number` type
+      hash: 8a8965250c00146c13923bff29d643ba99074c83
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add support for `text` type
+      hash: 1efaf879f35d96e31e28c74f09ae00519bf482c2
+      body: |
+        Properly emit custom UISchema widget for it.
+        Fix unnecessary `Null` in the UISchema output as well.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.3
+  date: 2018-12-20T14:12:30.363Z
+- commits:
     - subject: Add support for enum values on integers
       hash: 4afb41199ab4da12338e69a7b9cc00b0f873b71f
       body: ''
