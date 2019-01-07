@@ -15,7 +15,7 @@ readme = "README.md"
 crate-type = ["lib", "cdylib"]
 
 [dependencies.balena-temen]
-version = "0.0.25"
+version = "0.0.26"
 
 [dependencies.heck]
 version = "0.3"
