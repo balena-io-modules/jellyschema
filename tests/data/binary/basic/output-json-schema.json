@@ -1,0 +1,35 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Render file pickers for `binary` format",
+    "$$order": [
+        "profile-picture",
+        "documents"
+    ],
+    "required": [
+        "profile-picture",
+        "documents"
+    ],
+    "properties": {
+        "profile-picture": {
+            "type": "string"
+        },
+        "documents": {
+            "type": "array",
+            "items": {
+                "required": [
+                    "contents"
+                ],
+                "$$order": [
+                    "contents"
+                ],
+                "properties": {
+                    "contents": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

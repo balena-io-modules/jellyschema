@@ -1,0 +1,11 @@
+version: 1
+title: Render file pickers for `binary` format
+properties:
+- profile-picture:
+    type: binary
+- documents:
+    type: array
+    items:
+      properties:
+        - contents:
+            type: binary

@@ -1,0 +1,10 @@
+{
+    "profile-picture": {
+        "ui:widget": "file"
+    },
+    "documents": {
+        "items": {
+            "ui:widget": "file"
+        }
+    }
+}
