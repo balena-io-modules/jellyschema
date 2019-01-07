@@ -1,6 +1,6 @@
 [package]
 name = "balena-cdsl"
-version = "0.6.4"
+version = "0.6.5"
 authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
 build = "build.rs"
@@ -15,7 +15,7 @@ readme = "README.md"
 crate-type = ["lib", "cdylib"]
 
 [dependencies.balena-temen]
-version = "0.0.25"
+version = "0.0.26"
 
 [dependencies.heck]
 version = "0.3"

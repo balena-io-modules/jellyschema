@@ -1,4 +1,15 @@
 - commits:
+    - subject: Fix WASM build.
+      hash: 546d52deac63ae23f177e3044443690961090925
+      body: |
+        Update to newest `temen` which fixes problem in WASM compilation.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.5
+  date: 2019-01-07T13:52:01.358Z
+- commits:
     - subject: Unknown types are treated as `text` by default
       hash: 634541f04d952cf4db06e565c732386cc3c82449
       body: ''
