@@ -45,7 +45,7 @@ Add as a dependency to your `Cargo.toml`:
 
 ```
 [dependencies]
-balena-cdsl = "0.2"
+balena-cdsl = "0"
 ```
 
 Evaluate simple JSON:
