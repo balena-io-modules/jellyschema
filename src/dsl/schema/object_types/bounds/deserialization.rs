@@ -5,18 +5,18 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 
 use crate::dsl::schema::deserialization::deserialize_schema;
+use crate::dsl::schema::object_types::bounds::enums::deserialize_enumeration;
 use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
 use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
-use crate::dsl::schema::object_types::bounds::enums::deserialize_enumeration;
 use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::Schema;
-use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
 
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where

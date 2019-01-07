@@ -5,13 +5,13 @@ use serde_yaml::Value;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_array_object_bounds;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_boolean_object_bounds;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds;
+use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds_with_defaults;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_string_object_bounds;
-use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
+use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
+use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
-use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds_with_defaults;
-use crate::dsl::schema::object_types::bounds::IntegerBound;
 
 pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<Vec<ObjectType>>, E>
 where

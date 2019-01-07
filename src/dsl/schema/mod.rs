@@ -8,8 +8,8 @@ use serde_derive::Serialize;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::when::DependencyGraph;
 
-pub mod deserialization;
 pub mod compiler;
+pub mod deserialization;
 pub mod object_types;
 pub mod when;
 

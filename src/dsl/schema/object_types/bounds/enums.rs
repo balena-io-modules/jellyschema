@@ -2,8 +2,8 @@ use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
 
-use crate::dsl::schema::Annotations;
 use crate::dsl::schema::object_types::bounds::EnumerationValue;
+use crate::dsl::schema::Annotations;
 
 pub fn deserialize_enumeration<E>(mapping: &Mapping) -> Result<Option<Vec<EnumerationValue>>, E>
 where

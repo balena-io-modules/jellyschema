@@ -3,16 +3,16 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 
 use crate::dsl::schema::compiler::CompilationError;
-use crate::dsl::schema::DocumentRoot;
-use crate::dsl::schema::NamedSchema;
 use crate::dsl::schema::object_types::deserialization::deserialize_object_type;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
-use crate::dsl::schema::Schema;
-use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::when::dependencies_for_schema_list;
 use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Annotations;
+use crate::dsl::schema::DocumentRoot;
+use crate::dsl::schema::NamedSchema;
+use crate::dsl::schema::Schema;
+use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::Widget;
 
 pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {

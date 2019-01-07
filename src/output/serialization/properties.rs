@@ -1,9 +1,9 @@
 use serde::ser::{Error, Serialize, SerializeMap, Serializer};
 
 use crate::dsl::schema::object_types::ObjectType;
+use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Schema;
 use crate::dsl::schema::SchemaList;
-use crate::dsl::schema::when::DependencyGraph;
 use crate::output::serialization::object_types::object_type_name;
 use crate::output::serialization::object_types::serialize_object_type;
 use crate::output::serialization::when::serialize_schema_list_dependencies;

@@ -5,9 +5,9 @@ use serde::ser::SerializeMap;
 use serde::Serialize;
 use serde_json::Value;
 
+use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::NamedSchema;
 use crate::dsl::schema::SchemaList;
-use crate::dsl::schema::when::DependencyGraph;
 
 /// this is one branch or arm of the `oneOf` statement in the `dependencies` section of the output JSONSchema
 struct Branch<'a> {

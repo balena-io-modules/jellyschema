@@ -1,8 +1,8 @@
 //! JSON Schema & UI Object generator
 use serde_json::Map;
 
-use crate::dsl::schema::compiler::CompilationError;
 use crate::dsl::schema::compiler::compile;
+use crate::dsl::schema::compiler::CompilationError;
 use crate::dsl::schema::compiler::CompiledSchema;
 use crate::output::JsonSchema;
 use crate::output::UiObject;

@@ -3,8 +3,8 @@ use serde::Serialize;
 use serde::Serializer;
 
 use crate::dsl::schema::DocumentRoot;
-use crate::output::JsonSchema;
 use crate::output::serialization::properties::serialize_schema;
+use crate::output::JsonSchema;
 
 // we output Draft 4 of the Json Schema specification because the downstream consumers
 // of the JSON schema we produce fully support Draft 4, and not really Draft 7;
