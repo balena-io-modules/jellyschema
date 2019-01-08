@@ -1,4 +1,22 @@
 - commits:
+    - subject: Remove stale documentation
+      hash: 490cc57cfb78144abc7b94c5f6431489f8d976d0
+      body: >
+        * Removed `SPEC_SUPPORT` as per
+        https://github.com/balena-io-modules/balena-cdsl/issues/15
+
+        * Removed notes that became stale
+
+        * Made the example in the readme suggest less rigid dependency - to
+
+        remove the need to update the version number there.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.6
+  date: 2019-01-07T17:49:10.624Z
+- commits:
     - subject: Fix WASM build.
       hash: 546d52deac63ae23f177e3044443690961090925
       body: |
