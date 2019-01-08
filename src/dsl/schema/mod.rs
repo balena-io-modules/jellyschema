@@ -65,6 +65,7 @@ pub struct Annotations {
 #[serde(rename_all = "lowercase")]
 pub enum Widget {
     Textarea,
+    File,
 }
 
 impl NamedSchema {

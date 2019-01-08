@@ -18,6 +18,7 @@
         "documents": {
             "type": "array",
             "items": {
+                "type": "object",
                 "required": [
                     "contents"
                 ],

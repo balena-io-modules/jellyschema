@@ -176,8 +176,10 @@ fn annotations_from_type(old_annotations: Annotations, type_information: &Option
     let mut widget = old_annotations.widget;
     if let Some(type_info) = type_information {
         for object_type in type_info {
-            if let RawObjectType::Text(_) = object_type.inner_raw() {
-                widget = Some(Widget::Textarea)
+            match object_type.inner_raw() {
+                RawObjectType::Text(_) => widget = Some(Widget::Textarea),
+                RawObjectType::Binary => widget = Some(Widget::File),
+                _ => {}
             }
         }
     }

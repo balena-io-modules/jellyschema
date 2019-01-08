@@ -47,7 +47,7 @@ where
 
     match raw_type {
         RawObjectType::Object => {}
-        RawObjectType::Boolean() => {}
+        RawObjectType::Boolean => {}
         RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => serialize_password(object_bounds, map)?,
@@ -64,6 +64,7 @@ where
         RawObjectType::IPV4 => map.serialize_entry("format", "ipv4")?,
         RawObjectType::IPV6 => map.serialize_entry("format", "ipv6")?,
         RawObjectType::URI => map.serialize_entry("format", "uri")?,
+        RawObjectType::Binary => {}
     };
     Ok(())
 }
@@ -71,7 +72,7 @@ where
 pub fn object_type_name(object_type: &RawObjectType) -> &str {
     match object_type {
         RawObjectType::Object => "object",
-        RawObjectType::Boolean() => "boolean",
+        RawObjectType::Boolean => "boolean",
         RawObjectType::String(_) => "string",
         RawObjectType::Text(_) => "string",
         RawObjectType::Password(_) => "string",
@@ -88,6 +89,8 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::IPV4 => "string",
         RawObjectType::IPV6 => "string",
         RawObjectType::URI => "string",
+
+        RawObjectType::Binary => "string",
     }
 }
 

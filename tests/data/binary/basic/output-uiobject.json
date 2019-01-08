@@ -4,7 +4,9 @@
     },
     "documents": {
         "items": {
-            "ui:widget": "file"
+            "contents": {
+                "ui:widget": "file"
+            }
         }
     }
 }
