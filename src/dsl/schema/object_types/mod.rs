@@ -10,8 +10,13 @@ pub mod deserialization;
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {
-    Required(RawObjectType),
-    Optional(RawObjectType),
+    Required(ObjectTypeData),
+    Optional(ObjectTypeData),
+}
+
+#[derive(Clone, Debug)]
+pub struct ObjectTypeData {
+   raw_type: RawObjectType,
 }
 
 #[derive(Clone, Debug)]
@@ -35,6 +40,16 @@ pub enum RawObjectType {
     IPV4,
     IPV6,
     URI,
+}
+
+impl ObjectTypeData {
+    pub fn with_raw_type(raw_type: RawObjectType) -> ObjectTypeData {
+        ObjectTypeData{raw_type}
+    }
+
+    pub fn raw_type(&self) -> &RawObjectType {
+        &self.raw_type
+    }
 }
 
 impl RawObjectType {
@@ -64,8 +79,8 @@ impl RawObjectType {
 impl ObjectType {
     pub fn inner(&self) -> &RawObjectType {
         match self {
-            ObjectType::Optional(object_type) => object_type,
-            ObjectType::Required(object_type) => object_type,
+            ObjectType::Optional(object_type_data) => &object_type_data.raw_type,
+            ObjectType::Required(object_type_data) => &object_type_data.raw_type,
         }
     }
 }

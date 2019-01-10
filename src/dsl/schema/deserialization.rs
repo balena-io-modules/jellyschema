@@ -14,6 +14,7 @@ use crate::dsl::schema::when::dependencies_for_schema_list;
 use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Annotations;
 use crate::dsl::schema::Widget;
+use crate::dsl::schema::object_types::ObjectTypeData;
 
 pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {
     let maybe_root = schema.as_mapping();
@@ -66,7 +67,9 @@ where
     let mut type_information = deserialize_object_type(&yaml_mapping)?;
 
     if type_information.is_none() {
-        type_information = Some(vec![ObjectType::Required(RawObjectType::Object)]);
+        let raw_type = RawObjectType::Object;
+        let type_data = ObjectTypeData::with_raw_type(raw_type);
+        type_information = Some(vec![ObjectType::Required(type_data)]);
     }
 
     let annotations = serde_yaml::from_value(value.clone())

@@ -12,6 +12,7 @@ use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds_with_defaults;
 use crate::dsl::schema::object_types::bounds::IntegerBound;
+use crate::dsl::schema::object_types::ObjectTypeData;
 
 pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<Vec<ObjectType>>, E>
 where
@@ -48,9 +49,13 @@ where
     let mut type_name = definition.trim().to_lowercase();
     Ok(if type_name.ends_with('?') {
         type_name.remove(type_name.len() - 1);
-        ObjectType::Optional(RawObjectType::from(&type_name, &mapping)?)
+        let raw_type = RawObjectType::from(&type_name, &mapping)?;
+        let type_data = ObjectTypeData { raw_type };
+        ObjectType::Optional(type_data)
     } else {
-        ObjectType::Required(RawObjectType::from(&type_name, &mapping)?)
+        let raw_type = RawObjectType::from(&type_name, &mapping)?;
+        let type_data = ObjectTypeData { raw_type };
+        ObjectType::Required(type_data)
     })
 }
 
