@@ -43,16 +43,16 @@ where
     match raw_type {
         RawObjectType::Object => {}
         RawObjectType::Boolean(object_bounds) => serialize_boolean(object_bounds, map)?,
-        RawObjectType::String(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
-        RawObjectType::Text(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
+        RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
+        RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => {
             map.serialize_entry("writeOnly", &true)?;
-            serialize_string_with_bounds(object_bounds, map)?;
+            serialize_string(object_bounds, map)?;
         }
-        RawObjectType::Integer(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
-        RawObjectType::Number(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
-        RawObjectType::Port(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
-        RawObjectType::Array(object_bounds) => serialize_array_object_bounds(object_bounds, map)?,
+        RawObjectType::Integer(object_bounds) => serialize_integer(object_bounds, map)?,
+        RawObjectType::Number(object_bounds) => serialize_integer(object_bounds, map)?,
+        RawObjectType::Port(object_bounds) => serialize_integer(object_bounds, map)?,
+        RawObjectType::Array(object_bounds) => serialize_array(object_bounds, map)?,
 
         RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
         RawObjectType::Datetime => map.serialize_entry("format", "date-time")?,
@@ -100,7 +100,7 @@ where
     Ok(())
 }
 
-fn serialize_string_with_bounds<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_string<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
@@ -128,7 +128,7 @@ where
     Ok(())
 }
 
-fn serialize_array_object_bounds<O, E, S>(bounds: &Option<ArrayObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_array<O, E, S>(bounds: &Option<ArrayObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
@@ -166,7 +166,7 @@ where
     Ok(())
 }
 
-fn serialize_integer_bounds<O, E, S>(bounds: &Option<IntegerObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_integer<O, E, S>(bounds: &Option<IntegerObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
