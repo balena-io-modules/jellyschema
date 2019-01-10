@@ -75,7 +75,7 @@ impl RawObjectType {
             "object" => RawObjectType::Object,
             "string" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
             "text" => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
-            "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
+            "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?, deserialize_default_value(mapping)?),
             "number" => RawObjectType::Number(deserialize_integer_bounds(mapping)?),
             "port" => {
                 let defaults = IntegerValueConditionObjectBounds {

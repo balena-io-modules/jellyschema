@@ -46,9 +46,9 @@ where
         RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => serialize_password(object_bounds, map)?,
-        RawObjectType::Integer(object_bounds) => serialize_integer(object_bounds, map)?,
-        RawObjectType::Number(object_bounds) => serialize_integer(object_bounds, map)?,
-        RawObjectType::Port(object_bounds) => serialize_integer(object_bounds, map)?,
+        RawObjectType::Integer(object_bounds, default) => serialize_integer(object_bounds, default, map)?,
+        RawObjectType::Number(object_bounds) => serialize_integer(object_bounds, &None, map)?,
+        RawObjectType::Port(object_bounds) => serialize_integer(object_bounds, &None, map)?,
         RawObjectType::Array(object_bounds) => serialize_array(object_bounds, map)?,
 
         RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
@@ -70,7 +70,7 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::String(_) => "string",
         RawObjectType::Text(_) => "string",
         RawObjectType::Password(_) => "string",
-        RawObjectType::Integer(_) => "integer",
+        RawObjectType::Integer(_, _) => "integer",
         RawObjectType::Number(_) => "number",
         RawObjectType::Port(_) => "number",
         RawObjectType::Array(_) => "array",
@@ -90,6 +90,14 @@ fn serialize_boolean<O, E, S>(default: &Option<DefaultValue>, map: &mut S) -> Re
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
+{
+    serialize_default(default, map)
+}
+
+fn serialize_default<O, E, S>(default: &Option<DefaultValue>, map: &mut S) -> Result<(), E>
+    where
+        E: Error,
+        S: SerializeMap<Ok = O, Error = E>,
 {
     for value in default {
         map.serialize_entry("default", value.value())?;
@@ -173,7 +181,7 @@ where
     Ok(())
 }
 
-fn serialize_integer<O, E, S>(bounds: &Option<IntegerObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_integer<O, E, S>(bounds: &Option<IntegerObjectBounds>, default: &Option<DefaultValue>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
@@ -190,6 +198,7 @@ where
             IntegerObjectBounds::List(list) => serialize_enum_bounds(list, map)?,
         }
     }
+    serialize_default(default, map)?;
     Ok(())
 }
 

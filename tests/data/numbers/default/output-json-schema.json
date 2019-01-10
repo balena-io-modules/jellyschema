@@ -1,0 +1,24 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Default values for numbers and integers",
+    "$$order": [
+        "number",
+        "integer"
+    ],
+    "required": [
+        "number",
+        "integer"
+    ],
+    "properties": {
+        "number": {
+            "type": "number",
+            "default": -7
+        },
+        "integer": {
+            "type": "integer",
+            "default": 3
+        }
+    }
+}
