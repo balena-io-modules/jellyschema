@@ -47,6 +47,8 @@ pub struct Schema {
     /// this is th DSL mapping, to and from output formats (e.g. config files etc)
     pub mapping: Option<serde_yaml::Mapping>, // TODO: real mapping support
     pub when: Option<Expression>,
+    /// unparsed formula, can't be evaluated by CDSL as we don't have data, just schema
+    pub formula: Option<String>,
 }
 
 /// Represents [`SchemaAnnotations`](https://github.com/balena-io/balena/blob/832f5551127dd8e1e82fa082bea97fc4db81c3ce/specs/configuration-dsl.md#schema-annotations) from the spec minus the `default` keyword, that lives in the object bounds information

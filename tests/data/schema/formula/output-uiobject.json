@@ -1,7 +1,1 @@
-{
-    "hostname": {
-        "ui:help": "You should set your machine name.",
-        "ui:warning": "Use something useful.",
-        "ui:description": "Hostname is a name of your machine."
-    }
-}
+{}

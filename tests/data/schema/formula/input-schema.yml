@@ -10,3 +10,9 @@ properties:
 - fqdn:
     type: hostname
     formula: host ~ `.` ~ domain
+
+# this is effectively a const but we only get to know that at runtime,
+# this tests serde edge case where the yaml Value is not a serde_yaml::Value::String
+- priority:
+    type: integer
+    formula: -7

@@ -5,12 +5,14 @@
     "$$order": [
         "host",
         "domain",
-        "fqdn"
+        "fqdn",
+        "priority"
     ],
     "required":  [
         "host",
         "domain",
-        "fqdn"
+        "fqdn",
+        "priority"
     ],
     "title": "Formula",
     "properties": {
@@ -27,6 +29,10 @@
             "type": "string",
             "format": "hostname",
             "$$formula": "host ~ `.` ~ domain"
+        },
+        "priority": {
+            "type": "integer",
+            "$$formula": "-7"
         }
     }
 }

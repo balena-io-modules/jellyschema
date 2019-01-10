@@ -72,14 +72,34 @@ where
     let properties = properties(yaml_mapping)?;
     let mapping = mapping(yaml_mapping)?;
     let when = when(yaml_mapping)?;
+    let formula = formula(yaml_mapping)?;
 
     Ok(Schema {
         types: type_information,
-        annotations,
         children: properties,
         mapping: mapping.cloned(),
+        annotations,
         when,
+        formula,
     })
+}
+
+fn formula<E>(yaml_mapping: &Mapping) -> Result<Option<String>, E>
+where
+    E: Error,
+{
+    let value = yaml_mapping.get(&Value::from("formula"));
+    match value {
+        None => Ok(None),
+        Some(value) => match value {
+            Value::String(string) => Ok(Some(string.to_string())),
+            _ => {
+                let string = serde_json::to_string(value)
+                    .map_err(|e| Error::custom(format!("error parsing formula value expression: {}", e)))?;
+                Ok(Some(string))
+            }
+        },
+    }
 }
 
 fn when<E>(yaml_mapping: &Mapping) -> Result<Option<Expression>, E>
