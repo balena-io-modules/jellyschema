@@ -1,4 +1,28 @@
 - commits:
+    - subject: Support default keyword for all types generically
+      hash: 9c812192565dbf79606a5457fc5c73ab799e4a55
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add default value support for Number and Port
+      hash: 1c68c3d1dba64392bea0672d8cf0f129d9280110
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add support for default values on Integers
+      hash: 64043db7ed1c0705bb41f17a67622442f226b43a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.7
+  date: 2019-01-10T10:19:44.404Z
+- commits:
     - subject: Remove stale documentation
       hash: 490cc57cfb78144abc7b94c5f6431489f8d976d0
       body: >
