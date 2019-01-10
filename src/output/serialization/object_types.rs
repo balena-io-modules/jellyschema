@@ -45,10 +45,7 @@ where
         RawObjectType::Boolean(object_bounds) => serialize_boolean(object_bounds, map)?,
         RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
-        RawObjectType::Password(object_bounds) => {
-            map.serialize_entry("writeOnly", &true)?;
-            serialize_string(object_bounds, map)?;
-        }
+        RawObjectType::Password(object_bounds) => serialize_password(object_bounds, map)?,
         RawObjectType::Integer(object_bounds) => serialize_integer(object_bounds, map)?,
         RawObjectType::Number(object_bounds) => serialize_integer(object_bounds, map)?,
         RawObjectType::Port(object_bounds) => serialize_integer(object_bounds, map)?,
@@ -65,6 +62,7 @@ where
     };
     Ok(())
 }
+
 
 pub fn object_type_name(object_type: &RawObjectType) -> &str {
     match object_type {
@@ -100,6 +98,7 @@ where
     Ok(())
 }
 
+
 fn serialize_string<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
@@ -108,6 +107,16 @@ where
     for enumeration_values in bounds {
         serialize_string_bounds(&enumeration_values, map)?;
     }
+    Ok(())
+}
+
+fn serialize_password<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
+    where
+        E: Error,
+        S: SerializeMap<Ok = O, Error = E>,
+{
+    map.serialize_entry("writeOnly", &true)?;
+    serialize_string(bounds, map)?;
     Ok(())
 }
 
