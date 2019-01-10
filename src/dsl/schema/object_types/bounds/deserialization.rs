@@ -8,7 +8,7 @@ use crate::dsl::schema::deserialization::deserialize_schema;
 use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
-use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::object_types::bounds::DefaultValue;
 use crate::dsl::schema::object_types::bounds::enums::deserialize_enumeration;
 use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
@@ -86,6 +86,7 @@ where
     let minimum = deserialize_integer_bound("min", mapping)?;
     let multiple_of = deserialize_integer("multipleOf", mapping)?;
     let possible_values = deserialize_enumeration(&mapping)?;
+
     let integer_bound_present = maximum.is_some() || minimum.is_some() || multiple_of.is_some();
 
     if integer_bound_present && possible_values.is_some() {
@@ -111,22 +112,14 @@ where
     Ok(None)
 }
 
-pub fn deserialize_boolean_object_bounds<E>(mapping: &Mapping) -> Result<Option<BooleanObjectBounds>, E>
+pub fn deserialize_default_value<E>(mapping: &Mapping) -> Result<Option<DefaultValue>, E>
 where
     E: Error,
 {
     let default_key = Value::from("default");
-
-    match mapping.get(&default_key) {
-        Some(default) => match default {
-            Value::Bool(value) => Ok(Some(BooleanObjectBounds::DefaultValue(*value))),
-            _ => Err(Error::custom(format!(
-                "cannot deserialize default value - {:#?} is not a boolean",
-                default
-            ))),
-        },
-        None => Ok(None),
-    }
+    let value = mapping.get(&default_key);
+    let value = value.map(|value| DefaultValue(value.clone()));
+    Ok(value)
 }
 
 pub fn deserialize_array_object_bounds<E>(mapping: &Mapping) -> Result<Option<ArrayObjectBounds>, E>

@@ -1,7 +1,7 @@
 //! A `type` is anything that can be specified after `type` keyword as in the spec
 
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
-use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::object_types::bounds::DefaultValue;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 
@@ -10,16 +10,20 @@ pub mod deserialization;
 
 #[derive(Clone, Debug)]
 pub enum ObjectType {
-    Required(RawObjectType),
-    Optional(RawObjectType),
+    Required(ObjectTypeData),
+    Optional(ObjectTypeData),
 }
 
 #[derive(Clone, Debug)]
-// `ArrayObjectBounds` is either a Property or small array of properties, and we know it should remain small
-// TODO: look into above to see if anything can be done in the compilation time to ensure this
+pub struct ObjectTypeData {
+    raw_type: RawObjectType,
+    default_value: Option<DefaultValue>,
+}
+
+#[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    Boolean(Option<BooleanObjectBounds>),
+    Boolean(),
     String(Option<StringObjectBounds>),
     Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),
@@ -39,6 +43,33 @@ pub enum RawObjectType {
     URI,
 }
 
+impl ObjectTypeData {
+    pub fn with_raw_type(raw_type: RawObjectType) -> ObjectTypeData {
+        ObjectTypeData {
+            raw_type,
+            default_value: None,
+        }
+    }
+
+    pub fn with_raw_type_and_default_value(
+        raw_type: RawObjectType,
+        default_value: Option<DefaultValue>,
+    ) -> ObjectTypeData {
+        ObjectTypeData {
+            raw_type,
+            default_value,
+        }
+    }
+
+    pub fn raw_type(&self) -> &RawObjectType {
+        &self.raw_type
+    }
+
+    pub fn default_value(&self) -> &Option<DefaultValue> {
+        &self.default_value
+    }
+}
+
 impl RawObjectType {
     pub fn has_bounds(&self) -> bool {
         match self {
@@ -51,7 +82,7 @@ impl RawObjectType {
             RawObjectType::IPV4 => false,
             RawObjectType::IPV6 => false,
             RawObjectType::URI => false,
-            RawObjectType::Boolean(bounds) => bounds.is_some(),
+            RawObjectType::Boolean() => false,
             RawObjectType::String(bounds) => bounds.is_some(),
             RawObjectType::Text(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),
@@ -64,10 +95,17 @@ impl RawObjectType {
 }
 
 impl ObjectType {
-    pub fn inner(&self) -> &RawObjectType {
+    pub fn data(&self) -> &ObjectTypeData {
         match self {
-            ObjectType::Optional(object_type) => object_type,
-            ObjectType::Required(object_type) => object_type,
+            ObjectType::Optional(object_type_data) => &object_type_data,
+            ObjectType::Required(object_type_data) => &object_type_data,
+        }
+    }
+
+    pub fn inner_raw(&self) -> &RawObjectType {
+        match self {
+            ObjectType::Optional(object_type_data) => &object_type_data.raw_type,
+            ObjectType::Required(object_type_data) => &object_type_data.raw_type,
         }
     }
 }

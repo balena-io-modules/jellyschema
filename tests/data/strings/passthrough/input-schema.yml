@@ -1,19 +1,30 @@
 version: 1
 title: Types with same definitions as in JSONSchema
 properties:
+  - string:
+      type: string
+      default: Hello world !
   - datetime:
       type: datetime
+      default: 1970-01-01T12:00:00.000Z
   - date:
       type: date
+      default: 1970-01-01
   - time:
       type: time
+      default: 12:00
   - hostname:
       type: hostname
+      default: example.com
   - email:
       type: email
+      default: hello@example.com
   - ipv4:
       type: ipv4
+      default: 1.1.1.1
   - ipv6:
       type: ipv6
+      default: 2606:4700:4700::1111
   - uri:
       type: uri
+      default: https://example.com

@@ -1,0 +1,12 @@
+version: 1
+title: Default values for numbers and integers
+properties:
+- number:
+    type: number
+    default: -7
+- integer:
+    type: integer
+    default: 3
+- port:
+    type: port
+    default: 80

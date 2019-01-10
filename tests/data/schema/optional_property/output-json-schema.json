@@ -10,7 +10,8 @@
         "hostname": {
             "type": "string",
             "format": "hostname",
-            "title": "Hostname"
+            "title": "Hostname",
+            "default": "example.com"
         }
     }
 }

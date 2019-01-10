@@ -10,13 +10,14 @@ use serde::Serializer;
 use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
-use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::object_types::bounds::DefaultValue;
 use crate::dsl::schema::object_types::bounds::EnumerationValue;
 use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::RawObjectType;
+use crate::dsl::schema::object_types::ObjectType;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -33,26 +34,27 @@ impl Serialize for EnumerationValue {
     }
 }
 
-pub fn serialize_object_type<O, E, S>(raw_type: &RawObjectType, map: &mut S) -> Result<(), E>
+pub fn serialize_object_type<O, E, S>(object_type: &ObjectType, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
+    let raw_type = object_type.inner_raw();
+    let default = object_type.data().default_value();
+
     map.serialize_entry("type", object_type_name(raw_type))?;
+    serialize_default(default, map)?;
 
     match raw_type {
         RawObjectType::Object => {}
-        RawObjectType::Boolean(object_bounds) => serialize_boolean_with_bounds(object_bounds, map)?,
-        RawObjectType::String(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
-        RawObjectType::Text(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
-        RawObjectType::Password(object_bounds) => {
-            map.serialize_entry("writeOnly", &true)?;
-            serialize_string_with_bounds(object_bounds, map)?;
-        }
-        RawObjectType::Integer(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
-        RawObjectType::Number(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
-        RawObjectType::Port(object_bounds) => serialize_integer_bounds(object_bounds, map)?,
-        RawObjectType::Array(object_bounds) => serialize_array_object_bounds(object_bounds, map)?,
+        RawObjectType::Boolean() => {}
+        RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
+        RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
+        RawObjectType::Password(object_bounds) => serialize_password(object_bounds, map)?,
+        RawObjectType::Integer(object_bounds) => serialize_integer(object_bounds, map)?,
+        RawObjectType::Number(object_bounds) => serialize_integer(object_bounds, map)?,
+        RawObjectType::Port(object_bounds) => serialize_integer(object_bounds, map)?,
+        RawObjectType::Array(object_bounds) => serialize_array(object_bounds, map)?,
 
         RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
         RawObjectType::Datetime => map.serialize_entry("format", "date-time")?,
@@ -69,7 +71,7 @@ where
 pub fn object_type_name(object_type: &RawObjectType) -> &str {
     match object_type {
         RawObjectType::Object => "object",
-        RawObjectType::Boolean(_) => "boolean",
+        RawObjectType::Boolean() => "boolean",
         RawObjectType::String(_) => "string",
         RawObjectType::Text(_) => "string",
         RawObjectType::Password(_) => "string",
@@ -89,22 +91,18 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
     }
 }
 
-fn serialize_boolean_with_bounds<O, E, S>(bounds: &Option<BooleanObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_default<O, E, S>(default: &Option<DefaultValue>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    for value in bounds {
-        match value {
-            BooleanObjectBounds::DefaultValue(default_value) => {
-                map.serialize_entry("default", default_value)?;
-            }
-        }
+    for value in default {
+        map.serialize_entry("default", value.value())?;
     }
     Ok(())
 }
 
-fn serialize_string_with_bounds<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_string<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
@@ -112,6 +110,16 @@ where
     for enumeration_values in bounds {
         serialize_string_bounds(&enumeration_values, map)?;
     }
+    Ok(())
+}
+
+fn serialize_password<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    map.serialize_entry("writeOnly", &true)?;
+    serialize_string(bounds, map)?;
     Ok(())
 }
 
@@ -132,7 +140,7 @@ where
     Ok(())
 }
 
-fn serialize_array_object_bounds<O, E, S>(bounds: &Option<ArrayObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_array<O, E, S>(bounds: &Option<ArrayObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
@@ -170,7 +178,7 @@ where
     Ok(())
 }
 
-fn serialize_integer_bounds<O, E, S>(bounds: &Option<IntegerObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_integer<O, E, S>(bounds: &Option<IntegerObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,

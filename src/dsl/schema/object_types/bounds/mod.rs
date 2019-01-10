@@ -90,8 +90,12 @@ pub struct StringLength {
 }
 
 #[derive(Clone, Debug)]
-pub enum BooleanObjectBounds {
-    DefaultValue(bool),
+pub struct DefaultValue(serde_yaml::Value);
+
+impl DefaultValue {
+    pub fn value(&self) -> &serde_yaml::Value {
+        &self.0
+    }
 }
 
 #[derive(Clone, Debug)]
