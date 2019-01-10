@@ -95,9 +95,9 @@ where
 }
 
 fn serialize_default<O, E, S>(default: &Option<DefaultValue>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok = O, Error = E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     for value in default {
         map.serialize_entry("default", value.value())?;
@@ -181,7 +181,11 @@ where
     Ok(())
 }
 
-fn serialize_integer<O, E, S>(bounds: &Option<IntegerObjectBounds>, default: &Option<DefaultValue>, map: &mut S) -> Result<(), E>
+fn serialize_integer<O, E, S>(
+    bounds: &Option<IntegerObjectBounds>,
+    default: &Option<DefaultValue>,
+    map: &mut S,
+) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,

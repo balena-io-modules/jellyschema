@@ -16,7 +16,8 @@ pub enum ObjectType {
 
 #[derive(Clone, Debug)]
 pub struct ObjectTypeData {
-   raw_type: RawObjectType,
+    raw_type: RawObjectType,
+    default_value: Option<DefaultValue>,
 }
 
 #[derive(Clone, Debug)]
@@ -44,7 +45,10 @@ pub enum RawObjectType {
 
 impl ObjectTypeData {
     pub fn with_raw_type(raw_type: RawObjectType) -> ObjectTypeData {
-        ObjectTypeData{raw_type}
+        ObjectTypeData {
+            raw_type,
+            default_value: None,
+        }
     }
 
     pub fn raw_type(&self) -> &RawObjectType {
