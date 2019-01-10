@@ -15,6 +15,7 @@ use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Annotations;
 use crate::dsl::schema::Widget;
 use crate::dsl::schema::object_types::ObjectTypeData;
+use balena_temen::ast::Expression;
 
 pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {
     let maybe_root = schema.as_mapping();
@@ -64,39 +65,29 @@ where
     let yaml_mapping = value
         .as_mapping()
         .ok_or_else(|| Error::custom(format!("schema is not a yaml mapping - {:#?}", value)))?;
-    let mut type_information = deserialize_object_type(&yaml_mapping)?;
+    let type_information = type_information(&yaml_mapping)?;
 
-    if type_information.is_none() {
-        let raw_type = RawObjectType::Object;
-        let type_data = ObjectTypeData::with_raw_type(raw_type);
-        type_information = Some(vec![ObjectType::Required(type_data)]);
-    }
-
-    let annotations = serde_yaml::from_value(value.clone())
-        .map_err(|e| Error::custom(format!("cannot deserialize schema annotations - {}", e)))?;
-
+    let annotations = annotations(value)?;
     let annotations = annotations_from_type(annotations, &type_information);
+    let properties = properties(yaml_mapping)?;
+    let mapping = mapping(yaml_mapping)?;
+    let when = when(yaml_mapping)?;
 
-    let properties = yaml_mapping.get(&Value::from("properties"));
-    let properties = match properties {
-        None => None,
-        Some(properties) => match properties {
-            Value::Sequence(sequence) => Some(sequence_to_schema_list(&sequence.to_vec())?),
-            _ => return Err(Error::custom("`properties` is not a yaml sequence")),
-        },
-    };
+    Ok(Schema {
+        types: type_information,
+        annotations,
+        children: properties,
+        mapping: mapping.cloned(),
+        when,
+    })
+}
 
-    let mapping = yaml_mapping.get(&Value::from("mapping"));
-    let mapping = match mapping {
-        None => Ok(None),
-        Some(mapping) => match mapping {
-            Value::Mapping(mapping) => Ok(Some(mapping)),
-            _ => Err(Error::custom(format!("cannot deserialize mapping {:#?}", mapping))),
-        },
-    }?;
-
+fn when<E>(yaml_mapping: &Mapping) -> Result<Option<Expression>, E>
+where
+    E: Error,
+{
     let when = yaml_mapping.get(&Value::from("when"));
-    let when = match when {
+    match when {
         None => Ok(None),
         Some(mapping) => match mapping {
             Value::String(string) => {
@@ -106,14 +97,59 @@ where
             }
             _ => Err(Error::custom(format!("unknown shape of `when`: {:#?}", mapping))),
         },
+    }
+}
+
+fn mapping<E>(yaml_mapping: &Mapping) -> Result<Option<&Mapping>, E>
+where
+    E: Error,
+{
+    let mapping = yaml_mapping.get(&Value::from("mapping"));
+    let mapping = match mapping {
+        None => Ok(None),
+        Some(mapping) => match mapping {
+            Value::Mapping(mapping) => Ok(Some(mapping)),
+            _ => Err(Error::custom(format!("cannot deserialize mapping {:#?}", mapping))),
+        },
+    }?;
+    Ok(mapping)
+}
+
+fn properties<E>(yaml_mapping: &Mapping) -> Result<Option<SchemaList>, E>
+where
+    E: Error,
+{
+    let properties = yaml_mapping.get(&Value::from("properties"));
+    let properties = match properties {
+        None => None,
+        Some(properties) => match properties {
+            Value::Sequence(sequence) => Some(sequence_to_schema_list(&sequence.to_vec())?),
+            _ => return Err(Error::custom("`properties` is not a yaml sequence")),
+        },
     };
-    Ok(Schema {
-        types: type_information,
-        annotations,
-        children: properties,
-        mapping: mapping.cloned(),
-        when: when?,
-    })
+    Ok(properties)
+}
+
+fn annotations<E>(value: &Value) -> Result<Annotations, E>
+where
+    E: Error,
+{
+    let annotations = serde_yaml::from_value(value.clone())
+        .map_err(|e| Error::custom(format!("cannot deserialize schema annotations - {}", e)))?;
+    Ok(annotations)
+}
+
+fn type_information<E>(yaml_mapping: &Mapping) -> Result<Option<Vec<ObjectType>>, E>
+where
+    E: Error,
+{
+    let mut type_information = deserialize_object_type(&yaml_mapping)?;
+    if type_information.is_none() {
+        let raw_type = RawObjectType::Object;
+        let type_data = ObjectTypeData::with_raw_type(raw_type);
+        type_information = Some(vec![ObjectType::Required(type_data)]);
+    }
+    Ok(type_information)
 }
 
 fn annotations_from_type(old_annotations: Annotations, type_information: &Option<Vec<ObjectType>>) -> Annotations {
