@@ -62,7 +62,7 @@ where
 
     if let Some(types) = &schema.types {
         if types.len() == 1 {
-            serialize_object_type(types[0].inner(), map)?;
+            serialize_object_type(&types[0], map)?;
         }
         if types.len() > 1 {
             serialize_type_array(types, map)?;
@@ -84,11 +84,11 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    if types.iter().any(|def| def.inner().has_bounds()) {
+    if types.iter().any(|def| def.inner_raw().has_bounds()) {
         return Err(Error::custom("cannot have type bounds when having a multi-type object"));
     }
 
-    let type_names: Vec<_> = types.iter().map(|def| object_type_name(def.inner())).collect();
+    let type_names: Vec<_> = types.iter().map(|def| object_type_name(def.inner_raw())).collect();
     map.serialize_entry("type", &type_names)?;
     Ok(())
 }

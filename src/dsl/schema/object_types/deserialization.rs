@@ -47,14 +47,15 @@ where
     E: Error,
 {
     let mut type_name = definition.trim().to_lowercase();
+    let default_value = deserialize_default_value(mapping)?;
     Ok(if type_name.ends_with('?') {
         type_name.remove(type_name.len() - 1);
         let raw_type = RawObjectType::from(&type_name, &mapping)?;
-        let type_data = ObjectTypeData::with_raw_type(raw_type);
+        let type_data = ObjectTypeData::with_raw_type_and_default_value(raw_type, default_value);
         ObjectType::Optional(type_data)
     } else {
         let raw_type = RawObjectType::from(&type_name, &mapping)?;
-        let type_data = ObjectTypeData::with_raw_type(raw_type);
+        let type_data = ObjectTypeData::with_raw_type_and_default_value(raw_type, default_value);
         ObjectType::Required(type_data)
     })
 }
@@ -80,14 +81,8 @@ impl RawObjectType {
             "object" => RawObjectType::Object,
             "string" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
             "text" => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
-            "integer" => RawObjectType::Integer(
-                deserialize_integer_bounds(mapping)?,
-                deserialize_default_value(mapping)?,
-            ),
-            "number" => RawObjectType::Number(
-                deserialize_integer_bounds(mapping)?,
-                deserialize_default_value(mapping)?,
-            ),
+            "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?),
+            "number" => RawObjectType::Number(deserialize_integer_bounds(mapping)?),
             "port" => {
                 let defaults = IntegerValueConditionObjectBounds {
                     minimum: Some(IntegerBound::Inclusive(0)),
@@ -95,13 +90,10 @@ impl RawObjectType {
                     multiple_of: None,
                 };
                 let defaults = IntegerObjectBounds::Conditions(defaults);
-                RawObjectType::Port(
-                    Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?),
-                    deserialize_default_value(mapping)?,
-                )
+                RawObjectType::Port(Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?))
             }
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
-            "boolean" => RawObjectType::Boolean(deserialize_default_value(mapping)?),
+            "boolean" => RawObjectType::Boolean(),
             "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
             "hostname" => RawObjectType::Hostname,
             "datetime" => RawObjectType::Datetime,

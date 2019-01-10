@@ -23,15 +23,15 @@ pub struct ObjectTypeData {
 #[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    Boolean(Option<DefaultValue>),
+    Boolean(),
     String(Option<StringObjectBounds>),
     Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),
-    Integer(Option<IntegerObjectBounds>, Option<DefaultValue>),
-    Number(Option<IntegerObjectBounds>, Option<DefaultValue>),
+    Integer(Option<IntegerObjectBounds>),
+    Number(Option<IntegerObjectBounds>),
     Array(Box<Option<ArrayObjectBounds>>),
 
-    Port(Option<IntegerObjectBounds>, Option<DefaultValue>),
+    Port(Option<IntegerObjectBounds>),
 
     Datetime,
     Date,
@@ -51,8 +51,22 @@ impl ObjectTypeData {
         }
     }
 
+    pub fn with_raw_type_and_default_value(
+        raw_type: RawObjectType,
+        default_value: Option<DefaultValue>,
+    ) -> ObjectTypeData {
+        ObjectTypeData {
+            raw_type,
+            default_value,
+        }
+    }
+
     pub fn raw_type(&self) -> &RawObjectType {
         &self.raw_type
+    }
+
+    pub fn default_value(&self) -> &Option<DefaultValue> {
+        &self.default_value
     }
 }
 
@@ -68,20 +82,27 @@ impl RawObjectType {
             RawObjectType::IPV4 => false,
             RawObjectType::IPV6 => false,
             RawObjectType::URI => false,
-            RawObjectType::Boolean(bounds) => bounds.is_some(),
+            RawObjectType::Boolean() => false,
             RawObjectType::String(bounds) => bounds.is_some(),
             RawObjectType::Text(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),
-            RawObjectType::Integer(bounds, _) => bounds.is_some(),
-            RawObjectType::Number(bounds, _) => bounds.is_some(),
-            RawObjectType::Port(bounds, _) => bounds.is_some(),
+            RawObjectType::Integer(bounds) => bounds.is_some(),
+            RawObjectType::Number(bounds) => bounds.is_some(),
+            RawObjectType::Port(bounds) => bounds.is_some(),
             RawObjectType::Array(bounds) => bounds.is_some(),
         }
     }
 }
 
 impl ObjectType {
-    pub fn inner(&self) -> &RawObjectType {
+    pub fn data(&self) -> &ObjectTypeData {
+        match self {
+            ObjectType::Optional(object_type_data) => &object_type_data,
+            ObjectType::Required(object_type_data) => &object_type_data,
+        }
+    }
+
+    pub fn inner_raw(&self) -> &RawObjectType {
         match self {
             ObjectType::Optional(object_type_data) => &object_type_data.raw_type,
             ObjectType::Required(object_type_data) => &object_type_data.raw_type,
