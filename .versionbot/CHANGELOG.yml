@@ -1,4 +1,14 @@
 - commits:
+    - subject: Add support for `formula` keyword on the schema level
+      hash: 6ed50c809beae7cd32626673e816fb001c77301a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.8
+  date: 2019-01-10T12:59:44.791Z
+- commits:
     - subject: Support default keyword for all types generically
       hash: 9c812192565dbf79606a5457fc5c73ab799e4a55
       body: ''
