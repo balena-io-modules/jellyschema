@@ -1,0 +1,32 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "$$order": [
+        "host",
+        "domain",
+        "fqdn"
+    ],
+    "required":  [
+        "host",
+        "domain",
+        "fqdn"
+    ],
+    "title": "Formula",
+    "properties": {
+        "host": {
+            "type": "string",
+            "default": "www"
+        },
+        "domain": {
+            "type": "string",
+            "format": "hostname",
+            "default": "example.com"
+        },
+        "fqdn": {
+            "type": "string",
+            "format": "hostname",
+            "$$formula": "host ~ `.` ~ domain"
+        }
+    }
+}
