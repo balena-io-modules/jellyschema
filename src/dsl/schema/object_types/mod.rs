@@ -1,7 +1,7 @@
 //! A `type` is anything that can be specified after `type` keyword as in the spec
 
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
-use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::object_types::bounds::DefaultValue;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 
@@ -15,11 +15,9 @@ pub enum ObjectType {
 }
 
 #[derive(Clone, Debug)]
-// `ArrayObjectBounds` is either a Property or small array of properties, and we know it should remain small
-// TODO: look into above to see if anything can be done in the compilation time to ensure this
 pub enum RawObjectType {
     Object,
-    Boolean(Option<BooleanObjectBounds>),
+    Boolean(Option<DefaultValue<bool>>),
     String(Option<StringObjectBounds>),
     Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),

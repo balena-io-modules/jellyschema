@@ -3,7 +3,7 @@ use serde_yaml::Mapping;
 use serde_yaml::Value;
 
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_array_object_bounds;
-use crate::dsl::schema::object_types::bounds::deserialization::deserialize_boolean_object_bounds;
+use crate::dsl::schema::object_types::bounds::deserialization::deserialize_boolean_default_value;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_string_object_bounds;
 use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
@@ -87,7 +87,7 @@ impl RawObjectType {
                 RawObjectType::Port(Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?))
             }
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
-            "boolean" => RawObjectType::Boolean(deserialize_boolean_object_bounds(mapping)?),
+            "boolean" => RawObjectType::Boolean(deserialize_boolean_default_value(mapping)?),
             "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
             "hostname" => RawObjectType::Hostname,
             "datetime" => RawObjectType::Datetime,

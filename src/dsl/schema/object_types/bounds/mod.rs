@@ -90,8 +90,12 @@ pub struct StringLength {
 }
 
 #[derive(Clone, Debug)]
-pub enum BooleanObjectBounds {
-    DefaultValue(bool),
+pub struct DefaultValue<T>(T);
+
+impl<T> DefaultValue<T> {
+    pub fn value(&self) -> &T {
+        &self.0
+    }
 }
 
 #[derive(Clone, Debug)]

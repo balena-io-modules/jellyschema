@@ -10,7 +10,7 @@ use serde::Serializer;
 use crate::dsl::schema::object_types::bounds::ArrayItemObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::ArrayUniqueItemBound;
-use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::object_types::bounds::DefaultValue;
 use crate::dsl::schema::object_types::bounds::EnumerationValue;
 use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
@@ -42,7 +42,7 @@ where
 
     match raw_type {
         RawObjectType::Object => {}
-        RawObjectType::Boolean(object_bounds) => serialize_boolean_with_bounds(object_bounds, map)?,
+        RawObjectType::Boolean(object_bounds) => serialize_boolean(object_bounds, map)?,
         RawObjectType::String(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
         RawObjectType::Text(object_bounds) => serialize_string_with_bounds(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => {
@@ -89,17 +89,13 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
     }
 }
 
-fn serialize_boolean_with_bounds<O, E, S>(bounds: &Option<BooleanObjectBounds>, map: &mut S) -> Result<(), E>
+fn serialize_boolean<O, E, S>(bounds: &Option<DefaultValue<bool>>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
     for value in bounds {
-        match value {
-            BooleanObjectBounds::DefaultValue(default_value) => {
-                map.serialize_entry("default", default_value)?;
-            }
-        }
+        map.serialize_entry("default", value.value())?;
     }
     Ok(())
 }
