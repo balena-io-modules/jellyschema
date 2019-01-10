@@ -5,11 +5,13 @@
     "title": "Default values for numbers and integers",
     "$$order": [
         "number",
-        "integer"
+        "integer",
+        "port"
     ],
     "required": [
         "number",
-        "integer"
+        "integer",
+        "port"
     ],
     "properties": {
         "number": {
@@ -19,6 +21,12 @@
         "integer": {
             "type": "integer",
             "default": 3
+        },
+        "port": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 65535,
+            "default": 80
         }
     }
 }

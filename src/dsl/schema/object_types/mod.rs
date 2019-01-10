@@ -22,10 +22,10 @@ pub enum RawObjectType {
     Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),
     Integer(Option<IntegerObjectBounds>, Option<DefaultValue>),
-    Number(Option<IntegerObjectBounds>),
+    Number(Option<IntegerObjectBounds>, Option<DefaultValue>),
     Array(Box<Option<ArrayObjectBounds>>),
 
-    Port(Option<IntegerObjectBounds>),
+    Port(Option<IntegerObjectBounds>, Option<DefaultValue>),
 
     Datetime,
     Date,
@@ -54,8 +54,8 @@ impl RawObjectType {
             RawObjectType::Text(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),
             RawObjectType::Integer(bounds, _) => bounds.is_some(),
-            RawObjectType::Number(bounds) => bounds.is_some(),
-            RawObjectType::Port(bounds) => bounds.is_some(),
+            RawObjectType::Number(bounds, _) => bounds.is_some(),
+            RawObjectType::Port(bounds, _) => bounds.is_some(),
             RawObjectType::Array(bounds) => bounds.is_some(),
         }
     }

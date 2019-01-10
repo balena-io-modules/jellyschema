@@ -7,3 +7,6 @@ properties:
 - integer:
     type: integer
     default: 3
+- port:
+    type: port
+    default: 80

@@ -76,7 +76,7 @@ impl RawObjectType {
             "string" => RawObjectType::String(deserialize_string_object_bounds(mapping)?),
             "text" => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
             "integer" => RawObjectType::Integer(deserialize_integer_bounds(mapping)?, deserialize_default_value(mapping)?),
-            "number" => RawObjectType::Number(deserialize_integer_bounds(mapping)?),
+            "number" => RawObjectType::Number(deserialize_integer_bounds(mapping)?, deserialize_default_value(mapping)?),
             "port" => {
                 let defaults = IntegerValueConditionObjectBounds {
                     minimum: Some(IntegerBound::Inclusive(0)),
@@ -84,7 +84,7 @@ impl RawObjectType {
                     multiple_of: None,
                 };
                 let defaults = IntegerObjectBounds::Conditions(defaults);
-                RawObjectType::Port(Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?))
+                RawObjectType::Port(Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?), deserialize_default_value(mapping)?)
             }
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
             "boolean" => RawObjectType::Boolean(deserialize_default_value(mapping)?),

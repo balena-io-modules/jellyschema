@@ -47,8 +47,8 @@ where
         RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => serialize_password(object_bounds, map)?,
         RawObjectType::Integer(object_bounds, default) => serialize_integer(object_bounds, default, map)?,
-        RawObjectType::Number(object_bounds) => serialize_integer(object_bounds, &None, map)?,
-        RawObjectType::Port(object_bounds) => serialize_integer(object_bounds, &None, map)?,
+        RawObjectType::Number(object_bounds, default) => serialize_integer(object_bounds, default, map)?,
+        RawObjectType::Port(object_bounds, default) => serialize_integer(object_bounds, default, map)?,
         RawObjectType::Array(object_bounds) => serialize_array(object_bounds, map)?,
 
         RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
@@ -71,8 +71,8 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Text(_) => "string",
         RawObjectType::Password(_) => "string",
         RawObjectType::Integer(_, _) => "integer",
-        RawObjectType::Number(_) => "number",
-        RawObjectType::Port(_) => "number",
+        RawObjectType::Number(_, _) => "number",
+        RawObjectType::Port(_, _) => "number",
         RawObjectType::Array(_) => "array",
 
         RawObjectType::Hostname => "string",
