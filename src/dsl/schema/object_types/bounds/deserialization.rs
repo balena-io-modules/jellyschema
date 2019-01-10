@@ -112,22 +112,14 @@ where
     Ok(None)
 }
 
-pub fn deserialize_boolean_default_value<E>(mapping: &Mapping) -> Result<Option<DefaultValue<bool>>, E>
+pub fn deserialize_default_value<E>(mapping: &Mapping) -> Result<Option<DefaultValue>, E>
 where
     E: Error,
 {
     let default_key = Value::from("default");
-
-    match mapping.get(&default_key) {
-        Some(default) => match default {
-            Value::Bool(value) => Ok(Some(DefaultValue(*value))),
-            _ => Err(Error::custom(format!(
-                "cannot deserialize default value - {:#?} is not a boolean",
-                default
-            ))),
-        },
-        None => Ok(None),
-    }
+    let value = mapping.get(&default_key);
+    let value = value.map(|value| DefaultValue(value.clone()));
+    Ok(value)
 }
 
 pub fn deserialize_array_object_bounds<E>(mapping: &Mapping) -> Result<Option<ArrayObjectBounds>, E>

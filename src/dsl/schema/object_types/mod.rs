@@ -17,7 +17,7 @@ pub enum ObjectType {
 #[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    Boolean(Option<DefaultValue<bool>>),
+    Boolean(Option<DefaultValue>),
     String(Option<StringObjectBounds>),
     Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),

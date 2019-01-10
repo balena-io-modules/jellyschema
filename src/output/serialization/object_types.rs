@@ -42,7 +42,7 @@ where
 
     match raw_type {
         RawObjectType::Object => {}
-        RawObjectType::Boolean(object_bounds) => serialize_boolean(object_bounds, map)?,
+        RawObjectType::Boolean(default_value) => serialize_boolean(default_value, map)?,
         RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => serialize_password(object_bounds, map)?,
@@ -62,7 +62,6 @@ where
     };
     Ok(())
 }
-
 
 pub fn object_type_name(object_type: &RawObjectType) -> &str {
     match object_type {
@@ -87,17 +86,16 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
     }
 }
 
-fn serialize_boolean<O, E, S>(bounds: &Option<DefaultValue<bool>>, map: &mut S) -> Result<(), E>
+fn serialize_boolean<O, E, S>(default: &Option<DefaultValue>, map: &mut S) -> Result<(), E>
 where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    for value in bounds {
+    for value in default {
         map.serialize_entry("default", value.value())?;
     }
     Ok(())
 }
-
 
 fn serialize_string<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
 where
@@ -111,9 +109,9 @@ where
 }
 
 fn serialize_password<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok = O, Error = E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     map.serialize_entry("writeOnly", &true)?;
     serialize_string(bounds, map)?;

@@ -90,10 +90,10 @@ pub struct StringLength {
 }
 
 #[derive(Clone, Debug)]
-pub struct DefaultValue<T>(T);
+pub struct DefaultValue(serde_yaml::Value);
 
-impl<T> DefaultValue<T> {
-    pub fn value(&self) -> &T {
+impl DefaultValue {
+    pub fn value(&self) -> &serde_yaml::Value {
         &self.0
     }
 }
