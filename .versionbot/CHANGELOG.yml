@@ -1,4 +1,18 @@
 - commits:
+    - subject: Fix problems with nested UISchema
+      hash: 0bdf9b1ac37f9c6e612e9f98487edf4c116c711b
+      body: |
+        Fix a bug where non-top levels of UISchema were not produced properly.
+        While this works the code is not ideal, especially with regards to
+        lifetimes - used clones to convince the borrow checker to compile but
+        definitely needs more thought there later.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.9
+  date: 2019-01-15T10:41:24.329Z
+- commits:
     - subject: Add support for `formula` keyword on the schema level
       hash: 6ed50c809beae7cd32626673e816fb001c77301a
       body: ''
