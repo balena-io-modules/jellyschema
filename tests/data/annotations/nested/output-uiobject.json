@@ -1,0 +1,10 @@
+{
+    "top": {
+        "middle": {
+            "ui:description": "half way through",
+            "bottom": {
+                "ui:help": "you have reached the bottom"
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+version: 1
+title: UISchema annotations
+properties:
+  - top:
+      type: object
+      title: top
+      properties:
+        - middle:
+            title: middle
+            description: half way through
+            properties:
+              - bottom:
+                  title: bottom
+                  help: you have reached the bottom
+                  type: string
