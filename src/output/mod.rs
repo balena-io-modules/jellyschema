@@ -19,7 +19,7 @@ pub struct JsonSchema<'a> {
 }
 
 /// UI Object wrapper
-#[derive(Clone, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct UiObject(HashMap<String, UiObjectProperty>);
 
 impl UiObject {
@@ -28,7 +28,7 @@ impl UiObject {
     }
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 struct UiObjectProperty {
     #[serde(rename = "ui:help", skip_serializing_if = "Option::is_none")]
     help: Option<String>,
@@ -39,12 +39,16 @@ struct UiObjectProperty {
     #[serde(rename = "ui:widget", skip_serializing_if = "Option::is_none")]
     widget: Option<Widget>,
     #[serde(flatten)]
-    children: Option<UiObject>
+    children: Option<UiObject>,
 }
 
 impl UiObjectProperty {
     /// Checks if an UI Object is empty
     pub fn is_empty(&self) -> bool {
-        self.help.is_none() && self.warning.is_none() && self.description.is_none() && self.widget.is_none()
+        self.help.is_none()
+            && self.warning.is_none()
+            && self.description.is_none()
+            && self.widget.is_none()
+            && self.children.is_none()
     }
 }

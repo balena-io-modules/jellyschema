@@ -1,0 +1,13 @@
+{
+    "advanced": {
+        "appUpdatePollInterval": {
+            "ui:help": "Check for updates every X minutes"
+        }
+    },
+    "network": {
+
+    },
+    "board": {
+        "ui:warning": "Please make sure to select the correct number of CPU Cores for your device.\n**Failing to do so will brick your device**."
+    }
+}

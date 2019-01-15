@@ -1,4 +1,3 @@
-use core::borrow::Borrow;
 use std::collections::HashMap;
 
 use crate::dsl::schema::DocumentRoot;
@@ -53,8 +52,7 @@ impl From<Schema> for UiObjectProperty {
             warning,
             description,
             widget,
-            children
+            children,
         }
     }
 }
-

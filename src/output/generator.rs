@@ -38,7 +38,6 @@ impl Generator {
         } else {
             serde_json::Value::Object(Map::new())
         };
-
         (serialized_json_schema, serialized_ui_object)
     }
 }
