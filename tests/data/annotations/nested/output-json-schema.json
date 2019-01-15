@@ -1,0 +1,42 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "UISchema annotations",
+    "$$order": [
+        "top"
+    ],
+    "required": [
+        "top"
+    ],
+    "properties": {
+        "top" : {
+            "$$order": [
+                "middle"
+            ],
+            "required": [
+                "middle"
+            ],
+            "type": "object",
+            "title": "top",
+            "properties": {
+                "middle": {
+                    "$$order": [
+                        "bottom"
+                    ],
+                    "required": [
+                        "bottom"
+                    ],
+                    "type": "object",
+                    "title": "middle",
+                    "properties": {
+                        "bottom": {
+                            "type": "string",
+                            "title": "bottom"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
