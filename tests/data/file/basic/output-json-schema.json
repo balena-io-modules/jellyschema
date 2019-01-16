@@ -2,7 +2,7 @@
     "$$version": 1,
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
-    "title": "Render file pickers for `binary` format",
+    "title": "Render file pickers for `file` format",
     "$$order": [
         "profile-picture",
         "documents"
@@ -13,7 +13,8 @@
     ],
     "properties": {
         "profile-picture": {
-            "type": "string"
+            "type": "string",
+            "format": "data-url"
         },
         "documents": {
             "type": "array",
@@ -27,7 +28,8 @@
                 ],
                 "properties": {
                     "contents": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "data-url"
                     }
                 }
             }

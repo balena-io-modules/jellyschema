@@ -103,7 +103,7 @@ impl RawObjectType {
             "ipv4" => RawObjectType::IPV4,
             "ipv6" => RawObjectType::IPV6,
             "uri" => RawObjectType::URI,
-            "binary" => RawObjectType::Binary,
+            "file" => RawObjectType::File,
             _ => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
         };
         Ok(object_type)

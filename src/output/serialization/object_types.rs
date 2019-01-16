@@ -64,7 +64,7 @@ where
         RawObjectType::IPV4 => map.serialize_entry("format", "ipv4")?,
         RawObjectType::IPV6 => map.serialize_entry("format", "ipv6")?,
         RawObjectType::URI => map.serialize_entry("format", "uri")?,
-        RawObjectType::Binary => {}
+        RawObjectType::File => map.serialize_entry("format", "data-url")?,
     };
     Ok(())
 }
@@ -90,7 +90,7 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::IPV6 => "string",
         RawObjectType::URI => "string",
 
-        RawObjectType::Binary => "string",
+        RawObjectType::File => "string",
     }
 }
 

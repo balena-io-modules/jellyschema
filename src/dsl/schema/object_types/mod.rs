@@ -31,7 +31,7 @@ pub enum RawObjectType {
     Number(Option<IntegerObjectBounds>),
     Array(Box<Option<ArrayObjectBounds>>),
 
-    Binary,
+    File,
     Port(Option<IntegerObjectBounds>),
 
     Datetime,
@@ -83,7 +83,7 @@ impl RawObjectType {
             RawObjectType::IPV4 => false,
             RawObjectType::IPV6 => false,
             RawObjectType::URI => false,
-            RawObjectType::Binary => false,
+            RawObjectType::File => false,
             RawObjectType::Boolean => false,
             RawObjectType::String(bounds) => bounds.is_some(),
             RawObjectType::Text(bounds) => bounds.is_some(),
