@@ -19,30 +19,36 @@ pub struct JsonSchema<'a> {
 }
 
 /// UI Object wrapper
-#[derive(Serialize)]
-pub struct UiObject<'a>(HashMap<&'a str, UiObjectProperty<'a>>);
+#[derive(Clone, Debug, Serialize)]
+pub struct UiObject(HashMap<String, UiObjectProperty>);
 
-impl<'a> UiObject<'a> {
+impl UiObject {
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
 }
 
-#[derive(Serialize)]
-struct UiObjectProperty<'a> {
+#[derive(Clone, Debug, Serialize)]
+struct UiObjectProperty {
     #[serde(rename = "ui:help", skip_serializing_if = "Option::is_none")]
-    help: Option<&'a str>,
+    help: Option<String>,
     #[serde(rename = "ui:warning", skip_serializing_if = "Option::is_none")]
-    warning: Option<&'a str>,
+    warning: Option<String>,
     #[serde(rename = "ui:description", skip_serializing_if = "Option::is_none")]
-    description: Option<&'a str>,
+    description: Option<String>,
     #[serde(rename = "ui:widget", skip_serializing_if = "Option::is_none")]
-    widget: Option<&'a Widget>,
+    widget: Option<Widget>,
+    #[serde(flatten)]
+    children: Option<UiObject>,
 }
 
-impl<'a> UiObjectProperty<'a> {
+impl UiObjectProperty {
     /// Checks if an UI Object is empty
     pub fn is_empty(&self) -> bool {
-        self.help.is_none() && self.warning.is_none() && self.description.is_none() && self.widget.is_none()
+        self.help.is_none()
+            && self.warning.is_none()
+            && self.description.is_none()
+            && self.widget.is_none()
+            && self.children.is_none()
     }
 }
