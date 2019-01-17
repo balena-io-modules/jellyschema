@@ -78,7 +78,7 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Password(_) => "string",
         RawObjectType::Integer(_) => "integer",
         RawObjectType::Number(_) => "number",
-        RawObjectType::Port(_) => "number",
+        RawObjectType::Port(_) => "integer",
         RawObjectType::Array(_) => "array",
 
         RawObjectType::Hostname => "string",
