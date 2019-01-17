@@ -1,5 +1,8 @@
 version: 1
 title: UISchema annotations
+description: This is top-level description
+help: Some top-level help
+warning: OMG top.
 properties:
 - justtitle:
     type: string

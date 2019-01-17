@@ -1,4 +1,7 @@
 {
+    "ui:description": "This is top-level description",
+    "ui:help": "Some top-level help",
+    "ui:warning":"OMG top.",
     "justwarning": {
         "ui:warning": "Warning!"
     },
