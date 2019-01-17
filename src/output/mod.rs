@@ -18,6 +18,10 @@ pub struct JsonSchema<'a> {
     dependencies: Option<&'a DependencyGraph>,
 }
 
+/// It's different than UiObject as the root is nameless in the output
+#[derive(Clone, Debug, Serialize)]
+pub struct UiObjectRoot(Option<UiObjectProperty>);
+
 /// UI Object wrapper
 #[derive(Clone, Debug, Serialize)]
 pub struct UiObject(HashMap<String, UiObjectProperty>);
@@ -50,5 +54,14 @@ impl UiObjectProperty {
             && self.description.is_none()
             && self.widget.is_none()
             && self.children.is_none()
+    }
+}
+
+impl UiObjectRoot {
+    pub fn is_empty(&self) -> bool {
+        match &self.0 {
+            None => true,
+            Some(property) => property.is_empty(),
+        }
     }
 }

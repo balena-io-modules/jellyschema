@@ -5,16 +5,11 @@ use crate::dsl::schema::Schema;
 use crate::dsl::schema::SchemaList;
 use crate::output::UiObject;
 use crate::output::UiObjectProperty;
+use crate::output::UiObjectRoot;
 
-impl From<DocumentRoot> for UiObject {
-    fn from(schema: DocumentRoot) -> Self {
-        match schema.schema {
-            Some(schema) => match schema.children {
-                Some(list) => list.into(),
-                None => UiObject(HashMap::new()),
-            },
-            None => UiObject(HashMap::new()),
-        }
+impl From<DocumentRoot> for UiObjectRoot {
+    fn from(schema: DocumentRoot) -> UiObjectRoot {
+        UiObjectRoot(schema.schema.map(|schema| schema.into()))
     }
 }
 
