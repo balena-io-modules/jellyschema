@@ -93,7 +93,7 @@ impl RawObjectType {
                 RawObjectType::Port(Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?))
             }
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
-            "boolean" => RawObjectType::Boolean(),
+            "boolean" => RawObjectType::Boolean,
             "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
             "hostname" => RawObjectType::Hostname,
             "datetime" => RawObjectType::Datetime,
@@ -103,6 +103,7 @@ impl RawObjectType {
             "ipv4" => RawObjectType::IPV4,
             "ipv6" => RawObjectType::IPV6,
             "uri" => RawObjectType::URI,
+            "file" => RawObjectType::File,
             _ => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
         };
         Ok(object_type)

@@ -14,7 +14,7 @@ find "$TESTS_DIRECTORY" -iname *.yml -exec yamllint {} +
 
 echo "Linting JSONSchemas"
 find "$TESTS_DIRECTORY" -type f -iname "output-json-schema.json" -print0 | while IFS= read -r -d $'\0' file; do
-    ajv compile -s "$file" --format=full
+    ajv compile -s "$file" --format='false'
 done
 
 echo "Checking Rust crate formatting..."

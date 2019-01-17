@@ -23,7 +23,7 @@ pub struct ObjectTypeData {
 #[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    Boolean(),
+    Boolean,
     String(Option<StringObjectBounds>),
     Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),
@@ -31,6 +31,7 @@ pub enum RawObjectType {
     Number(Option<IntegerObjectBounds>),
     Array(Box<Option<ArrayObjectBounds>>),
 
+    File,
     Port(Option<IntegerObjectBounds>),
 
     Datetime,
@@ -82,7 +83,8 @@ impl RawObjectType {
             RawObjectType::IPV4 => false,
             RawObjectType::IPV6 => false,
             RawObjectType::URI => false,
-            RawObjectType::Boolean() => false,
+            RawObjectType::File => false,
+            RawObjectType::Boolean => false,
             RawObjectType::String(bounds) => bounds.is_some(),
             RawObjectType::Text(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),

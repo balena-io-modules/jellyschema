@@ -1,0 +1,38 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Render file pickers for `file` format",
+    "$$order": [
+        "profile-picture",
+        "documents"
+    ],
+    "required": [
+        "profile-picture",
+        "documents"
+    ],
+    "properties": {
+        "profile-picture": {
+            "type": "string",
+            "format": "data-url"
+        },
+        "documents": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "contents"
+                ],
+                "$$order": [
+                    "contents"
+                ],
+                "properties": {
+                    "contents": {
+                        "type": "string",
+                        "format": "data-url"
+                    }
+                }
+            }
+        }
+    }
+}
