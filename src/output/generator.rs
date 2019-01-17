@@ -5,7 +5,7 @@ use crate::dsl::schema::compiler::CompilationError;
 use crate::dsl::schema::compiler::compile;
 use crate::dsl::schema::compiler::CompiledSchema;
 use crate::output::JsonSchema;
-use crate::output::UiObject;
+use crate::output::UiObjectRoot;
 
 /// JSON Schema & UI Object generator
 pub struct Generator {
@@ -30,9 +30,10 @@ impl Generator {
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
         let source_schema = self.compiled_schema.compiled();
         let json_schema = JsonSchema::from(&source_schema);
-        let ui_object = UiObject::from(source_schema.clone());
+        let ui_object = UiObjectRoot::from(source_schema.clone());
         let serialized_json_schema =
             serde_json::to_value(json_schema).expect("Internal error: inconsistent schema: json schema");
+
         let serialized_ui_object = if !ui_object.is_empty() {
             serde_json::to_value(ui_object).expect("Internal error: inconsistent schema: ui object")
         } else {
