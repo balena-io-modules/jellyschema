@@ -1,4 +1,14 @@
 - commits:
+    - subject: Fix port type to be integer on JSONSchema side
+      hash: 3501bc24e55cc24041dbedb6bbba229904df7eee
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.11
+  date: 2019-01-17T10:11:24.142Z
+- commits:
     - subject: Add support for `file` type
       hash: 1235728924c51999447a9cf86bf13205274d0445
       body: ''
