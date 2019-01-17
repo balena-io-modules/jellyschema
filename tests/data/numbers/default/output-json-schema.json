@@ -23,7 +23,7 @@
             "default": 3
         },
         "port": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0,
             "maximum": 65535,
             "default": 80
