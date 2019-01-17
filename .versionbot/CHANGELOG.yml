@@ -1,4 +1,14 @@
 - commits:
+    - subject: Add support for annotations on the root level
+      hash: 2c0fe3c5748e1f0124beb71607df4587670af6a5
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.12
+  date: 2019-01-17T12:48:55.655Z
+- commits:
     - subject: Fix port type to be integer on JSONSchema side
       hash: 3501bc24e55cc24041dbedb6bbba229904df7eee
       body: ''
