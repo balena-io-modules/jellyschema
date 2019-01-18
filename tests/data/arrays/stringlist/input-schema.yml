@@ -1,0 +1,18 @@
+version: 1
+title: Stringlist is an array.
+properties:
+  - namelist:
+      type: stringlist
+      title: Name list
+      items:
+        title: first name
+        type: string
+      minItems: 1
+      maxItems: 2
+
+  - portlist:
+      type: stringlist
+      title: Port list
+      items:
+        title: port number
+        type: port

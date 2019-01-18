@@ -55,6 +55,7 @@ where
         RawObjectType::Number(object_bounds) => serialize_integer(object_bounds, map)?,
         RawObjectType::Port(object_bounds) => serialize_integer(object_bounds, map)?,
         RawObjectType::Array(object_bounds) => serialize_array(object_bounds, map)?,
+        RawObjectType::Stringlist(object_bounds) => serialize_array(object_bounds, map)?,
 
         RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
         RawObjectType::Datetime => map.serialize_entry("format", "date-time")?,
@@ -80,6 +81,7 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Number(_) => "number",
         RawObjectType::Port(_) => "integer",
         RawObjectType::Array(_) => "array",
+        RawObjectType::Stringlist(_) => "array",
 
         RawObjectType::Hostname => "string",
         RawObjectType::Datetime => "string",

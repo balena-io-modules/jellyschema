@@ -95,6 +95,7 @@ impl RawObjectType {
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
             "boolean" => RawObjectType::Boolean,
             "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
+            "stringlist" => RawObjectType::Stringlist(Box::new(deserialize_array_object_bounds(mapping)?)),
             "hostname" => RawObjectType::Hostname,
             "datetime" => RawObjectType::Datetime,
             "date" => RawObjectType::Date,

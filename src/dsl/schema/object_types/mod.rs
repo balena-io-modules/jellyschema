@@ -30,6 +30,7 @@ pub enum RawObjectType {
     Integer(Option<IntegerObjectBounds>),
     Number(Option<IntegerObjectBounds>),
     Array(Box<Option<ArrayObjectBounds>>),
+    Stringlist(Box<Option<ArrayObjectBounds>>),
 
     File,
     Port(Option<IntegerObjectBounds>),
@@ -92,6 +93,7 @@ impl RawObjectType {
             RawObjectType::Number(bounds) => bounds.is_some(),
             RawObjectType::Port(bounds) => bounds.is_some(),
             RawObjectType::Array(bounds) => bounds.is_some(),
+            RawObjectType::Stringlist(bounds) => bounds.is_some(),
         }
     }
 }
