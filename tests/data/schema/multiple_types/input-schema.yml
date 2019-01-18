@@ -3,3 +3,9 @@ title: Multiple types (one property)
 properties:
 - age:
     type: [integer, string]
+- distance:
+    type: [number, string]
+- hostname:
+    type: [string, hostname]
+- address:
+    type: [ipv4, ipv6]

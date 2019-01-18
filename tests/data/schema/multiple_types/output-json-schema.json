@@ -3,17 +3,60 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "$$order": [
-        "age"
+        "age",
+        "distance",
+        "hostname",
+        "address"
     ],
     "required": [
-        "age"
+        "age",
+        "distance",
+        "hostname",
+        "address"
     ],
     "title": "Multiple types (one property)",
     "properties": {
         "age": {
-            "type": [
-                "integer",
-                "string"
+            "anyOf": [
+                {
+                    "type": "integer"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "distance": {
+            "anyOf": [
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "hostname": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "string",
+                    "format": "hostname"
+                }
+            ]
+        },
+        "address": {
+            "anyOf": [
+                {
+                    "type": "string",
+                    "format": "ipv4"
+                },
+                {
+                    "type": "string",
+                    "format": "ipv6"
+                }
             ]
         }
     }
