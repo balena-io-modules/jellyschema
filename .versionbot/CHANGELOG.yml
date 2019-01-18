@@ -1,4 +1,15 @@
 - commits:
+    - subject: Add `stringlist` type
+      hash: 18386d8ef911d3d2e9cc57d56a5523ae4cc00916
+      body: |
+        It acts the same as an array.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.6.13
+  date: 2019-01-18T11:29:21.182Z
+- commits:
     - subject: Add support for annotations on the root level
       hash: 2c0fe3c5748e1f0124beb71607df4587670af6a5
       body: ''
