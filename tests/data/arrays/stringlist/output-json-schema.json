@@ -1,0 +1,37 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Stringlist is an array.",
+    "$$order": [
+        "namelist",
+        "portlist"
+    ],
+    "required": [
+        "namelist",
+        "portlist"
+    ],
+    "type": "object",
+    "properties": {
+        "namelist": {
+            "type": "array",
+            "title": "Name list",
+            "items": {
+                "type": "string",
+                "title": "first name"
+            },
+            "minItems": 1,
+            "maxItems": 2
+        },
+        "portlist": {
+            "type": "array",
+            "title": "Port list",
+            "items": {
+                "type": "integer",
+                "title": "port number",
+                "minimum": 0,
+                "maximum": 65535
+            }
+        }
+    }
+}
+
