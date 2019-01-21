@@ -13,6 +13,7 @@
     "title": "Dynamic object.",
     "properties": {
         "rules": {
+            "title": "Rules",
             "type": "object",
             "patternProperties": {
                "^[+-]?[0-9]+$" : {
@@ -23,6 +24,7 @@
         },
         "services": {
             "type": "object",
+            "title": "List of service endpoints per hostname",
             "patternProperties": {
                 "hostname" : {
                     "type": "array",
