@@ -1,4 +1,27 @@
 - commits:
+    - subject: Remove support for compund types completely
+      hash: 50e0206fb4a73d34a2a42ca35ce0c454ec6e2300
+      body: >
+        It turns out that these are confusing and implementation is error-prone.
+
+        Change the underlying Rust type to not allow a `Vec<ObjectType>` but
+        just
+
+        `ObjectType` and basically relied on the compiler to tell me what to
+
+        fix.
+
+
+        Checked that the array type cases are unaffected - see tests in
+
+        `tests/data/arrays`.
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.7.0
+  date: 2019-01-18T15:27:34.371Z
+- commits:
     - subject: Add `stringlist` type
       hash: 18386d8ef911d3d2e9cc57d56a5523ae4cc00916
       body: |
