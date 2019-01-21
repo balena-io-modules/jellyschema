@@ -75,7 +75,7 @@ where
     let formula = formula(yaml_mapping)?;
 
     Ok(Schema {
-        types: type_information,
+        object_type: type_information,
         children: properties,
         mapping: mapping.cloned(),
         annotations,
@@ -159,7 +159,7 @@ where
     Ok(annotations)
 }
 
-fn type_information<E>(yaml_mapping: &Mapping) -> Result<Option<Vec<ObjectType>>, E>
+fn type_information<E>(yaml_mapping: &Mapping) -> Result<Option<ObjectType>, E>
 where
     E: Error,
 {
@@ -167,18 +167,16 @@ where
     if type_information.is_none() {
         let raw_type = RawObjectType::Object;
         let type_data = ObjectTypeData::with_raw_type(raw_type);
-        type_information = Some(vec![ObjectType::Required(type_data)]);
+        type_information = Some(ObjectType::Required(type_data));
     }
     Ok(type_information)
 }
 
-fn annotations_from_type(old_annotations: Annotations, type_information: &Option<Vec<ObjectType>>) -> Annotations {
+fn annotations_from_type(old_annotations: Annotations, type_information: &Option<ObjectType>) -> Annotations {
     let mut widget = old_annotations.widget;
     if let Some(type_info) = type_information {
-        for object_type in type_info {
-            if let RawObjectType::Text(_) = object_type.inner_raw() {
-                widget = Some(Widget::Textarea)
-            }
+        if let RawObjectType::Text(_) = type_info.inner_raw() {
+            widget = Some(Widget::Textarea)
         }
     }
     Annotations {

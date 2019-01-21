@@ -40,12 +40,13 @@ pub struct NamedSchema {
 /// Everything that a schema at any level can represent, see schema and subschema in the spec
 #[derive(Clone, Debug)]
 pub struct Schema {
-    pub types: Option<Vec<ObjectType>>,
+    pub object_type: Option<ObjectType>,
     pub annotations: Annotations,
     /// children of a schema are all schemas defined inside of this schema
     pub children: Option<SchemaList>,
     /// this is th DSL mapping, to and from output formats (e.g. config files etc)
-    pub mapping: Option<serde_yaml::Mapping>, // TODO: real mapping support
+    pub mapping: Option<serde_yaml::Mapping>,
+    // TODO: real mapping support
     pub when: Option<Expression>,
     /// unparsed formula, can't be evaluated by CDSL as we don't have data, just schema
     pub formula: Option<String>,
@@ -124,17 +125,11 @@ impl SchemaList {
         self.entries
             .iter()
             .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
-            .filter_map(|named_schema| match &named_schema.schema.types {
-                Some(type_list) => {
-                    if type_list.iter().any(|type_spec| match type_spec {
-                        ObjectType::Required(_) => true,
-                        ObjectType::Optional(_) => false,
-                    }) {
-                        Some(named_schema.name.as_str())
-                    } else {
-                        None
-                    }
-                }
+            .filter_map(|named_schema| match &named_schema.schema.object_type {
+                Some(object_type) => match object_type {
+                    ObjectType::Required(_) => Some(named_schema.name.as_str()),
+                    ObjectType::Optional(_) => None,
+                },
                 None => None,
             })
             .collect()
