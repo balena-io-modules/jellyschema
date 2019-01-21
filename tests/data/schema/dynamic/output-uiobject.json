@@ -1,0 +1,5 @@
+{
+    "dynamicObject": {
+        "ui:description": "Be aware that `keys:type:` MUST be coercable to string, because JSON only supports strings as keys."
+    }
+}

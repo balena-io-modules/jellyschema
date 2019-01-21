@@ -1,0 +1,39 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "$$order": [
+        "rules",
+        "services"
+    ],
+    "required": [
+        "rules",
+        "services"
+    ],
+    "title": "Dynamic object.",
+    "properties": {
+        "rules": {
+            "type": "object",
+            "patternProperties": {
+               "^[+-]?[0-9]+$" : {
+                   "type": "string",
+                   "title": "Rule"
+               }
+            }
+        },
+        "services": {
+            "type": "object",
+            "patternProperties": {
+                "hostname" : {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+                            "type": "string",
+                            "format": "hostname"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

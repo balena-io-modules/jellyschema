@@ -1,0 +1,29 @@
+version: 1
+title: Dynamic object.
+properties:
+  - rules:
+      title: Rules
+      description: >-
+        Be aware that `keys:type:` MUST be coercable to string, because JSON
+        only supports strings as keys.
+      keys:
+        type: integer
+        title: Priority
+      values:
+        type: string
+        title: Rule
+
+  - services:
+      title: List of service endpoints per hostname
+      description: >-
+        Key is the hostname and the value is the list of service endpoints
+      keys:
+        type: hostname
+      values:
+        type: array
+        items:
+          properties:
+            port:
+              - type: port
+            fqdn:
+              - type: hostname
