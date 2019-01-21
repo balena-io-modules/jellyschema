@@ -1,4 +1,16 @@
 - commits:
+    - subject: Move to Rust stable
+      hash: 0384d17ca489c95fd5d86edf38007fb2e89b21b7
+      body: |
+        As the issues we had previously rode the trains and the fixes are in
+        1.32 now - we can switch to stable.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.7.1
+  date: 2019-01-21T13:38:52.945Z
+- commits:
     - subject: Remove support for compund types completely
       hash: 50e0206fb4a73d34a2a42ca35ce0c454ec6e2300
       body: >
