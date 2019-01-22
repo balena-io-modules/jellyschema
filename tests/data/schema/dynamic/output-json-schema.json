@@ -16,23 +16,21 @@
             "title": "Rules",
             "type": "object",
             "patternProperties": {
-               "^[+-]?[0-9]+$" : {
-                   "type": "string",
-                   "title": "Rule"
-               }
+                "^[+-]?[0-9]+$": {
+                    "type": "string",
+                    "title": "Rule"
+                }
             }
         },
         "services": {
             "type": "object",
             "title": "List of service endpoints per hostname",
             "patternProperties": {
-                "hostname" : {
+                "hostname": {
                     "type": "array",
                     "items": {
-                        "properties": {
-                            "type": "string",
-                            "format": "hostname"
-                        }
+                        "type": "string",
+                        "format": "hostname"
                     }
                 }
             }
