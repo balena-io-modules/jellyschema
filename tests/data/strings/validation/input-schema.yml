@@ -8,3 +8,6 @@ properties:
     type: password
     minLength: 8
     maxLength: 32
+- hostname:
+    type: hostname
+    pattern: /^www.*$/

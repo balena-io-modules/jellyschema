@@ -1,9 +1,32 @@
 version: 1
 title: Enum test
 properties:
-  - shortOne:
+  - string:
       type: string
       enum:
         - fincm3
         - raspberrypi3
         - raspberrypi2
+
+  - boolean:
+      type: boolean
+      enum:
+        - value: true
+          title: yes
+        - value: false
+          title: no
+
+  - hostname:
+      type: hostname
+      enum:
+        - www.example.com
+        - example.com
+
+  - port:
+      type: port
+      enum:
+        - value: 80
+          title: http
+        - value: 443
+          title: https
+
