@@ -57,17 +57,30 @@ where
         RawObjectType::Array(object_bounds) => serialize_array(object_bounds, map)?,
         RawObjectType::Stringlist(object_bounds) => serialize_array(object_bounds, map)?,
 
-        RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
-        RawObjectType::Datetime => map.serialize_entry("format", "date-time")?,
-        RawObjectType::Date => map.serialize_entry("format", "date")?,
-        RawObjectType::Time => map.serialize_entry("format", "time")?,
-        RawObjectType::Email => map.serialize_entry("format", "email")?,
-        RawObjectType::IPV4 => map.serialize_entry("format", "ipv4")?,
-        RawObjectType::IPV6 => map.serialize_entry("format", "ipv6")?,
-        RawObjectType::URI => map.serialize_entry("format", "uri")?,
-        RawObjectType::File => map.serialize_entry("format", "data-url")?,
+        RawObjectType::Hostname(object_bounds) => serialize_string_with_format("hostname", object_bounds, map)?,
+        RawObjectType::Datetime(object_bounds) => serialize_string_with_format("date-time", object_bounds, map)?,
+        RawObjectType::Date(object_bounds) => serialize_string_with_format("date", object_bounds, map)?,
+        RawObjectType::Time(object_bounds) => serialize_string_with_format("time", object_bounds, map)?,
+        RawObjectType::Email(object_bounds) => serialize_string_with_format("email", object_bounds, map)?,
+        RawObjectType::IPV4(object_bounds) => serialize_string_with_format("ipv4", object_bounds, map)?,
+        RawObjectType::IPV6(object_bounds) => serialize_string_with_format("ipv6", object_bounds, map)?,
+        RawObjectType::URI(object_bounds) => serialize_string_with_format("uri", object_bounds, map)?,
+        RawObjectType::File(object_bounds) => serialize_string_with_format("data-url", object_bounds, map)?,
     };
     Ok(())
+}
+
+fn serialize_string_with_format<O, E, S>(
+    format: &str,
+    bounds: &Option<StringObjectBounds>,
+    map: &mut S,
+) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    map.serialize_entry("format", format)?;
+    serialize_string(bounds, map)
 }
 
 pub fn object_type_name(object_type: &RawObjectType) -> &str {
@@ -83,16 +96,16 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Array(_) => "array",
         RawObjectType::Stringlist(_) => "array",
 
-        RawObjectType::Hostname => "string",
-        RawObjectType::Datetime => "string",
-        RawObjectType::Date => "string",
-        RawObjectType::Time => "string",
-        RawObjectType::Email => "string",
-        RawObjectType::IPV4 => "string",
-        RawObjectType::IPV6 => "string",
-        RawObjectType::URI => "string",
+        RawObjectType::Hostname(_) => "string",
+        RawObjectType::Datetime(_) => "string",
+        RawObjectType::Date(_) => "string",
+        RawObjectType::Time(_) => "string",
+        RawObjectType::Email(_) => "string",
+        RawObjectType::IPV4(_) => "string",
+        RawObjectType::IPV6(_) => "string",
+        RawObjectType::URI(_) => "string",
 
-        RawObjectType::File => "string",
+        RawObjectType::File(_) => "string",
     }
 }
 
