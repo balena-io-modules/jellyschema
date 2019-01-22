@@ -18,13 +18,13 @@ use crate::dsl::schema::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::Schema;
 use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
 use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::object_types::bounds::StringValueObjectBounds;
 
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
     E: Error,
 {
     let possible_values = deserialize_enumeration(&mapping)?;
-
     let pattern = deserialize_pattern(&mapping)?;
     let length = deserialize_length_bounds(&mapping)?;
     if possible_values.is_some() && pattern.is_some() {
@@ -35,13 +35,9 @@ where
     }
     let result = {
         if let Some(values) = possible_values {
-            Some(StringObjectBounds::List(values))
-        } else if let Some(pattern) = pattern {
-            Some(StringObjectBounds::Pattern(pattern))
-        } else if let Some(length) = length {
-            Some(length)
+            Some(StringObjectBounds::Enumeration(values))
         } else {
-            None
+            Some(StringObjectBounds::Value(StringValueObjectBounds { pattern, length }))
         }
     };
 
@@ -54,17 +50,18 @@ where
 {
     Ok(deserialize_enumeration(&mapping)?.map(BooleanObjectBounds))
 }
-pub fn deserialize_length_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
+
+pub fn deserialize_length_bounds<E>(mapping: &Mapping) -> Result<Option<StringLength>, E>
 where
     E: Error,
 {
     let max_length = deserialize_integer("maxLength", &mapping)?;
     let min_length = deserialize_integer("minLength", &mapping)?;
     if max_length.is_some() || min_length.is_some() {
-        Ok(Some(StringObjectBounds::Length(StringLength {
+        Ok(Some(StringLength {
             minimum: min_length,
             maximum: max_length,
-        })))
+        }))
     } else {
         Ok(None)
     }
@@ -113,7 +110,7 @@ where
     }
 
     if let Some(values) = possible_values {
-        return Ok(Some(IntegerObjectBounds::List(values)));
+        return Ok(Some(IntegerObjectBounds::Enumeration(values)));
     }
 
     Ok(None)

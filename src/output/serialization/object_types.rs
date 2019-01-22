@@ -222,7 +222,7 @@ where
                     map.serialize_entry("multipleOf", &multiple_of)?;
                 }
             }
-            IntegerObjectBounds::List(list) => serialize_enum_bounds(list, map)?,
+            IntegerObjectBounds::Enumeration(list) => serialize_enum_bounds(list, map)?,
         }
     }
     Ok(())
@@ -234,9 +234,15 @@ where
     S: SerializeMap<Ok = O, Error = E>,
 {
     match string_bounds {
-        StringObjectBounds::List(values) => serialize_enum_bounds(values, map)?,
-        StringObjectBounds::Pattern(pattern) => map.serialize_entry("pattern", pattern.as_str())?,
-        StringObjectBounds::Length(length) => serialize_length_bounds(length, map)?,
+        StringObjectBounds::Enumeration(values) => serialize_enum_bounds(values, map)?,
+        StringObjectBounds::Value(value_bounds) => {
+            if let Some(pattern) = &value_bounds.pattern {
+                map.serialize_entry("pattern", pattern.as_str())?
+            }
+            if let Some(length) = &value_bounds.length {
+                serialize_length_bounds(length, map)?
+            }
+        }
     }
     Ok(())
 }

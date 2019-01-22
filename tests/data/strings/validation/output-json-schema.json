@@ -27,7 +27,8 @@
         "hostname": {
             "type": "string",
             "format": "hostname",
-            "pattern": "/^www.*$/"
+            "pattern": "/^www.*$/",
+            "maxLength": 32
         }
     }
 }

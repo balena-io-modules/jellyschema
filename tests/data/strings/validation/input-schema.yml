@@ -11,3 +11,4 @@ properties:
 - hostname:
     type: hostname
     pattern: /^www.*$/
+    maxLength: 32
