@@ -17,6 +17,7 @@ use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::deserialization::deserialize_integer;
 use crate::dsl::schema::Schema;
 use crate::dsl::schema::object_types::bounds::IntegerValueConditionObjectBounds;
+use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
 
 pub fn deserialize_string_object_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
@@ -47,6 +48,12 @@ where
     Ok(result)
 }
 
+pub fn deserialize_boolean_object_bounds<E>(mapping: &Mapping) -> Result<Option<BooleanObjectBounds>, E>
+where
+    E: Error,
+{
+    Ok(deserialize_enumeration(&mapping)?.map(BooleanObjectBounds))
+}
 pub fn deserialize_length_bounds<E>(mapping: &Mapping) -> Result<Option<StringObjectBounds>, E>
 where
     E: Error,

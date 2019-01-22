@@ -18,6 +18,7 @@ use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::object_types::ObjectType;
+use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -47,7 +48,7 @@ where
 
     match raw_type {
         RawObjectType::Object => {}
-        RawObjectType::Boolean => {}
+        RawObjectType::Boolean(object_bounds) => serialize_boolean(object_bounds, map)?,
         RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => serialize_password(object_bounds, map)?,
@@ -70,23 +71,10 @@ where
     Ok(())
 }
 
-fn serialize_string_with_format<O, E, S>(
-    format: &str,
-    bounds: &Option<StringObjectBounds>,
-    map: &mut S,
-) -> Result<(), E>
-where
-    E: Error,
-    S: SerializeMap<Ok = O, Error = E>,
-{
-    map.serialize_entry("format", format)?;
-    serialize_string(bounds, map)
-}
-
 pub fn object_type_name(object_type: &RawObjectType) -> &str {
     match object_type {
         RawObjectType::Object => "object",
-        RawObjectType::Boolean => "boolean",
+        RawObjectType::Boolean(_) => "boolean",
         RawObjectType::String(_) => "string",
         RawObjectType::Text(_) => "string",
         RawObjectType::Password(_) => "string",
@@ -120,6 +108,17 @@ where
     Ok(())
 }
 
+fn serialize_boolean<O, E, S>(bounds: &Option<BooleanObjectBounds>, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if let Some(bounds) = bounds {
+        serialize_enum_bounds(&bounds.0, map)?;
+    }
+    Ok(())
+}
+
 fn serialize_string<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
@@ -129,6 +128,19 @@ where
         serialize_string_bounds(&enumeration_values, map)?;
     }
     Ok(())
+}
+
+fn serialize_string_with_format<O, E, S>(
+    format: &str,
+    bounds: &Option<StringObjectBounds>,
+    map: &mut S,
+) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    map.serialize_entry("format", format)?;
+    serialize_string(bounds, map)
 }
 
 fn serialize_password<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>

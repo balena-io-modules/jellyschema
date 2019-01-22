@@ -13,6 +13,7 @@ use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds_with_defaults;
 use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::ObjectTypeData;
+use crate::dsl::schema::object_types::bounds::deserialization::deserialize_boolean_object_bounds;
 
 pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
 where
@@ -79,7 +80,7 @@ impl RawObjectType {
                 RawObjectType::Port(Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?))
             }
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
-            "boolean" => RawObjectType::Boolean,
+            "boolean" => RawObjectType::Boolean(deserialize_boolean_object_bounds(mapping)?),
             "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
             "stringlist" => RawObjectType::Stringlist(Box::new(deserialize_array_object_bounds(mapping)?)),
             "hostname" => RawObjectType::Hostname(deserialize_string_object_bounds(mapping)?),

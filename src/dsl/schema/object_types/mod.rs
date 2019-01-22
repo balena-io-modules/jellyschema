@@ -4,6 +4,7 @@ use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::DefaultValue;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
+use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
 
 pub mod bounds;
 pub mod deserialization;
@@ -23,7 +24,7 @@ pub struct ObjectTypeData {
 #[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    Boolean,
+    Boolean(Option<BooleanObjectBounds>),
     String(Option<StringObjectBounds>),
     Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),
@@ -85,7 +86,7 @@ impl RawObjectType {
             RawObjectType::IPV6(bounds) => bounds.is_some(),
             RawObjectType::URI(bounds) => bounds.is_some(),
             RawObjectType::File(bounds) => bounds.is_some(),
-            RawObjectType::Boolean => false,
+            RawObjectType::Boolean(bounds) => bounds.is_some(),
             RawObjectType::String(bounds) => bounds.is_some(),
             RawObjectType::Text(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),

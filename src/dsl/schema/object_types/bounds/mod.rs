@@ -9,6 +9,9 @@ pub mod deserialization;
 mod enums;
 
 #[derive(Clone, Debug)]
+pub struct BooleanObjectBounds(pub Vec<EnumerationValue>);
+
+#[derive(Clone, Debug)]
 pub enum StringObjectBounds {
     List(Vec<EnumerationValue>),
     Pattern(Regex),
