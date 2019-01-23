@@ -12,7 +12,10 @@
         "email",
         "ipv4",
         "ipv6",
-        "uri"
+        "uri",
+        "dnsmasq-address",
+        "chrony-address",
+        "iptables-address"
     ],
     "required": [
         "string",
@@ -23,7 +26,10 @@
         "email",
         "ipv4",
         "ipv6",
-        "uri"
+        "uri",
+        "dnsmasq-address",
+        "chrony-address",
+        "iptables-address"
     ],
     "properties": {
         "string": {
@@ -69,6 +75,21 @@
             "type": "string",
             "format": "uri",
             "default": "https://example.com"
+        },
+        "dnsmasq-address": {
+            "type": "string",
+            "format": "dnsmasq-address",
+            "default": "1.1.1.1"
+        },
+        "chrony-address": {
+            "type": "string",
+            "format": "chrony-address",
+            "default": "1.1.1.1"
+        },
+        "iptables-address": {
+            "type": "string",
+            "format": "iptables-address",
+            "default": "1.1.1.1"
         }
     }
 }

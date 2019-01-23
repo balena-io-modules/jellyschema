@@ -67,6 +67,16 @@ where
         RawObjectType::IPV6(object_bounds) => serialize_string_with_format("ipv6", object_bounds, map)?,
         RawObjectType::URI(object_bounds) => serialize_string_with_format("uri", object_bounds, map)?,
         RawObjectType::File(object_bounds) => serialize_string_with_format("data-url", object_bounds, map)?,
+
+        RawObjectType::DnsmasqAddress(object_bounds) => {
+            serialize_string_with_format("dnsmasq-address", object_bounds, map)?
+        }
+        RawObjectType::ChronyAddress(object_bounds) => {
+            serialize_string_with_format("chrony-address", object_bounds, map)?
+        }
+        RawObjectType::IpTablesAddress(object_bounds) => {
+            serialize_string_with_format("iptables-address", object_bounds, map)?
+        }
     };
     Ok(())
 }
@@ -94,6 +104,10 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::URI(_) => "string",
 
         RawObjectType::File(_) => "string",
+
+        RawObjectType::DnsmasqAddress(_) => "string",
+        RawObjectType::ChronyAddress(_) => "string",
+        RawObjectType::IpTablesAddress(_) => "string",
     }
 }
 
