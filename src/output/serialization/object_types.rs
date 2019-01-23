@@ -22,8 +22,8 @@ use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: Serializer,
+    where
+        S: Serializer,
     {
         let mut map = serializer.serialize_map(None)?;
         if self.annotations.title.is_some() {
@@ -36,9 +36,9 @@ impl Serialize for EnumerationValue {
 }
 
 pub fn serialize_object_type<O, E, S>(object_type: &ObjectType, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     let raw_type = object_type.inner_raw();
     let default = object_type.data().default_value();
@@ -68,9 +68,15 @@ pub fn serialize_object_type<O, E, S>(object_type: &ObjectType, map: &mut S) -> 
         RawObjectType::URI(object_bounds) => serialize_string_with_format("uri", object_bounds, map)?,
         RawObjectType::File(object_bounds) => serialize_string_with_format("data-url", object_bounds, map)?,
 
-        RawObjectType::DnsmasqAddress(object_bounds) => serialize_string(object_bounds, map)?,
-        RawObjectType::ChronyAddress(object_bounds) => serialize_string(object_bounds, map)?,
-        RawObjectType::IpTablesAddress(object_bounds) => serialize_string(object_bounds, map)?,
+        RawObjectType::DnsmasqAddress(object_bounds) => {
+            serialize_string_with_format("dnsmasq-address", object_bounds, map)?
+        }
+        RawObjectType::ChronyAddress(object_bounds) => {
+            serialize_string_with_format("chrony-address", object_bounds, map)?
+        }
+        RawObjectType::IpTablesAddress(object_bounds) => {
+            serialize_string_with_format("iptables-address", object_bounds, map)?
+        }
     };
     Ok(())
 }
@@ -101,14 +107,14 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
 
         RawObjectType::DnsmasqAddress(_) => "string",
         RawObjectType::ChronyAddress(_) => "string",
-        RawObjectType::IpTablesAddress(_) => "string"
+        RawObjectType::IpTablesAddress(_) => "string",
     }
 }
 
 fn serialize_default<O, E, S>(default: &Option<DefaultValue>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     for value in default {
         map.serialize_entry("default", value.value())?;
@@ -117,9 +123,9 @@ fn serialize_default<O, E, S>(default: &Option<DefaultValue>, map: &mut S) -> Re
 }
 
 fn serialize_boolean<O, E, S>(bounds: &Option<BooleanObjectBounds>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     if let Some(bounds) = bounds {
         serialize_enum_bounds(&bounds.0, map)?;
@@ -128,9 +134,9 @@ fn serialize_boolean<O, E, S>(bounds: &Option<BooleanObjectBounds>, map: &mut S)
 }
 
 fn serialize_string<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     for enumeration_values in bounds {
         serialize_string_bounds(&enumeration_values, map)?;
@@ -143,18 +149,18 @@ fn serialize_string_with_format<O, E, S>(
     bounds: &Option<StringObjectBounds>,
     map: &mut S,
 ) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     map.serialize_entry("format", format)?;
     serialize_string(bounds, map)
 }
 
 fn serialize_password<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     map.serialize_entry("writeOnly", &true)?;
     serialize_string(bounds, map)?;
@@ -162,9 +168,9 @@ fn serialize_password<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S)
 }
 
 fn serialize_integer_bound<O, E, S>(name: &str, bound: &Option<IntegerBound>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     if let Some(value) = bound {
         match value {
@@ -179,9 +185,9 @@ fn serialize_integer_bound<O, E, S>(name: &str, bound: &Option<IntegerBound>, ma
 }
 
 fn serialize_array<O, E, S>(bounds: &Option<ArrayObjectBounds>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     if let Some(bounds) = bounds {
         if let Some(max) = bounds.maximum_number_of_items {
@@ -217,9 +223,9 @@ fn serialize_array<O, E, S>(bounds: &Option<ArrayObjectBounds>, map: &mut S) -> 
 }
 
 fn serialize_integer<O, E, S>(bounds: &Option<IntegerObjectBounds>, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     if let Some(bounds) = bounds {
         match bounds {
@@ -237,9 +243,9 @@ fn serialize_integer<O, E, S>(bounds: &Option<IntegerObjectBounds>, map: &mut S)
 }
 
 fn serialize_string_bounds<O, E, S>(string_bounds: &StringObjectBounds, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     match string_bounds {
         StringObjectBounds::Enumeration(values) => serialize_enum_bounds(values, map)?,
@@ -256,9 +262,9 @@ fn serialize_string_bounds<O, E, S>(string_bounds: &StringObjectBounds, map: &mu
 }
 
 fn serialize_enum_bounds<O, E, S>(values: &[EnumerationValue], map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     if values.len() == 1 {
         serialize_singular_constant_value(&values[0], map)?;
@@ -269,9 +275,9 @@ fn serialize_enum_bounds<O, E, S>(values: &[EnumerationValue], map: &mut S) -> R
 }
 
 fn serialize_length_bounds<O, E, S>(length_bounds: &StringLength, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     if let Some(maximum) = length_bounds.maximum {
         map.serialize_entry("maxLength", &maximum)?;
@@ -283,9 +289,9 @@ fn serialize_length_bounds<O, E, S>(length_bounds: &StringLength, map: &mut S) -
 }
 
 fn serialize_multiple_enum_values<O, E, S>(enumeration_values: &[EnumerationValue], map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     if !enumeration_values.is_empty() {
         map.serialize_entry("oneOf", &enumeration_values)?;
@@ -294,9 +300,9 @@ fn serialize_multiple_enum_values<O, E, S>(enumeration_values: &[EnumerationValu
 }
 
 fn serialize_singular_constant_value<O, E, S>(constant: &EnumerationValue, map: &mut S) -> Result<(), E>
-    where
-        E: Error,
-        S: SerializeMap<Ok=O, Error=E>,
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
 {
     Ok(map.serialize_entry("enum", &vec![constant.value.clone()]))?
 }

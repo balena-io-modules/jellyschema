@@ -92,6 +92,9 @@ impl RawObjectType {
             "ipv6" => RawObjectType::IPV6(deserialize_string_object_bounds(mapping)?),
             "uri" => RawObjectType::URI(deserialize_string_object_bounds(mapping)?),
             "file" => RawObjectType::File(deserialize_string_object_bounds(mapping)?),
+            "dnsmasq-address" => RawObjectType::DnsmasqAddress(deserialize_string_object_bounds(mapping)?),
+            "chrony-address" => RawObjectType::ChronyAddress(deserialize_string_object_bounds(mapping)?),
+            "iptables-address" => RawObjectType::IpTablesAddress(deserialize_string_object_bounds(mapping)?),
             _ => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
         };
         Ok(object_type)
