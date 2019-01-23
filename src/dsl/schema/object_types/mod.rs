@@ -44,6 +44,9 @@ pub enum RawObjectType {
     IPV4(Option<StringObjectBounds>),
     IPV6(Option<StringObjectBounds>),
     URI(Option<StringObjectBounds>),
+    DnsmasqAddress(Option<StringObjectBounds>),
+    ChronyAddress(Option<StringObjectBounds>),
+    IpTablesAddress(Option<StringObjectBounds>)
 }
 
 impl ObjectTypeData {
