@@ -1,4 +1,14 @@
 - commits:
+    - subject: Add support for *address types
+      hash: f35a8c9c2f6f330ece81b01c27114e0ecef20145
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.7.3
+  date: 2019-01-23T15:20:50.632Z
+- commits:
     - subject: Allow lenght bounds and patterns to coexist on strings
       hash: 74dfdbcc33a79c15ba6557547a9e048e111b5b34
       body: ''
