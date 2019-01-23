@@ -28,3 +28,12 @@ properties:
   - uri:
       type: uri
       default: https://example.com
+  - dnsmasq-address:
+      type: dnsmasq-address
+      default: 1.1.1.1
+  - chrony-address:
+      type: chrony-address
+      default: 1.1.1.1
+  - iptables-address:
+      type: iptables-address
+      default: 1.1.1.1
