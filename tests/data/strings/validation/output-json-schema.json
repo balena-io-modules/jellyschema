@@ -5,11 +5,13 @@
     "title": "String validation",
     "$$order": [
         "ssid",
-        "password"
+        "password",
+        "hostname"
     ],
     "required": [
         "ssid",
-        "password"
+        "password",
+        "hostname"
     ],
     "properties": {
         "ssid": {
@@ -21,6 +23,12 @@
             "minLength": 8,
             "maxLength": 32,
             "writeOnly": true
+        },
+        "hostname": {
+            "type": "string",
+            "format": "hostname",
+            "pattern": "/^www.*$/",
+            "maxLength": 32
         }
     }
 }

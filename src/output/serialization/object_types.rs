@@ -18,6 +18,7 @@ use crate::dsl::schema::object_types::bounds::StringLength;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::object_types::ObjectType;
+use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -47,7 +48,7 @@ where
 
     match raw_type {
         RawObjectType::Object => {}
-        RawObjectType::Boolean => {}
+        RawObjectType::Boolean(object_bounds) => serialize_boolean(object_bounds, map)?,
         RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Password(object_bounds) => serialize_password(object_bounds, map)?,
@@ -57,15 +58,15 @@ where
         RawObjectType::Array(object_bounds) => serialize_array(object_bounds, map)?,
         RawObjectType::Stringlist(object_bounds) => serialize_array(object_bounds, map)?,
 
-        RawObjectType::Hostname => map.serialize_entry("format", "hostname")?,
-        RawObjectType::Datetime => map.serialize_entry("format", "date-time")?,
-        RawObjectType::Date => map.serialize_entry("format", "date")?,
-        RawObjectType::Time => map.serialize_entry("format", "time")?,
-        RawObjectType::Email => map.serialize_entry("format", "email")?,
-        RawObjectType::IPV4 => map.serialize_entry("format", "ipv4")?,
-        RawObjectType::IPV6 => map.serialize_entry("format", "ipv6")?,
-        RawObjectType::URI => map.serialize_entry("format", "uri")?,
-        RawObjectType::File => map.serialize_entry("format", "data-url")?,
+        RawObjectType::Hostname(object_bounds) => serialize_string_with_format("hostname", object_bounds, map)?,
+        RawObjectType::Datetime(object_bounds) => serialize_string_with_format("date-time", object_bounds, map)?,
+        RawObjectType::Date(object_bounds) => serialize_string_with_format("date", object_bounds, map)?,
+        RawObjectType::Time(object_bounds) => serialize_string_with_format("time", object_bounds, map)?,
+        RawObjectType::Email(object_bounds) => serialize_string_with_format("email", object_bounds, map)?,
+        RawObjectType::IPV4(object_bounds) => serialize_string_with_format("ipv4", object_bounds, map)?,
+        RawObjectType::IPV6(object_bounds) => serialize_string_with_format("ipv6", object_bounds, map)?,
+        RawObjectType::URI(object_bounds) => serialize_string_with_format("uri", object_bounds, map)?,
+        RawObjectType::File(object_bounds) => serialize_string_with_format("data-url", object_bounds, map)?,
     };
     Ok(())
 }
@@ -73,7 +74,7 @@ where
 pub fn object_type_name(object_type: &RawObjectType) -> &str {
     match object_type {
         RawObjectType::Object => "object",
-        RawObjectType::Boolean => "boolean",
+        RawObjectType::Boolean(_) => "boolean",
         RawObjectType::String(_) => "string",
         RawObjectType::Text(_) => "string",
         RawObjectType::Password(_) => "string",
@@ -83,16 +84,16 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::Array(_) => "array",
         RawObjectType::Stringlist(_) => "array",
 
-        RawObjectType::Hostname => "string",
-        RawObjectType::Datetime => "string",
-        RawObjectType::Date => "string",
-        RawObjectType::Time => "string",
-        RawObjectType::Email => "string",
-        RawObjectType::IPV4 => "string",
-        RawObjectType::IPV6 => "string",
-        RawObjectType::URI => "string",
+        RawObjectType::Hostname(_) => "string",
+        RawObjectType::Datetime(_) => "string",
+        RawObjectType::Date(_) => "string",
+        RawObjectType::Time(_) => "string",
+        RawObjectType::Email(_) => "string",
+        RawObjectType::IPV4(_) => "string",
+        RawObjectType::IPV6(_) => "string",
+        RawObjectType::URI(_) => "string",
 
-        RawObjectType::File => "string",
+        RawObjectType::File(_) => "string",
     }
 }
 
@@ -107,6 +108,17 @@ where
     Ok(())
 }
 
+fn serialize_boolean<O, E, S>(bounds: &Option<BooleanObjectBounds>, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    if let Some(bounds) = bounds {
+        serialize_enum_bounds(&bounds.0, map)?;
+    }
+    Ok(())
+}
+
 fn serialize_string<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
 where
     E: Error,
@@ -116,6 +128,19 @@ where
         serialize_string_bounds(&enumeration_values, map)?;
     }
     Ok(())
+}
+
+fn serialize_string_with_format<O, E, S>(
+    format: &str,
+    bounds: &Option<StringObjectBounds>,
+    map: &mut S,
+) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    map.serialize_entry("format", format)?;
+    serialize_string(bounds, map)
 }
 
 fn serialize_password<O, E, S>(bounds: &Option<StringObjectBounds>, map: &mut S) -> Result<(), E>
@@ -197,7 +222,7 @@ where
                     map.serialize_entry("multipleOf", &multiple_of)?;
                 }
             }
-            IntegerObjectBounds::List(list) => serialize_enum_bounds(list, map)?,
+            IntegerObjectBounds::Enumeration(list) => serialize_enum_bounds(list, map)?,
         }
     }
     Ok(())
@@ -209,9 +234,15 @@ where
     S: SerializeMap<Ok = O, Error = E>,
 {
     match string_bounds {
-        StringObjectBounds::List(values) => serialize_enum_bounds(values, map)?,
-        StringObjectBounds::Pattern(pattern) => map.serialize_entry("pattern", pattern.as_str())?,
-        StringObjectBounds::Length(length) => serialize_length_bounds(length, map)?,
+        StringObjectBounds::Enumeration(values) => serialize_enum_bounds(values, map)?,
+        StringObjectBounds::Value(value_bounds) => {
+            if let Some(pattern) = &value_bounds.pattern {
+                map.serialize_entry("pattern", pattern.as_str())?
+            }
+            if let Some(length) = &value_bounds.length {
+                serialize_length_bounds(length, map)?
+            }
+        }
     }
     Ok(())
 }

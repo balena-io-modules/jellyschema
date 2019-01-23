@@ -13,6 +13,7 @@ use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integer_bounds_with_defaults;
 use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::ObjectTypeData;
+use crate::dsl::schema::object_types::bounds::deserialization::deserialize_boolean_object_bounds;
 
 pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
 where
@@ -79,18 +80,18 @@ impl RawObjectType {
                 RawObjectType::Port(Some(deserialize_integer_bounds_with_defaults(defaults, mapping)?))
             }
             "password" => RawObjectType::Password(deserialize_string_object_bounds(mapping)?),
-            "boolean" => RawObjectType::Boolean,
+            "boolean" => RawObjectType::Boolean(deserialize_boolean_object_bounds(mapping)?),
             "array" => RawObjectType::Array(Box::new(deserialize_array_object_bounds(mapping)?)),
             "stringlist" => RawObjectType::Stringlist(Box::new(deserialize_array_object_bounds(mapping)?)),
-            "hostname" => RawObjectType::Hostname,
-            "datetime" => RawObjectType::Datetime,
-            "date" => RawObjectType::Date,
-            "time" => RawObjectType::Time,
-            "email" => RawObjectType::Email,
-            "ipv4" => RawObjectType::IPV4,
-            "ipv6" => RawObjectType::IPV6,
-            "uri" => RawObjectType::URI,
-            "file" => RawObjectType::File,
+            "hostname" => RawObjectType::Hostname(deserialize_string_object_bounds(mapping)?),
+            "datetime" => RawObjectType::Datetime(deserialize_string_object_bounds(mapping)?),
+            "date" => RawObjectType::Date(deserialize_string_object_bounds(mapping)?),
+            "time" => RawObjectType::Time(deserialize_string_object_bounds(mapping)?),
+            "email" => RawObjectType::Email(deserialize_string_object_bounds(mapping)?),
+            "ipv4" => RawObjectType::IPV4(deserialize_string_object_bounds(mapping)?),
+            "ipv6" => RawObjectType::IPV6(deserialize_string_object_bounds(mapping)?),
+            "uri" => RawObjectType::URI(deserialize_string_object_bounds(mapping)?),
+            "file" => RawObjectType::File(deserialize_string_object_bounds(mapping)?),
             _ => RawObjectType::Text(deserialize_string_object_bounds(mapping)?),
         };
         Ok(object_type)

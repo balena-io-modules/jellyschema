@@ -4,6 +4,7 @@ use crate::dsl::schema::object_types::bounds::ArrayObjectBounds;
 use crate::dsl::schema::object_types::bounds::DefaultValue;
 use crate::dsl::schema::object_types::bounds::IntegerObjectBounds;
 use crate::dsl::schema::object_types::bounds::StringObjectBounds;
+use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
 
 pub mod bounds;
 pub mod deserialization;
@@ -23,7 +24,7 @@ pub struct ObjectTypeData {
 #[derive(Clone, Debug)]
 pub enum RawObjectType {
     Object,
-    Boolean,
+    Boolean(Option<BooleanObjectBounds>),
     String(Option<StringObjectBounds>),
     Text(Option<StringObjectBounds>),
     Password(Option<StringObjectBounds>),
@@ -32,17 +33,17 @@ pub enum RawObjectType {
     Array(Box<Option<ArrayObjectBounds>>),
     Stringlist(Box<Option<ArrayObjectBounds>>),
 
-    File,
+    File(Option<StringObjectBounds>),
     Port(Option<IntegerObjectBounds>),
 
-    Datetime,
-    Date,
-    Time,
-    Hostname,
-    Email,
-    IPV4,
-    IPV6,
-    URI,
+    Datetime(Option<StringObjectBounds>),
+    Date(Option<StringObjectBounds>),
+    Time(Option<StringObjectBounds>),
+    Hostname(Option<StringObjectBounds>),
+    Email(Option<StringObjectBounds>),
+    IPV4(Option<StringObjectBounds>),
+    IPV6(Option<StringObjectBounds>),
+    URI(Option<StringObjectBounds>),
 }
 
 impl ObjectTypeData {
@@ -76,16 +77,16 @@ impl RawObjectType {
     pub fn has_bounds(&self) -> bool {
         match self {
             RawObjectType::Object => false,
-            RawObjectType::Hostname => false,
-            RawObjectType::Datetime => false,
-            RawObjectType::Date => false,
-            RawObjectType::Time => false,
-            RawObjectType::Email => false,
-            RawObjectType::IPV4 => false,
-            RawObjectType::IPV6 => false,
-            RawObjectType::URI => false,
-            RawObjectType::File => false,
-            RawObjectType::Boolean => false,
+            RawObjectType::Hostname(bounds) => bounds.is_some(),
+            RawObjectType::Datetime(bounds) => bounds.is_some(),
+            RawObjectType::Date(bounds) => bounds.is_some(),
+            RawObjectType::Time(bounds) => bounds.is_some(),
+            RawObjectType::Email(bounds) => bounds.is_some(),
+            RawObjectType::IPV4(bounds) => bounds.is_some(),
+            RawObjectType::IPV6(bounds) => bounds.is_some(),
+            RawObjectType::URI(bounds) => bounds.is_some(),
+            RawObjectType::File(bounds) => bounds.is_some(),
+            RawObjectType::Boolean(bounds) => bounds.is_some(),
             RawObjectType::String(bounds) => bounds.is_some(),
             RawObjectType::Text(bounds) => bounds.is_some(),
             RawObjectType::Password(bounds) => bounds.is_some(),

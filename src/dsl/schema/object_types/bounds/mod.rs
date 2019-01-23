@@ -9,10 +9,18 @@ pub mod deserialization;
 mod enums;
 
 #[derive(Clone, Debug)]
+pub struct BooleanObjectBounds(pub Vec<EnumerationValue>);
+
+#[derive(Clone, Debug)]
 pub enum StringObjectBounds {
-    List(Vec<EnumerationValue>),
-    Pattern(Regex),
-    Length(StringLength),
+    Enumeration(Vec<EnumerationValue>),
+    Value(StringValueObjectBounds),
+}
+
+#[derive(Clone, Debug)]
+pub struct StringValueObjectBounds {
+    pub pattern: Option<Regex>,
+    pub length: Option<StringLength>,
 }
 
 #[derive(Clone, Debug)]
@@ -25,7 +33,7 @@ pub struct IntegerValueConditionObjectBounds {
 #[derive(Clone, Debug)]
 pub enum IntegerObjectBounds {
     Conditions(IntegerValueConditionObjectBounds),
-    List(Vec<EnumerationValue>),
+    Enumeration(Vec<EnumerationValue>),
 }
 
 #[derive(Clone, Debug)]

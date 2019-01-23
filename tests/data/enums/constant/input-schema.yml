@@ -1,6 +1,28 @@
 version: 1
 title: Const test
 properties:
-- constant:
+- string:
     type: string
     const: fincm3
+- number:
+    type: number
+    const: -1.2
+- integer:
+    type: integer
+    const: 1
+- hostname:
+    type: hostname
+    const: www.example.com
+- boolean:
+    type: boolean
+    const: false
+- port:
+    type: port
+    const: 1337
+- date:
+    type: date
+    const: 1970-01-01
+- email:
+    type: email
+    const: email@example.com
+

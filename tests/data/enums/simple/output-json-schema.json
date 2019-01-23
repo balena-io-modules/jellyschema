@@ -3,14 +3,20 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "$$order": [
-        "shortOne"
+        "string",
+        "boolean",
+        "hostname",
+        "port"
     ],
     "required": [
-        "shortOne"
+        "string",
+        "boolean",
+        "hostname",
+        "port"
     ],
     "title": "Enum test",
     "properties": {
-        "shortOne": {
+        "string": {
             "type": "string",
             "oneOf": [
                 {
@@ -29,6 +35,58 @@
                     "title": "raspberrypi2",
                     "enum": [
                         "raspberrypi2"
+                    ]
+                }
+            ]
+        },
+        "boolean": {
+            "type": "boolean",
+            "oneOf": [
+                {
+                    "title": "yes",
+                    "enum": [
+                        true
+                    ]
+                },
+                {
+                    "title": "no",
+                    "enum": [
+                        false
+                    ]
+                }
+            ]
+        },
+        "hostname": {
+            "type": "string",
+            "format": "hostname",
+            "oneOf": [
+                {
+                    "title": "www.example.com",
+                    "enum": [
+                        "www.example.com"
+                    ]
+                },
+                {
+                    "title": "example.com",
+                    "enum": [
+                        "example.com"
+                    ]
+                }
+            ]
+        },
+        "port": {
+            "type": "integer",
+            "oneOf": [
+                {
+                    "title": "http",
+                    "enum": [
+                        80
+                    ]
+                },
+                {
+                    "title": "https",
+                    "enum": [
+                        443
                     ]
                 }
             ]
