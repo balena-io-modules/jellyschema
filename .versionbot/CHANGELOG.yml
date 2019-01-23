@@ -1,4 +1,35 @@
 - commits:
+    - subject: Allow lenght bounds and patterns to coexist on strings
+      hash: 74dfdbcc33a79c15ba6557547a9e048e111b5b34
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: 'Add more tests for const, enum and pattern'
+      hash: b707fd5e6eeb652cc2493c410713a913a72a47ee
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add enum/const support for booleans
+      hash: 271b70d687ddbcfc23e228d728b98deacc17282e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add support for all string object bounds for all string-based types
+      hash: 043c648e260f35c65bff45dabf3276442c2abdb6
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.7.2
+  date: 2019-01-22T14:35:55.812Z
+- commits:
     - subject: Move to Rust stable
       hash: 0384d17ca489c95fd5d86edf38007fb2e89b21b7
       body: |
