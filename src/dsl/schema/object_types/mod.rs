@@ -73,32 +73,6 @@ impl ObjectTypeData {
     }
 }
 
-impl RawObjectType {
-    pub fn has_bounds(&self) -> bool {
-        match self {
-            RawObjectType::Object => false,
-            RawObjectType::Hostname(bounds) => bounds.is_some(),
-            RawObjectType::Datetime(bounds) => bounds.is_some(),
-            RawObjectType::Date(bounds) => bounds.is_some(),
-            RawObjectType::Time(bounds) => bounds.is_some(),
-            RawObjectType::Email(bounds) => bounds.is_some(),
-            RawObjectType::IPV4(bounds) => bounds.is_some(),
-            RawObjectType::IPV6(bounds) => bounds.is_some(),
-            RawObjectType::URI(bounds) => bounds.is_some(),
-            RawObjectType::File(bounds) => bounds.is_some(),
-            RawObjectType::Boolean(bounds) => bounds.is_some(),
-            RawObjectType::String(bounds) => bounds.is_some(),
-            RawObjectType::Text(bounds) => bounds.is_some(),
-            RawObjectType::Password(bounds) => bounds.is_some(),
-            RawObjectType::Integer(bounds) => bounds.is_some(),
-            RawObjectType::Number(bounds) => bounds.is_some(),
-            RawObjectType::Port(bounds) => bounds.is_some(),
-            RawObjectType::Array(bounds) => bounds.is_some(),
-            RawObjectType::Stringlist(bounds) => bounds.is_some(),
-        }
-    }
-}
-
 impl ObjectType {
     pub fn data(&self) -> &ObjectTypeData {
         match self {
