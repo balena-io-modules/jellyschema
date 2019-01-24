@@ -3,37 +3,35 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "$$order": [
-        "rules",
-        "services"
+        "extendedRules"
     ],
     "required": [
-        "rules",
-        "services"
+        "extendedRules"
     ],
     "title": "Dynamic object.",
     "properties": {
-        "rules": {
+        "extendedRules": {
             "title": "Rules",
             "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "Rules set name"
+                }
+            },
             "patternProperties": {
-                "^[+-]?[0-9]+$": {
+                "^[0-9]+$": {
                     "type": "string",
                     "title": "Rule"
                 }
-            }
-        },
-        "services": {
-            "type": "object",
-            "title": "List of service endpoints per hostname",
-            "patternProperties": {
-                "hostname": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "format": "hostname"
-                    }
-                }
-            }
+            },
+            "additionalProperties": false,
+            "$$order": [
+                "name"
+            ],
+            "required": [
+                "name"
+            ]
         }
     }
 }

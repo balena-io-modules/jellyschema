@@ -7,6 +7,9 @@ use serde_derive::Serialize;
 
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::when::DependencyGraph;
+use regex::Regex;
+use crate::dsl::schema::object_types::ObjectTypeData;
+use crate::dsl::schema::object_types::RawObjectType;
 
 pub mod deserialization;
 pub mod compiler;
@@ -44,6 +47,8 @@ pub struct Schema {
     pub annotations: Annotations,
     /// children of a schema are all schemas defined inside of this schema
     pub children: Option<SchemaList>,
+    /// this represents `keys` and `values` - defining dynamic objects
+    pub dynamic: Option<Box<KeysValues>>,
     /// this is th DSL mapping, to and from output formats (e.g. config files etc)
     pub mapping: Option<serde_yaml::Mapping>,
     // TODO: real mapping support
@@ -66,6 +71,30 @@ pub struct Annotations {
 #[serde(rename_all = "lowercase")]
 pub enum Widget {
     Textarea,
+}
+
+#[derive(Clone, Debug)]
+pub struct KeysSchema {
+    pattern: Regex,
+    title: Option<String>
+}
+
+#[derive(Clone, Debug)]
+pub struct KeysValues {
+    keys: KeysSchema,
+    values: Schema
+}
+
+impl KeysValues {
+    pub fn new(keys: KeysSchema, values: Schema) -> KeysValues {
+        KeysValues { keys, values }
+    }
+}
+
+impl KeysSchema {
+    pub fn new(pattern: Regex, title: Option<String>) -> KeysSchema {
+        KeysSchema{pattern, title}
+    }
 }
 
 impl NamedSchema {

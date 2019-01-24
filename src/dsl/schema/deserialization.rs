@@ -16,6 +16,9 @@ use crate::dsl::schema::Annotations;
 use crate::dsl::schema::Widget;
 use crate::dsl::schema::object_types::ObjectTypeData;
 use balena_temen::ast::Expression;
+use crate::dsl::schema::KeysValues;
+use crate::dsl::schema::KeysSchema;
+use regex::Regex;
 
 pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {
     let maybe_root = schema.as_mapping();
@@ -70,6 +73,8 @@ where
     let annotations = annotations(value)?;
     let annotations = annotations_from_type(annotations, &type_information);
     let properties = properties(yaml_mapping)?;
+    let dynamic = keys_values(yaml_mapping)?;
+
     let mapping = mapping(yaml_mapping)?;
     let when = when(yaml_mapping)?;
     let formula = formula(yaml_mapping)?;
@@ -78,11 +83,82 @@ where
         object_type: type_information,
         children: properties,
         mapping: mapping.cloned(),
+        dynamic,
         annotations,
         when,
         formula,
     })
 }
+
+fn deserialize_keys_schema<E>(value: &Value) -> Result<KeysSchema, E>
+where E: Error
+{
+
+    let yaml_mapping = value
+        .as_mapping()
+        .ok_or_else(|| Error::custom(format!("schema is not a yaml mapping - {:#?}", value)))?;
+
+
+    let pattern = yaml_mapping.get(&Value::from("pattern"));
+    let title = yaml_mapping.get(&Value::from("title"));
+    let type_spec = yaml_mapping.get(&Value::from("type"));
+
+    if type_spec.is_none() {
+        return Err(Error::custom("`keys` must have a `type` specified"))
+    }
+
+    let type_spec = type_spec.unwrap().as_str();
+    if type_spec.is_none() {
+        return Err(Error::custom("`keys` must have `type` specified as string"))
+    }
+
+    let title = match title {
+        None => Ok(None),
+        Some(title) => match title.as_str() {
+            None => Err(Error::custom("`title` must be a string")),
+            Some(title) => Ok(Some(title.to_string()))
+        }
+    }?;
+
+    if pattern.is_none() {
+        return Err(Error::custom("`keys` must have a `pattern`"))
+    }
+
+    let pattern = pattern.unwrap().as_str();
+    if pattern.is_none() {
+        return Err(Error::custom("`pattern` must be a string"))
+    }
+
+    let pattern = Regex::new(pattern.unwrap()).map_err(|e| Error::custom("`pattern` is not a regex"))?;
+
+    Ok(KeysSchema::new(pattern, title))
+}
+
+fn keys_values<E>(yaml_mapping: &Mapping) -> Result<Option<Box<KeysValues>>, E>
+where E: Error
+{
+    let key = yaml_mapping.get(&Value::from("keys"));
+    let value = yaml_mapping.get(&Value::from("values"));
+
+    if key.is_none() && value.is_none() {
+        return Ok(None);
+    }
+
+    if key.is_some() && value.is_none() {
+        return Err(Error::custom("need `values` when specifying a `keys`"));
+    }
+
+    if key.is_none() && value.is_some() {
+        return Err(Error::custom("need `keys` when specifying a `values`"));
+    }
+
+    let key = deserialize_keys_schema(key.unwrap())?;
+    let value = deserialize_schema(value.unwrap())?;
+
+    Ok(Some(Box::new(KeysValues::new(key, value))))
+}
+
+
 
 fn formula<E>(yaml_mapping: &Mapping) -> Result<Option<String>, E>
 where
