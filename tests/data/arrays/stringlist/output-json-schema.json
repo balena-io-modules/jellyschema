@@ -11,6 +11,7 @@
         "portlist"
     ],
     "type": "object",
+"additionalProperties": false,
     "properties": {
         "namelist": {
             "type": "array",

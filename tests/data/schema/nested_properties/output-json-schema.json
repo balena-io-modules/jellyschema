@@ -9,9 +9,11 @@
     ],
     "title": "Nested properties",
     "type": "object",
+"additionalProperties": false,
     "properties": {
         "top": {
             "type": "object",
+"additionalProperties": false,
             "title": "Top level property with no type specified",
             "$$order": [
                 "second"

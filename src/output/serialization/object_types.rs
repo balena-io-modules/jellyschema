@@ -47,7 +47,9 @@ where
     serialize_default(default, map)?;
 
     match raw_type {
-        RawObjectType::Object => {}
+        RawObjectType::Object => {
+            map.serialize_entry("additionalProperties", &false)?;
+        }
         RawObjectType::Boolean(object_bounds) => serialize_boolean(object_bounds, map)?,
         RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,
         RawObjectType::Text(object_bounds) => serialize_string(object_bounds, map)?,

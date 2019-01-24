@@ -3,6 +3,7 @@
     "$$version": 1,
     "title": "ResinOS Technologic TS-4900 Configuration",
     "type": "object",
+    "additionalProperties": false,
     "required": [
         "board",
         "network",
@@ -42,7 +43,8 @@
                 "cores"
             ],
             "title": "CPU Cores",
-            "type": "object"
+            "type": "object",
+            "additionalProperties": false
         },
         "network": {
             "$$order": [
@@ -71,7 +73,8 @@
                             "psk"
                         ],
                         "title": "WiFi Network",
-                        "type": "object"
+                        "type": "object",
+                        "additionalProperties": false
                     },
                     "type": "array"
                 }
@@ -80,9 +83,9 @@
                 "networks"
             ],
             "title": "Network Connection",
-            "type": "object"
+            "type": "object",
+            "additionalProperties": false
         },
-
         "advanced": {
             "$$order": [
                 "appUpdatePollInterval"
@@ -99,7 +102,8 @@
                 "appUpdatePollInterval"
             ],
             "title": "Advanced",
-            "type": "object"
+            "type": "object",
+            "additionalProperties": false
         }
     }
 }

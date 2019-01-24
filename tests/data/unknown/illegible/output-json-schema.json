@@ -2,6 +2,7 @@
     "$$version": 1,
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
+"additionalProperties": false,
     "title": "Unknown type should produce textarea by default",
     "$$order": [
         "property"
