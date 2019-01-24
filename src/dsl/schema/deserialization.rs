@@ -91,42 +91,41 @@ where
 }
 
 fn deserialize_keys_schema<E>(value: &Value) -> Result<KeysSchema, E>
-where E: Error
+where
+    E: Error,
 {
-
     let yaml_mapping = value
         .as_mapping()
         .ok_or_else(|| Error::custom(format!("schema is not a yaml mapping - {:#?}", value)))?;
-
 
     let pattern = yaml_mapping.get(&Value::from("pattern"));
     let title = yaml_mapping.get(&Value::from("title"));
     let type_spec = yaml_mapping.get(&Value::from("type"));
 
     if type_spec.is_none() {
-        return Err(Error::custom("`keys` must have a `type` specified"))
+        return Err(Error::custom("`keys` must have a `type` specified"));
     }
 
     let type_spec = type_spec.unwrap().as_str();
     if type_spec.is_none() {
-        return Err(Error::custom("`keys` must have `type` specified as string"))
+        return Err(Error::custom("`keys` must have `type` specified as string"));
     }
 
     let title = match title {
         None => Ok(None),
         Some(title) => match title.as_str() {
             None => Err(Error::custom("`title` must be a string")),
-            Some(title) => Ok(Some(title.to_string()))
-        }
+            Some(title) => Ok(Some(title.to_string())),
+        },
     }?;
 
     if pattern.is_none() {
-        return Err(Error::custom("`keys` must have a `pattern`"))
+        return Err(Error::custom("`keys` must have a `pattern`"));
     }
 
     let pattern = pattern.unwrap().as_str();
     if pattern.is_none() {
-        return Err(Error::custom("`pattern` must be a string"))
+        return Err(Error::custom("`pattern` must be a string"));
     }
 
     let pattern = Regex::new(pattern.unwrap()).map_err(|e| Error::custom("`pattern` is not a regex"))?;
@@ -135,7 +134,8 @@ where E: Error
 }
 
 fn keys_values<E>(yaml_mapping: &Mapping) -> Result<Option<Box<KeysValues>>, E>
-where E: Error
+where
+    E: Error,
 {
     let key = yaml_mapping.get(&Value::from("keys"));
     let value = yaml_mapping.get(&Value::from("values"));
@@ -157,8 +157,6 @@ where E: Error
 
     Ok(Some(Box::new(KeysValues::new(key, value))))
 }
-
-
 
 fn formula<E>(yaml_mapping: &Mapping) -> Result<Option<String>, E>
 where

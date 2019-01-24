@@ -76,13 +76,13 @@ pub enum Widget {
 #[derive(Clone, Debug)]
 pub struct KeysSchema {
     pattern: Regex,
-    title: Option<String>
+    title: Option<String>,
 }
 
 #[derive(Clone, Debug)]
 pub struct KeysValues {
     keys: KeysSchema,
-    values: Schema
+    values: Schema,
 }
 
 impl KeysValues {
@@ -93,7 +93,7 @@ impl KeysValues {
 
 impl KeysSchema {
     pub fn new(pattern: Regex, title: Option<String>) -> KeysSchema {
-        KeysSchema{pattern, title}
+        KeysSchema { pattern, title }
     }
 }
 
