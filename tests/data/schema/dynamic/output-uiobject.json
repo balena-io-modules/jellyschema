@@ -1,9 +1,6 @@
 {
-    "rules": {
-        "ui:key-title": "Priority"
-    },
-    "rules": {
-        "key": {
+    "extendedRules": {
+        "ui:keys": {
             "ui:title": "Priority"
         }
     }
