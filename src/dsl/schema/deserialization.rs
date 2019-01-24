@@ -130,7 +130,7 @@ where
 
     let pattern = Regex::new(pattern.unwrap()).map_err(|e| Error::custom("`pattern` is not a regex"))?;
 
-    Ok(KeysSchema::new(pattern, title))
+    Ok(KeysSchema { pattern, title })
 }
 
 fn keys_values<E>(yaml_mapping: &Mapping) -> Result<Option<Box<KeysValues>>, E>
@@ -152,10 +152,10 @@ where
         return Err(Error::custom("need `keys` when specifying a `values`"));
     }
 
-    let key = deserialize_keys_schema(key.unwrap())?;
-    let value = deserialize_schema(value.unwrap())?;
+    let keys = deserialize_keys_schema(key.unwrap())?;
+    let values = deserialize_schema(value.unwrap())?;
 
-    Ok(Some(Box::new(KeysValues::new(key, value))))
+    Ok(Some(Box::new(KeysValues { keys, values })))
 }
 
 fn formula<E>(yaml_mapping: &Mapping) -> Result<Option<String>, E>

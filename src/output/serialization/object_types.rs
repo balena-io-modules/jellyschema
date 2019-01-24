@@ -19,6 +19,7 @@ use crate::dsl::schema::object_types::bounds::StringObjectBounds;
 use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::bounds::BooleanObjectBounds;
+use crate::dsl::schema::KeysValues;
 
 impl Serialize for EnumerationValue {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -111,6 +112,17 @@ pub fn object_type_name(object_type: &RawObjectType) -> &str {
         RawObjectType::ChronyAddress(_) => "string",
         RawObjectType::IpTablesAddress(_) => "string",
     }
+}
+
+pub fn serialize_keys_values<O, E, S>(keys_values: &KeysValues, map: &mut S) -> Result<(), E>
+where
+    E: Error,
+    S: SerializeMap<Ok = O, Error = E>,
+{
+    let mut pattern_properties = HashMap::new();
+    pattern_properties.insert(keys_values.keys.pattern.to_string(), &keys_values.values);
+    map.serialize_entry("patternProperties", &pattern_properties)?;
+    Ok(())
 }
 
 fn serialize_default<O, E, S>(default: &Option<DefaultValue>, map: &mut S) -> Result<(), E>

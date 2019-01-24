@@ -8,8 +8,6 @@ use serde_derive::Serialize;
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::when::DependencyGraph;
 use regex::Regex;
-use crate::dsl::schema::object_types::ObjectTypeData;
-use crate::dsl::schema::object_types::RawObjectType;
 
 pub mod deserialization;
 pub mod compiler;
@@ -75,26 +73,14 @@ pub enum Widget {
 
 #[derive(Clone, Debug)]
 pub struct KeysSchema {
-    pattern: Regex,
-    title: Option<String>,
+    pub pattern: Regex,
+    pub title: Option<String>,
 }
 
 #[derive(Clone, Debug)]
 pub struct KeysValues {
-    keys: KeysSchema,
-    values: Schema,
-}
-
-impl KeysValues {
-    pub fn new(keys: KeysSchema, values: Schema) -> KeysValues {
-        KeysValues { keys, values }
-    }
-}
-
-impl KeysSchema {
-    pub fn new(pattern: Regex, title: Option<String>) -> KeysSchema {
-        KeysSchema { pattern, title }
-    }
+    pub keys: KeysSchema,
+    pub values: Schema,
 }
 
 impl NamedSchema {
