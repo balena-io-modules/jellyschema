@@ -1,0 +1,10 @@
+version: 1
+title: Allow additional properties in the data.
+additionalProperties: true
+properties:
+- property:
+    type: object
+    additionalProperties: true
+    properties:
+      - subproperty:
+          type: string
