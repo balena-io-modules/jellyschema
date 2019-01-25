@@ -6,7 +6,6 @@ use serde_derive::Serialize;
 use crate::dsl::schema::Schema;
 use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Widget;
-use crate::dsl::schema::KeysValues;
 use crate::dsl::schema::KeysSchema;
 
 pub mod generator;

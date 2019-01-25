@@ -128,7 +128,8 @@ where
         return Err(Error::custom("`pattern` must be a string"));
     }
 
-    let pattern = Regex::new(pattern.unwrap()).map_err(|e| Error::custom("`pattern` is not a regex"))?;
+    let pattern =
+        Regex::new(pattern.unwrap()).map_err(|e| Error::custom(format!("`pattern` is not a regex - {:#?}", e)))?;
 
     Ok(KeysSchema { pattern, title })
 }
