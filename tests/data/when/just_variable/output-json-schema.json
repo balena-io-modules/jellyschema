@@ -3,7 +3,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Simplest when condition",
     "type": "object",
-"additionalProperties": false,
+    "additionalProperties": false,
     "additionalProperties": false,
     "properties": {
         "showAllDevices": {

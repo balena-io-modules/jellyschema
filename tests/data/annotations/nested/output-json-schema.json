@@ -2,7 +2,7 @@
     "$$version": 1,
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
-"additionalProperties": false,
+    "additionalProperties": false,
     "title": "UISchema annotations",
     "$$order": [
         "top"
@@ -11,7 +11,7 @@
         "top"
     ],
     "properties": {
-        "top" : {
+        "top": {
             "$$order": [
                 "middle"
             ],
@@ -19,7 +19,7 @@
                 "middle"
             ],
             "type": "object",
-"additionalProperties": false,
+            "additionalProperties": false,
             "title": "top",
             "properties": {
                 "middle": {
@@ -30,7 +30,7 @@
                         "bottom"
                     ],
                     "type": "object",
-"additionalProperties": false,
+                    "additionalProperties": false,
                     "title": "middle",
                     "properties": {
                         "bottom": {

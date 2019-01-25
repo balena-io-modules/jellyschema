@@ -9,7 +9,7 @@
         "wifiNetworks"
     ],
     "type": "object",
-"additionalProperties": false,
+    "additionalProperties": false,
     "properties": {
         "wifiNetworks": {
             "type": "array",
