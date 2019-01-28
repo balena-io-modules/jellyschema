@@ -1,4 +1,21 @@
 - commits:
+    - subject: Add support for pass-through of `additionalProperties`
+      hash: c10ef153a72a396232a394ef85baea4e31c26e66
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add support for dynamic objects.
+      hash: ee13a65b8e887829a801d818fe22cf960f877d6a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.7.4
+  date: 2019-01-28T16:10:26.914Z
+- commits:
     - subject: Add support for *address types
       hash: f35a8c9c2f6f330ece81b01c27114e0ecef20145
       body: ''
