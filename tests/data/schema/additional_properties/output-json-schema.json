@@ -17,13 +17,31 @@
             "properties": {
                 "subproperty": {
                     "type": "string"
+                },
+                "anotherSubproperty": {
+                    "type": "object",
+                    "title": "additionalProperties defaults to false",
+                    "additionalProperties": false,
+                    "properties": {
+                        "final": {
+                            "type": "string"
+                        }
+                    },
+                    "$$order": [
+                        "final"
+                    ],
+                    "required": [
+                        "final"
+                    ]
                 }
             },
             "$$order": [
-                "subproperty"
+                "subproperty",
+                "anotherSubproperty"
             ],
             "required": [
-                "subproperty"
+                "subproperty",
+                "anotherSubproperty"
             ]
         }
     }

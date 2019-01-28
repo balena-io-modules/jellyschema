@@ -8,3 +8,9 @@ properties:
       properties:
         - subproperty:
             type: string
+        - anotherSubproperty:
+            type: object
+            title: additionalProperties defaults to false
+            properties:
+              - final:
+                  type: string
