@@ -55,7 +55,8 @@ mod tests {
                 "$$version": 1,
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "title": "Empty schema",
-                "type": "object"
+                "type": "object",
+                "additionalProperties": false
             },
             "ui_object": {}
         }
