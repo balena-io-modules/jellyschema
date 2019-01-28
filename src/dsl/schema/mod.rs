@@ -2,17 +2,18 @@
 use std::collections::HashMap;
 
 use balena_temen::ast::Expression;
+use regex::Regex;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::when::DependencyGraph;
-use regex::Regex;
 
 pub mod deserialization;
 pub mod compiler;
 pub mod object_types;
 pub mod when;
+mod dynamic;
 
 /// Represents the root of the yaml DSL document
 #[derive(Clone, Debug)]
