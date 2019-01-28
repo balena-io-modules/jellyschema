@@ -14,6 +14,7 @@ use crate::dsl::schema::object_types::bounds::deserialization::deserialize_integ
 use crate::dsl::schema::object_types::bounds::IntegerBound;
 use crate::dsl::schema::object_types::ObjectTypeData;
 use crate::dsl::schema::object_types::bounds::deserialization::deserialize_boolean_object_bounds;
+use crate::dsl::schema::object_types::bounds::deserialization::deserialize_bool;
 
 pub fn deserialize_object_type<E>(mapping: &Mapping) -> Result<Option<ObjectType>, E>
 where
@@ -29,22 +30,23 @@ where
     })?)
 }
 
-fn deserialize_individual_type_definition<E>(definition: &str, mapping: &Mapping) -> Result<ObjectType, E>
+pub fn deserialize_individual_type_definition<E>(definition: &str, mapping: &Mapping) -> Result<ObjectType, E>
 where
     E: Error,
 {
-    let mut type_name = definition.trim().to_lowercase();
     let default_value = deserialize_default_value(mapping)?;
-    Ok(if type_name.ends_with('?') {
-        type_name.remove(type_name.len() - 1);
-        let raw_type = RawObjectType::from(&type_name, &mapping)?;
-        let type_data = ObjectTypeData::with_raw_type_and_default_value(raw_type, default_value);
-        ObjectType::Optional(type_data)
+    let additional_properties = deserialize_bool("additionalProperties", mapping)?.unwrap_or(false);
+    dbg!(additional_properties);
+    let is_optional = is_optional_type(definition);
+    let type_name = type_name(definition);
+    let raw_type = RawObjectType::from(&type_name, &mapping)?;
+    let type_data = ObjectTypeData::new(raw_type, default_value, additional_properties);
+
+    if is_optional {
+        Ok(ObjectType::Optional(type_data))
     } else {
-        let raw_type = RawObjectType::from(&type_name, &mapping)?;
-        let type_data = ObjectTypeData::with_raw_type_and_default_value(raw_type, default_value);
-        ObjectType::Required(type_data)
-    })
+        Ok(ObjectType::Required(type_data))
+    }
 }
 
 pub fn deserialize_integer<E>(name: &str, mapping: &Mapping) -> Result<Option<i64>, E>
@@ -57,6 +59,18 @@ where
             Error::custom(format!("cannot deserialize {:#?} as integer", value))
         })?))
     })
+}
+
+fn type_name(definition: &str) -> String {
+    let mut type_name = definition.trim().to_lowercase();
+    if type_name.ends_with('?') {
+        type_name.remove(type_name.len() - 1);
+    };
+    type_name
+}
+
+fn is_optional_type(definition: &str) -> bool {
+    definition.ends_with('?')
 }
 
 impl RawObjectType {

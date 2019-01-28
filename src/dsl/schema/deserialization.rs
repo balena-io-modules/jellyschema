@@ -14,11 +14,11 @@ use crate::dsl::schema::when::dependencies_for_schema_list;
 use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Annotations;
 use crate::dsl::schema::Widget;
-use crate::dsl::schema::object_types::ObjectTypeData;
 use balena_temen::ast::Expression;
 use crate::dsl::schema::KeysValues;
 use crate::dsl::schema::KeysSchema;
 use regex::Regex;
+use crate::dsl::schema::object_types::deserialization::deserialize_individual_type_definition;
 
 pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {
     let maybe_root = schema.as_mapping();
@@ -234,25 +234,24 @@ where
     Ok(annotations)
 }
 
-fn type_information<E>(yaml_mapping: &Mapping) -> Result<Option<ObjectType>, E>
+fn type_information<E>(yaml_mapping: &Mapping) -> Result<ObjectType, E>
 where
     E: Error,
 {
-    let mut type_information = deserialize_object_type(&yaml_mapping)?;
-    if type_information.is_none() {
-        let raw_type = RawObjectType::Object;
-        let type_data = ObjectTypeData::with_raw_type(raw_type);
-        type_information = Some(ObjectType::Required(type_data));
+    let type_information = deserialize_object_type(&yaml_mapping)?;
+
+    if let Some(type_information) = type_information {
+        Ok(type_information)
+    } else {
+        let type_definition = deserialize_individual_type_definition("object", yaml_mapping)?;
+        Ok(type_definition)
     }
-    Ok(type_information)
 }
 
-fn annotations_from_type(old_annotations: Annotations, type_information: &Option<ObjectType>) -> Annotations {
+fn annotations_from_type(old_annotations: Annotations, type_information: &ObjectType) -> Annotations {
     let mut widget = old_annotations.widget;
-    if let Some(type_info) = type_information {
-        if let RawObjectType::Text(_) = type_info.inner_raw() {
-            widget = Some(Widget::Textarea)
-        }
+    if let RawObjectType::Text(_) = type_information.inner_raw() {
+        widget = Some(Widget::Textarea)
     }
     Annotations {
         widget,

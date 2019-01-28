@@ -59,9 +59,7 @@ where
         map.serialize_entry("title", &title)?;
     }
 
-    if let Some(object_type) = &schema.object_type {
-        serialize_object_type(&object_type, map)?;
-    }
+    serialize_object_type(&schema.object_type, map)?;
 
     if let Some(children) = &schema.children {
         serialize_schema_list(children, dependencies, map)?;

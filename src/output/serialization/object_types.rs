@@ -49,7 +49,10 @@ where
 
     match raw_type {
         RawObjectType::Object => {
-            map.serialize_entry("additionalProperties", &false)?;
+            map.serialize_entry(
+                "additionalProperties",
+                &object_type.data().allow_additional_properties(),
+            )?;
         }
         RawObjectType::Boolean(object_bounds) => serialize_boolean(object_bounds, map)?,
         RawObjectType::String(object_bounds) => serialize_string(object_bounds, map)?,

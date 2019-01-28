@@ -15,7 +15,7 @@
             "type": "object",
             "additionalProperties": true,
             "properties": {
-                "subproperty":{
+                "subproperty": {
                     "type": "string"
                 }
             },

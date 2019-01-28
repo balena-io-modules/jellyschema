@@ -126,6 +126,18 @@ where
     Ok(value)
 }
 
+pub fn deserialize_bool<E>(name: &str, mapping: &Mapping) -> Result<Option<bool>, E>
+where
+    E: Error,
+{
+    dbg!(mapping);
+    let default_key = dbg!(Value::from(name));
+    let value = dbg!(mapping.get(&default_key));
+    let value = dbg!(value.and_then(|value| value.as_bool()));
+
+    Ok(value)
+}
+
 pub fn deserialize_array_object_bounds<E>(mapping: &Mapping) -> Result<Option<ArrayObjectBounds>, E>
 where
     E: Error,

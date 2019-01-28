@@ -41,7 +41,7 @@ pub struct NamedSchema {
 /// Everything that a schema at any level can represent, see schema and subschema in the spec
 #[derive(Clone, Debug)]
 pub struct Schema {
-    pub object_type: Option<ObjectType>,
+    pub object_type: ObjectType,
     pub annotations: Annotations,
     /// children of a schema are all schemas defined inside of this schema
     pub children: Option<SchemaList>,
@@ -140,12 +140,12 @@ impl SchemaList {
         self.entries
             .iter()
             .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
-            .filter_map(|named_schema| match &named_schema.schema.object_type {
-                Some(object_type) => match object_type {
+            .filter_map(|named_schema| {
+                let object_type = &named_schema.schema.object_type;
+                match object_type {
                     ObjectType::Required(_) => Some(named_schema.name.as_str()),
                     ObjectType::Optional(_) => None,
-                },
-                None => None,
+                }
             })
             .collect()
     }
