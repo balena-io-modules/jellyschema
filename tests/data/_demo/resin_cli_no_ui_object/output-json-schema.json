@@ -23,6 +23,7 @@
         }
     },
     "type": "object",
+    "additionalProperties": false,
     "required": [
         "network",
         "advanced"
@@ -43,6 +44,7 @@
                 "passphrase"
             ],
             "type": "object",
+            "additionalProperties": false,
             "$$mapping": {
                 "target": "resin_wifi",
                 "template": {
@@ -100,6 +102,7 @@
                 "persistentLogging"
             ],
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "hostname": {
                     "title": "Device Hostname",

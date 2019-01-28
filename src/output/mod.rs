@@ -6,6 +6,7 @@ use serde_derive::Serialize;
 use crate::dsl::schema::Schema;
 use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Widget;
+use crate::dsl::schema::KeysSchema;
 
 pub mod generator;
 mod serialization;
@@ -43,7 +44,9 @@ struct UiObjectProperty {
     #[serde(rename = "ui:widget", skip_serializing_if = "Option::is_none")]
     widget: Option<Widget>,
     #[serde(flatten)]
-    children: Option<UiObject>,
+    properties: Option<UiObject>,
+    #[serde(flatten)]
+    keys: Option<KeysSchema>,
 }
 
 impl UiObjectProperty {
@@ -53,7 +56,7 @@ impl UiObjectProperty {
             && self.warning.is_none()
             && self.description.is_none()
             && self.widget.is_none()
-            && self.children.is_none()
+            && self.properties.is_none()
     }
 }
 

@@ -2,6 +2,7 @@
     "$$version": 1,
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
+    "additionalProperties": false,
     "title": "Render file pickers for `file` format",
     "$$order": [
         "profile-picture",
@@ -20,6 +21,7 @@
             "type": "array",
             "items": {
                 "type": "object",
+                "additionalProperties": false,
                 "required": [
                     "contents"
                 ],

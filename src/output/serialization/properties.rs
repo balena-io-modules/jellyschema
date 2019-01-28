@@ -5,6 +5,7 @@ use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::when::DependencyGraph;
 use crate::output::serialization::object_types::serialize_object_type;
 use crate::output::serialization::when::serialize_schema_list_dependencies;
+use crate::output::serialization::object_types::serialize_keys_values;
 
 pub fn serialize_schema_list<O, E, S>(
     schema_list: &SchemaList,
@@ -58,12 +59,14 @@ where
         map.serialize_entry("title", &title)?;
     }
 
-    if let Some(object_type) = &schema.object_type {
-        serialize_object_type(&object_type, map)?;
-    }
+    serialize_object_type(&schema.object_type, map)?;
 
     if let Some(children) = &schema.children {
         serialize_schema_list(children, dependencies, map)?;
+    }
+
+    if let Some(keysvalues) = &schema.dynamic {
+        serialize_keys_values(keysvalues, map)?;
     }
 
     if let Some(mapping) = &schema.mapping {

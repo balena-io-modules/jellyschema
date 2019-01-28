@@ -2,6 +2,7 @@
 use std::collections::HashMap;
 
 use balena_temen::ast::Expression;
+use regex::Regex;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
@@ -12,6 +13,7 @@ pub mod deserialization;
 pub mod compiler;
 pub mod object_types;
 pub mod when;
+mod dynamic;
 
 /// Represents the root of the yaml DSL document
 #[derive(Clone, Debug)]
@@ -40,10 +42,12 @@ pub struct NamedSchema {
 /// Everything that a schema at any level can represent, see schema and subschema in the spec
 #[derive(Clone, Debug)]
 pub struct Schema {
-    pub object_type: Option<ObjectType>,
+    pub object_type: ObjectType,
     pub annotations: Annotations,
     /// children of a schema are all schemas defined inside of this schema
     pub children: Option<SchemaList>,
+    /// this represents `keys` and `values` - defining dynamic objects
+    pub dynamic: Option<Box<KeysValues>>,
     /// this is th DSL mapping, to and from output formats (e.g. config files etc)
     pub mapping: Option<serde_yaml::Mapping>,
     // TODO: real mapping support
@@ -66,6 +70,18 @@ pub struct Annotations {
 #[serde(rename_all = "lowercase")]
 pub enum Widget {
     Textarea,
+}
+
+#[derive(Clone, Debug)]
+pub struct KeysSchema {
+    pub pattern: Regex,
+    pub title: Option<String>,
+}
+
+#[derive(Clone, Debug)]
+pub struct KeysValues {
+    pub keys: KeysSchema,
+    pub values: Schema,
 }
 
 impl NamedSchema {
@@ -125,12 +141,12 @@ impl SchemaList {
         self.entries
             .iter()
             .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
-            .filter_map(|named_schema| match &named_schema.schema.object_type {
-                Some(object_type) => match object_type {
+            .filter_map(|named_schema| {
+                let object_type = &named_schema.schema.object_type;
+                match object_type {
                     ObjectType::Required(_) => Some(named_schema.name.as_str()),
                     ObjectType::Optional(_) => None,
-                },
-                None => None,
+                }
             })
             .collect()
     }

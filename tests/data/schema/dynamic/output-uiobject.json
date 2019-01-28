@@ -1,0 +1,7 @@
+{
+    "extendedRules": {
+        "ui:keys": {
+            "ui:title": "Priority"
+        }
+    }
+}
