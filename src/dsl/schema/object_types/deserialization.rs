@@ -36,7 +36,6 @@ where
 {
     let default_value = deserialize_default_value(mapping)?;
     let additional_properties = deserialize_bool("additionalProperties", mapping)?.unwrap_or(false);
-    dbg!(additional_properties);
     let is_optional = is_optional_type(definition);
     let type_name = type_name(definition);
     let raw_type = RawObjectType::from(&type_name, &mapping)?;
@@ -63,7 +62,7 @@ where
 
 fn type_name(definition: &str) -> String {
     let mut type_name = definition.trim().to_lowercase();
-    if type_name.ends_with('?') {
+    if is_optional_type(definition) {
         type_name.remove(type_name.len() - 1);
     };
     type_name

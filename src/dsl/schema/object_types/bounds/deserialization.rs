@@ -130,10 +130,9 @@ pub fn deserialize_bool<E>(name: &str, mapping: &Mapping) -> Result<Option<bool>
 where
     E: Error,
 {
-    dbg!(mapping);
-    let default_key = dbg!(Value::from(name));
-    let value = dbg!(mapping.get(&default_key));
-    let value = dbg!(value.and_then(|value| value.as_bool()));
+    let default_key = Value::from(name);
+    let value = mapping.get(&default_key);
+    let value = value.and_then(|value| value.as_bool());
 
     Ok(value)
 }

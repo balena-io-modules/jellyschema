@@ -19,7 +19,7 @@ pub enum ObjectType {
 pub struct ObjectTypeData {
     raw_type: RawObjectType,
     default_value: Option<DefaultValue>,
-    /// to allow additional properties in the data or not ?
+    /// to allow additional properties in the data validated against this schema or not ?
     additional_properties: bool,
 }
 
