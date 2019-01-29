@@ -4,22 +4,34 @@ description: This is top-level description
 help: Some top-level help
 warning: OMG top.
 properties:
-- justtitle:
-    type: string
-    title: Just title
-- justhelp:
-    type: string
-    help: Hello help
-- justwarning:
-    type: string
-    warning: Warning!
-- justdescription:
-    type: string
-    description: Lorem ipsum dolor sit amet
-- alltogether:
-    type: string
-    help: Hello help
-    warning: Warning!
-    description: Lorem ipsum dolor sit amet
-- text:
-    type: text
+  - justtitle:
+      type: string
+      title: Just title
+  - justhelp:
+      type: string
+      help: Hello help
+  - justwarning:
+      type: string
+      warning: Warning!
+  - justdescription:
+      type: string
+      description: Lorem ipsum dolor sit amet
+  - alltogether:
+      type: string
+      help: Hello help
+      warning: Warning!
+      description: Lorem ipsum dolor sit amet
+  - hidden:
+      hidden: true
+      type: string
+  - placeholder:
+      placeholder: hello this is placeholder text
+      type: string
+  - readonly:
+      readOnly: true
+      type: string
+  - nonreadonly:
+      readOnly: false
+      type: string
+  - text:
+      type: text

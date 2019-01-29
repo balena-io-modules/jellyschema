@@ -60,16 +60,21 @@ pub struct Annotations {
     pub help: Option<String>,
     pub warning: Option<String>,
     pub description: Option<String>,
+    pub placeholder: Option<String>,
     pub widget: Option<Widget>,
     pub orderable: Option<bool>,
     pub addable: Option<bool>,
     pub removable: Option<bool>,
+    pub hidden: Option<bool>,
+    #[serde(rename = "readOnly")]
+    pub readonly: Option<bool>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Widget {
     Textarea,
+    Hidden,
 }
 
 #[derive(Clone, Debug)]
