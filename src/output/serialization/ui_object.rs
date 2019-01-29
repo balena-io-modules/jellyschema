@@ -11,6 +11,8 @@ use serde::Serialize;
 use serde::Serializer;
 use crate::dsl::schema::KeysSchema;
 use crate::output::UiOptions;
+use crate::dsl::schema::Annotations;
+use crate::dsl::schema::Widget;
 
 impl From<DocumentRoot> for UiObjectRoot {
     fn from(schema: DocumentRoot) -> UiObjectRoot {
@@ -41,26 +43,13 @@ impl From<SchemaList> for UiObject {
 impl From<Schema> for UiObjectProperty {
     fn from(schema: Schema) -> Self {
         let annotations = schema.annotations;
-        let help = annotations.help;
-        let warning = annotations.warning;
-        let description = annotations.description;
-        let widget = annotations.widget;
+        let (help, warning, description) = help_warning_description(&annotations);
+        let widget = widget(&annotations);
         let keys_values = schema.dynamic.map(|keys_values| keys_values.keys);
 
         let children = schema.children.map(|children| children.into());
-        let default_ui_options = UiOptions::default();
 
-        let ui_options = UiOptions {
-            removable: annotations.removable.unwrap_or(default_ui_options.removable),
-            addable: annotations.addable.unwrap_or(default_ui_options.addable),
-            orderable: annotations.orderable.unwrap_or(default_ui_options.orderable),
-        };
-
-        let ui_options = if ui_options == default_ui_options {
-            None
-        } else {
-            Some(ui_options)
-        };
+        let ui_options = ui_options(&annotations);
 
         UiObjectProperty {
             help,
@@ -87,4 +76,32 @@ impl Serialize for KeysSchema {
         }
         map.end()
     }
+}
+
+fn ui_options(annotations: &Annotations) -> Option<UiOptions> {
+    let default_ui_options = UiOptions::default();
+    let ui_options = UiOptions {
+        removable: annotations.removable.unwrap_or(default_ui_options.removable),
+        addable: annotations.addable.unwrap_or(default_ui_options.addable),
+        orderable: annotations.orderable.unwrap_or(default_ui_options.orderable),
+    };
+    if ui_options == default_ui_options {
+        None
+    } else {
+        Some(ui_options)
+    }
+}
+
+fn widget(annotations: &Annotations) -> Option<Widget> {
+    if annotations.hidden.unwrap_or(false) {
+        return Some(Widget::Hidden);
+    }
+    annotations.widget.clone()
+}
+
+fn help_warning_description(annotations: &Annotations) -> (Option<String>, Option<String>, Option<String>) {
+    let help = &annotations.help;
+    let warning = &annotations.warning;
+    let description = &annotations.description;
+    (help.clone(), warning.clone(), description.clone())
 }

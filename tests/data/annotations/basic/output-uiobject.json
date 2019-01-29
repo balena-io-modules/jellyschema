@@ -16,6 +16,9 @@
         "ui:help": "Hello help",
         "ui:description": "Lorem ipsum dolor sit amet"
     },
+    "hidden": {
+        "ui:widget": "hidden"
+    },
     "text": {
         "ui:widget": "textarea"
     }

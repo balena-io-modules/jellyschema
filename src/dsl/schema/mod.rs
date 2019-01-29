@@ -67,12 +67,14 @@ pub struct Annotations {
     pub orderable: Option<bool>,
     pub addable: Option<bool>,
     pub removable: Option<bool>,
+    pub hidden: Option<bool>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Widget {
     Textarea,
+    Hidden,
 }
 
 #[derive(Clone, Debug)]
