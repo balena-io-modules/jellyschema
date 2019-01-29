@@ -19,6 +19,9 @@
     "hidden": {
         "ui:widget": "hidden"
     },
+    "placeholder": {
+        "ui:placeholder": "hello this is placeholder text"
+    },
     "text": {
         "ui:widget": "textarea"
     }

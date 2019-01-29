@@ -24,5 +24,8 @@ properties:
   - hidden:
       hidden: true
       type: string
+  - placeholder:
+      placeholder: hello this is placeholder text
+      type: string
   - text:
       type: text

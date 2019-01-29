@@ -11,6 +11,7 @@
         "justdescription",
         "alltogether",
         "hidden",
+        "placeholder",
         "text"
     ],
     "required": [
@@ -20,6 +21,7 @@
         "justdescription",
         "alltogether",
         "hidden",
+        "placeholder",
         "text"
     ],
     "properties": {
@@ -40,6 +42,9 @@
             "type": "string"
         },
         "hidden": {
+            "type": "string"
+        },
+        "placeholder": {
             "type": "string"
         },
         "text": {

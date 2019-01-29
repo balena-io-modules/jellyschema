@@ -45,6 +45,7 @@ impl From<Schema> for UiObjectProperty {
         let annotations = schema.annotations;
         let (help, warning, description) = help_warning_description(&annotations);
         let widget = widget(&annotations);
+        let placeholder = placeholder(&annotations);
         let keys_values = schema.dynamic.map(|keys_values| keys_values.keys);
 
         let children = schema.children.map(|children| children.into());
@@ -55,6 +56,7 @@ impl From<Schema> for UiObjectProperty {
             help,
             warning,
             description,
+            placeholder,
             widget,
             properties: children,
             keys: keys_values,
@@ -104,4 +106,9 @@ fn help_warning_description(annotations: &Annotations) -> (Option<String>, Optio
     let warning = &annotations.warning;
     let description = &annotations.description;
     (help.clone(), warning.clone(), description.clone())
+}
+
+fn placeholder(annotations: &Annotations) -> Option<String> {
+    let placeholder = &annotations.placeholder;
+    placeholder.clone()
 }

@@ -63,6 +63,7 @@ pub struct Annotations {
     pub help: Option<String>,
     pub warning: Option<String>,
     pub description: Option<String>,
+    pub placeholder: Option<String>,
     pub widget: Option<Widget>,
     pub orderable: Option<bool>,
     pub addable: Option<bool>,

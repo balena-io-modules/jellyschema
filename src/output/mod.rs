@@ -48,6 +48,8 @@ struct UiObjectProperty {
     warning: Option<String>,
     #[serde(rename = "ui:description", skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+    #[serde(rename = "ui:placeholder", skip_serializing_if = "Option::is_none")]
+    placeholder: Option<String>,
     #[serde(rename = "ui:widget", skip_serializing_if = "Option::is_none")]
     widget: Option<Widget>,
     #[serde(flatten)]
@@ -69,6 +71,7 @@ impl UiObjectProperty {
             && self.properties.is_none()
             && self.keys.is_none()
             && self.ui_options.is_none()
+            && self.placeholder.is_none()
     }
 }
 
