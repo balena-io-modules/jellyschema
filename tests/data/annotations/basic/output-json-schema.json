@@ -10,6 +10,10 @@
         "justwarning",
         "justdescription",
         "alltogether",
+        "hidden",
+        "placeholder",
+        "readonly",
+        "nonreadonly",
         "text"
     ],
     "required": [
@@ -18,6 +22,10 @@
         "justwarning",
         "justdescription",
         "alltogether",
+        "hidden",
+        "placeholder",
+        "readonly",
+        "nonreadonly",
         "text"
     ],
     "properties": {
@@ -35,6 +43,18 @@
             "type": "string"
         },
         "alltogether": {
+            "type": "string"
+        },
+        "hidden": {
+            "type": "string"
+        },
+        "placeholder": {
+            "type": "string"
+        },
+        "readonly": {
+            "type": "string"
+        },
+        "nonreadonly": {
             "type": "string"
         },
         "text": {

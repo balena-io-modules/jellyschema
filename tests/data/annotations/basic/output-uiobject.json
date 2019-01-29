@@ -16,6 +16,18 @@
         "ui:help": "Hello help",
         "ui:description": "Lorem ipsum dolor sit amet"
     },
+    "hidden": {
+        "ui:widget": "hidden"
+    },
+    "placeholder": {
+        "ui:placeholder": "hello this is placeholder text"
+    },
+    "readonly": {
+        "ui:readonly": true
+    },
+    "nonreadonly": {
+        "ui:readonly": false
+    },
     "text": {
         "ui:widget": "textarea"
     }
