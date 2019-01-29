@@ -1,4 +1,14 @@
 - commits:
+    - subject: Add support for array annotations.
+      hash: b49ac6a7513eeea45b3486dbe54f24f063237f36
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.7.5
+  date: 2019-01-29T14:04:40.850Z
+- commits:
     - subject: Add support for pass-through of `additionalProperties`
       hash: c10ef153a72a396232a394ef85baea4e31c26e66
       body: ''
