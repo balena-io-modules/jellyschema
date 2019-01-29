@@ -1,0 +1,15 @@
+version: 1
+title: Array annotations
+properties:
+  - nonorderable:
+      type: array
+      orderable: false
+  - nonaddable:
+      type: array
+      addable: false
+  - nonremovable:
+      type: array
+      removable: false
+  - default:
+      type: array
+      title: orderable, addable and removable should default to true

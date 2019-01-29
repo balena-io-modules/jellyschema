@@ -1,0 +1,24 @@
+{
+    "nonorderable": {
+        "ui:options": {
+            "orderable": false
+        }
+    },
+    "nonaddable": {
+        "ui:options": {
+            "addable": false
+        }
+    },
+    "nonremovable": {
+        "ui:options": {
+            "removable": false
+        }
+    },
+    "default": {
+        "ui:options": {
+            "orderable": true,
+            "addable": true,
+            "removable": true
+        }
+    }
+}

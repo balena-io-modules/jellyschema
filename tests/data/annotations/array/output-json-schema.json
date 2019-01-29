@@ -1,0 +1,34 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "title": "Array annotations",
+    "$$order": [
+        "nonorderable",
+        "nonaddable",
+        "nonremovable",
+        "default"
+    ],
+    "required": [
+        "nonorderable",
+        "nonaddable",
+        "nonremovable",
+        "default"
+    ],
+    "properties": {
+        "nonorderable": {
+            "type": "array"
+        },
+        "nonaddable": {
+            "type": "array"
+        },
+        "nonremovable": {
+            "type": "array"
+        },
+        "default": {
+            "type": "array",
+            "title": "orderable, addable and removable should default to true"
+        }
+    }
+}
