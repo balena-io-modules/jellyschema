@@ -40,7 +40,7 @@ impl From<SchemaList> for UiObject {
 
 impl From<Schema> for UiObjectProperty {
     fn from(schema: Schema) -> Self {
-        let annotations = schema.annotations.clone();
+        let annotations = schema.annotations;
         let help = annotations.help;
         let warning = annotations.warning;
         let description = annotations.description;
