@@ -48,9 +48,6 @@ pub struct Schema {
     pub children: Option<SchemaList>,
     /// this represents `keys` and `values` - defining dynamic objects
     pub dynamic: Option<Box<KeysValues>>,
-    /// this is th DSL mapping, to and from output formats (e.g. config files etc)
-    pub mapping: Option<serde_yaml::Mapping>,
-    // TODO: real mapping support
     pub when: Option<Expression>,
     /// unparsed formula, can't be evaluated by CDSL as we don't have data, just schema
     pub formula: Option<String>,
