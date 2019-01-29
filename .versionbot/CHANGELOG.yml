@@ -1,4 +1,14 @@
 - commits:
+    - subject: Remove mapping passthrough.
+      hash: 8436c879261825b75456d9a67bacfa9ae8a803b4
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.8.0
+  date: 2019-01-29T16:59:12.461Z
+- commits:
     - subject: Add readOnly annotation
       hash: f4af5c6c77d8685c8cee7a7e285768f1e4a4de51
       body: ''
