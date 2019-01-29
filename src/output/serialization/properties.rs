@@ -69,10 +69,6 @@ where
         serialize_keys_values(keysvalues, map)?;
     }
 
-    if let Some(mapping) = &schema.mapping {
-        map.serialize_entry("$$mapping", mapping)?;
-    }
-
     if let Some(formula) = &schema.formula {
         map.serialize_entry("$$formula", &formula)?;
     }
