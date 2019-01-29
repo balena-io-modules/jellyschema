@@ -1,15 +1,25 @@
 version: 1
 title: Array annotations
+definitions:
+  items: &ITEMS
+    properties:
+      - someproperty:
+          type: string
+
 properties:
   - nonorderable:
       type: array
       orderable: false
+      items: *ITEMS
   - nonaddable:
       type: array
       addable: false
+      items: *ITEMS
   - nonremovable:
       type: array
       removable: false
+      items: *ITEMS
   - default:
       type: array
+      items: *ITEMS
       title: orderable, addable and removable should default to true and then default UiOptions should not be emitted
