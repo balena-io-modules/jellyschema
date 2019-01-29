@@ -56,9 +56,10 @@ struct UiObjectProperty {
     properties: Option<UiObject>,
     #[serde(flatten)]
     keys: Option<KeysSchema>,
-
     #[serde(rename = "ui:options", skip_serializing_if = "Option::is_none")]
     ui_options: Option<UiOptions>,
+    #[serde(rename = "ui:readonly", skip_serializing_if = "Option::is_none")]
+    readonly: Option<bool>,
 }
 
 impl UiObjectProperty {
@@ -73,6 +74,7 @@ impl UiObjectProperty {
             && self.keys.is_none()
             && self.ui_options.is_none()
             && self.placeholder.is_none()
+            && self.readonly.is_none()
     }
 }
 

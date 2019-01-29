@@ -22,6 +22,12 @@
     "placeholder": {
         "ui:placeholder": "hello this is placeholder text"
     },
+    "readonly": {
+        "ui:readonly": true
+    },
+    "nonreadonly": {
+        "ui:readonly": false
+    },
     "text": {
         "ui:widget": "textarea"
     }

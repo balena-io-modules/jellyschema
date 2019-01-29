@@ -27,5 +27,11 @@ properties:
   - placeholder:
       placeholder: hello this is placeholder text
       type: string
+  - readonly:
+      readOnly: true
+      type: string
+  - nonreadonly:
+      readOnly: false
+      type: string
   - text:
       type: text

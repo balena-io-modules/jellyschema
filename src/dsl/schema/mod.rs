@@ -69,6 +69,8 @@ pub struct Annotations {
     pub addable: Option<bool>,
     pub removable: Option<bool>,
     pub hidden: Option<bool>,
+    #[serde(rename = "readOnly")]
+    pub readonly: Option<bool>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

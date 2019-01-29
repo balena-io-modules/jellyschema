@@ -46,6 +46,7 @@ impl From<Schema> for UiObjectProperty {
         let (help, warning, description) = help_warning_description(&annotations);
         let widget = widget(&annotations);
         let placeholder = placeholder(&annotations);
+        let readonly = readonly(&annotations);
         let keys_values = schema.dynamic.map(|keys_values| keys_values.keys);
 
         let children = schema.children.map(|children| children.into());
@@ -61,6 +62,7 @@ impl From<Schema> for UiObjectProperty {
             properties: children,
             keys: keys_values,
             ui_options,
+            readonly,
         }
     }
 }
@@ -111,4 +113,8 @@ fn help_warning_description(annotations: &Annotations) -> (Option<String>, Optio
 fn placeholder(annotations: &Annotations) -> Option<String> {
     let placeholder = &annotations.placeholder;
     placeholder.clone()
+}
+
+fn readonly(annotations: &Annotations) -> Option<bool> {
+    annotations.readonly
 }
