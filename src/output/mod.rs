@@ -33,6 +33,13 @@ impl UiObject {
     }
 }
 
+#[derive(Clone, Debug, PartialEq, Serialize)]
+struct UiOptions {
+    removable: bool,
+    addable: bool,
+    orderable: bool,
+}
+
 #[derive(Clone, Debug, Serialize)]
 struct UiObjectProperty {
     #[serde(rename = "ui:help", skip_serializing_if = "Option::is_none")]
@@ -47,6 +54,9 @@ struct UiObjectProperty {
     properties: Option<UiObject>,
     #[serde(flatten)]
     keys: Option<KeysSchema>,
+
+    #[serde(rename = "ui:options", skip_serializing_if = "Option::is_none")]
+    ui_options: Option<UiOptions>,
 }
 
 impl UiObjectProperty {
@@ -57,6 +67,8 @@ impl UiObjectProperty {
             && self.description.is_none()
             && self.widget.is_none()
             && self.properties.is_none()
+            && self.keys.is_none()
+            && self.ui_options.is_none()
     }
 }
 
@@ -65,6 +77,16 @@ impl UiObjectRoot {
         match &self.0 {
             None => true,
             Some(property) => property.is_empty(),
+        }
+    }
+}
+
+impl Default for UiOptions {
+    fn default() -> Self {
+        UiOptions {
+            removable: true,
+            addable: true,
+            orderable: true,
         }
     }
 }

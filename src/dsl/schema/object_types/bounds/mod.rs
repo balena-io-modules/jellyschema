@@ -115,13 +115,7 @@ pub struct EnumerationValue {
 impl From<&str> for EnumerationValue {
     fn from(value: &str) -> Self {
         let value = value.to_string();
-        let annotations = Annotations {
-            title: Some(value.clone()),
-            help: None,
-            warning: None,
-            description: None,
-            widget: None,
-        };
+        let annotations = Annotations::with_title_option(Some(value.clone()));
         EnumerationValue {
             value: value.into(),
             annotations,
