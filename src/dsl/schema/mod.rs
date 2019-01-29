@@ -64,6 +64,9 @@ pub struct Annotations {
     pub warning: Option<String>,
     pub description: Option<String>,
     pub widget: Option<Widget>,
+    pub orderable: Option<bool>,
+    pub addable: Option<bool>,
+    pub removable: Option<bool>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -149,5 +152,12 @@ impl SchemaList {
                 }
             })
             .collect()
+    }
+}
+
+impl Annotations {
+    pub fn with_title_option(title: Option<String>) -> Annotations {
+        let default = Annotations::default();
+        Annotations { title, ..default }
     }
 }

@@ -83,14 +83,7 @@ where
             Err(e) => return Err(e),
         },
     };
-
-    let annotations = Annotations {
-        title,
-        help: None,
-        warning: None,
-        description: None,
-        widget: None,
-    };
+    let annotations = Annotations::with_title_option(title);
     Ok(EnumerationValue {
         annotations,
         value: value.clone(),
@@ -106,15 +99,11 @@ where
         serde_yaml::from_value(value.clone())
             .map_err(|e| Error::custom(format!("cannot deserialize constant specifier: {:?} - {}", value, e)))
     })?;
-    let annotations = Annotations {
-        title: None,
-        help: None,
-        warning: None,
-        description: None,
-        widget: None,
-    };
     match value {
         None => Ok(None),
-        Some(value) => Ok(Some(EnumerationValue { value, annotations })),
+        Some(value) => Ok(Some(EnumerationValue {
+            value,
+            annotations: Annotations::default(),
+        })),
     }
 }

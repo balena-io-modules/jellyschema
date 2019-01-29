@@ -12,4 +12,4 @@ properties:
       removable: false
   - default:
       type: array
-      title: orderable, addable and removable should default to true
+      title: orderable, addable and removable should default to true and then default UiOptions should not be emitted

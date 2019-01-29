@@ -10,6 +10,7 @@ use crate::output::UiObjectRoot;
 use serde::Serialize;
 use serde::Serializer;
 use crate::dsl::schema::KeysSchema;
+use crate::output::UiOptions;
 
 impl From<DocumentRoot> for UiObjectRoot {
     fn from(schema: DocumentRoot) -> UiObjectRoot {
@@ -39,13 +40,27 @@ impl From<SchemaList> for UiObject {
 
 impl From<Schema> for UiObjectProperty {
     fn from(schema: Schema) -> Self {
-        let help = schema.annotations.help;
-        let warning = schema.annotations.warning;
-        let description = schema.annotations.description;
-        let widget = schema.annotations.widget;
+        let annotations = schema.annotations.clone();
+        let help = annotations.help;
+        let warning = annotations.warning;
+        let description = annotations.description;
+        let widget = annotations.widget;
         let keys_values = schema.dynamic.map(|keys_values| keys_values.keys);
 
         let children = schema.children.map(|children| children.into());
+        let default_ui_options = UiOptions::default();
+
+        let ui_options = UiOptions {
+            removable: annotations.removable.unwrap_or(default_ui_options.removable),
+            addable: annotations.addable.unwrap_or(default_ui_options.addable),
+            orderable: annotations.orderable.unwrap_or(default_ui_options.orderable),
+        };
+
+        let ui_options = if ui_options == default_ui_options {
+            None
+        } else {
+            Some(ui_options)
+        };
 
         UiObjectProperty {
             help,
@@ -54,6 +69,7 @@ impl From<Schema> for UiObjectProperty {
             widget,
             properties: children,
             keys: keys_values,
+            ui_options,
         }
     }
 }
