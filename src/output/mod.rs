@@ -63,6 +63,7 @@ struct UiObjectProperty {
 
 impl UiObjectProperty {
     /// Checks if an UI Object is empty
+    // FIXME: this is hard to maintain - need to remember to add things here
     pub fn is_empty(&self) -> bool {
         self.help.is_none()
             && self.warning.is_none()
