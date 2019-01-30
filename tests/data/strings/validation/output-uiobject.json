@@ -1,1 +1,5 @@
-{}
+{
+    "password":{
+        "ui:widget": "password"
+    }
+}

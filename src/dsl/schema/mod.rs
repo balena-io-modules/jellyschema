@@ -75,6 +75,7 @@ pub struct Annotations {
 pub enum Widget {
     Textarea,
     Hidden,
+    Password,
 }
 
 #[derive(Clone, Debug)]
