@@ -50,10 +50,9 @@ impl From<Schema> for UiObjectProperty {
         let readonly = readonly(&annotations);
         let keys_values = schema.dynamic.map(|keys_values| keys_values.keys);
 
-        let children = schema.children.clone();
-        let children_ui_objects = children.map(|children| children.into());
-        let children = schema.children.clone();
-        let order = children.map(|list| list.all_names().iter().map(|name| name.to_string()).collect());
+        let children = schema.children;
+        let children_ui_objects = children.clone().map(|children| children.into());
+        let order = children.clone().map(|list| list.all_names().iter().map(|name| name.to_string()).collect());
 
         let ui_options = ui_options(&annotations);
 
