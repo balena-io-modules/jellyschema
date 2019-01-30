@@ -52,10 +52,12 @@
             "type": "string"
         },
         "readonly": {
-            "type": "string"
+            "type": "string",
+            "readOnly": true
         },
         "nonreadonly": {
-            "type": "string"
+            "type": "string",
+            "readOnly": false
         },
         "text": {
             "type": "string"

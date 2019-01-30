@@ -69,6 +69,10 @@ where
         serialize_keys_values(keysvalues, map)?;
     }
 
+    if let Some(readonly) = &schema.annotations.readonly {
+        map.serialize_entry("readOnly", &readonly)?;
+    }
+
     if let Some(formula) = &schema.formula {
         map.serialize_entry("$$formula", &formula)?;
     }
