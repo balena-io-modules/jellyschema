@@ -1,6 +1,6 @@
 [package]
 name = "balena-cdsl"
-version = "0.8.0"
+version = "0.9.0"
 authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
 build = "build.rs"

@@ -1,4 +1,14 @@
 - commits:
+    - subject: Remove support for `when`
+      hash: 9b80a09f9ed690af8b193fdc65b17062b7a7720e
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.9.0
+  date: 2019-01-30T09:45:29.854Z
+- commits:
     - subject: Remove mapping passthrough.
       hash: 8436c879261825b75456d9a67bacfa9ae8a803b4
       body: ''
