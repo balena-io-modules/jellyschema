@@ -52,7 +52,9 @@ impl From<Schema> for UiObjectProperty {
 
         let children = schema.children;
         let children_ui_objects = children.clone().map(|children| children.into());
-        let order = children.clone().map(|list| list.all_names().iter().map(|name| name.to_string()).collect());
+        let order = children
+            .clone()
+            .map(|list| list.all_names().iter().map(|name| name.to_string()).collect());
 
         let ui_options = ui_options(&annotations);
 
