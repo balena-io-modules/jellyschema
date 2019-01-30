@@ -1,8 +1,0 @@
-title: Simplest when condition
-version: 1
-properties:
-  - showAllDevices:
-      type: boolean
-  - deviceType:
-      type: string
-      when: showAllDevices
