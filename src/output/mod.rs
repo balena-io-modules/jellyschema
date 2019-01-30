@@ -46,19 +46,23 @@ struct UiObjectProperty {
     warning: Option<String>,
     #[serde(rename = "ui:description", skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+    #[serde(rename = "ui:placeholder", skip_serializing_if = "Option::is_none")]
+    placeholder: Option<String>,
     #[serde(rename = "ui:widget", skip_serializing_if = "Option::is_none")]
     widget: Option<Widget>,
     #[serde(flatten)]
     properties: Option<UiObject>,
     #[serde(flatten)]
     keys: Option<KeysSchema>,
-
     #[serde(rename = "ui:options", skip_serializing_if = "Option::is_none")]
     ui_options: Option<UiOptions>,
+    #[serde(rename = "ui:readonly", skip_serializing_if = "Option::is_none")]
+    readonly: Option<bool>,
 }
 
 impl UiObjectProperty {
     /// Checks if an UI Object is empty
+    // FIXME: this is hard to maintain - need to remember to add things here
     pub fn is_empty(&self) -> bool {
         self.help.is_none()
             && self.warning.is_none()
@@ -67,6 +71,8 @@ impl UiObjectProperty {
             && self.properties.is_none()
             && self.keys.is_none()
             && self.ui_options.is_none()
+            && self.placeholder.is_none()
+            && self.readonly.is_none()
     }
 }
 

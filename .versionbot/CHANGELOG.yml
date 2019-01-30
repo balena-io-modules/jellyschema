@@ -1,4 +1,38 @@
 - commits:
+    - subject: Remove mapping passthrough.
+      hash: 8436c879261825b75456d9a67bacfa9ae8a803b4
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Cyryl Płotnicki
+  version: 0.8.0
+  date: 2019-01-29T16:59:12.461Z
+- commits:
+    - subject: Add readOnly annotation
+      hash: f4af5c6c77d8685c8cee7a7e285768f1e4a4de51
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add support for placeholder.
+      hash: ea11af60afa41b96a8b57d3683e7f573601105d9
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Add support for `hidden` keyword.
+      hash: f18c948c93b4baa0e7834a5c5c2b1a3f29d127a2
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.7.6
+  date: 2019-01-29T16:32:50.041Z
+- commits:
     - subject: Add support for array annotations.
       hash: b49ac6a7513eeea45b3486dbe54f24f063237f36
       body: ''

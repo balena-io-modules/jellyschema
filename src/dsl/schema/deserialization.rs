@@ -67,13 +67,11 @@ where
     let properties = properties(yaml_mapping)?;
     let dynamic = keys_values(yaml_mapping)?;
 
-    let mapping = mapping(yaml_mapping)?;
     let formula = formula(yaml_mapping)?;
 
     Ok(Schema {
         object_type: type_information,
         children: properties,
-        mapping: mapping.cloned(),
         dynamic,
         annotations,
         formula,
@@ -96,21 +94,6 @@ where
             }
         },
     }
-}
-
-fn mapping<E>(yaml_mapping: &Mapping) -> Result<Option<&Mapping>, E>
-where
-    E: Error,
-{
-    let mapping = yaml_mapping.get(&Value::from("mapping"));
-    let mapping = match mapping {
-        None => Ok(None),
-        Some(mapping) => match mapping {
-            Value::Mapping(mapping) => Ok(Some(mapping)),
-            _ => Err(Error::custom(format!("cannot deserialize mapping {:#?}", mapping))),
-        },
-    }?;
-    Ok(mapping)
 }
 
 fn properties<E>(yaml_mapping: &Mapping) -> Result<Option<SchemaList>, E>

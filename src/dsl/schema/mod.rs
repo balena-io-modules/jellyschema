@@ -43,9 +43,6 @@ pub struct Schema {
     pub children: Option<SchemaList>,
     /// this represents `keys` and `values` - defining dynamic objects
     pub dynamic: Option<Box<KeysValues>>,
-    /// this is th DSL mapping, to and from output formats (e.g. config files etc)
-    pub mapping: Option<serde_yaml::Mapping>,
-    // TODO: real mapping support
     /// unparsed formula, can't be evaluated by CDSL as we don't have data, just schema
     pub formula: Option<String>,
 }
@@ -57,16 +54,21 @@ pub struct Annotations {
     pub help: Option<String>,
     pub warning: Option<String>,
     pub description: Option<String>,
+    pub placeholder: Option<String>,
     pub widget: Option<Widget>,
     pub orderable: Option<bool>,
     pub addable: Option<bool>,
     pub removable: Option<bool>,
+    pub hidden: Option<bool>,
+    #[serde(rename = "readOnly")]
+    pub readonly: Option<bool>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Widget {
     Textarea,
+    Hidden,
 }
 
 #[derive(Clone, Debug)]
