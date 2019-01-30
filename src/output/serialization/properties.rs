@@ -73,6 +73,10 @@ where
         map.serialize_entry("readOnly", &readonly)?;
     }
 
+    if let Some(writeonly) = &schema.annotations.writeonly {
+        map.serialize_entry("writeOnly", &writeonly)?;
+    }
+
     if let Some(formula) = &schema.formula {
         map.serialize_entry("$$formula", &formula)?;
     }

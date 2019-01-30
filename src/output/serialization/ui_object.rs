@@ -102,6 +102,9 @@ fn widget(schema: &Schema) -> Option<Widget> {
     if let RawObjectType::Password(_) = schema.object_type.inner_raw() {
         return Some(Widget::Password);
     }
+    if annotations.writeonly.unwrap_or(false) {
+        return Some(Widget::Password);
+    }
     if annotations.hidden.unwrap_or(false) {
         return Some(Widget::Hidden);
     }

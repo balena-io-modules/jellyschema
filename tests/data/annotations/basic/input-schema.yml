@@ -33,5 +33,11 @@ properties:
   - nonreadonly:
       readOnly: false
       type: string
+  - writeonly:
+      writeOnly: true
+      type: string
+  - nonwriteonly:
+      writeOnly: false
+      type: string
   - text:
       type: text

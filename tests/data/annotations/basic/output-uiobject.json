@@ -28,6 +28,9 @@
     "nonreadonly": {
         "ui:readonly": false
     },
+    "writeonly": {
+        "ui:widget": "password"
+    },
     "text": {
         "ui:widget": "textarea"
     }
