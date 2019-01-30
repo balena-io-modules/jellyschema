@@ -1,4 +1,14 @@
 - commits:
+    - subject: 'Emit `ui:order` in addition to `$$order`'
+      hash: 29ca779c894c5a4ad0de7dc9a646b5f68ccdea13
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.9.2
+  date: 2019-01-30T15:30:45.639Z
+- commits:
     - subject: 'Emit both `writeOnly` and `ui:widget`:`password` for `writeOnly`'
       hash: 078d63b9d9b3855d04702d8f27217e94e5ffd549
       body: |
