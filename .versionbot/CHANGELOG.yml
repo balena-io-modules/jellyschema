@@ -1,4 +1,34 @@
 - commits:
+    - subject: 'Emit both `writeOnly` and `ui:widget`:`password` for `writeOnly`'
+      hash: 078d63b9d9b3855d04702d8f27217e94e5ffd549
+      body: |
+        To make it consistent with how readonly is used and also to be able to
+        display it correctly using current rjsf implementation.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: 'Emit `ui:widget`:`password` for passwords, in addition to `writeOnly`'
+      hash: c2e0a41f7f4da2bbbe4864c71823099094d42c48
+      body: |
+        Take advantage of existing ui widget to get proper rendering in rjsf.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Emit `readOnly` on the JSONSChema level as well.
+      hash: 511a46cb90064df657300e6b62ce361e277da36c
+      body: |
+        For `readOnly` jellyschema keyword - emit both `readOnly` in JSONSchema
+        and `ui:readonly` in UISchema. This is to give more information to the
+        application reading JSONSchema.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.9.1
+  date: 2019-01-30T12:08:01.076Z
+- commits:
     - subject: Remove support for `when`
       hash: 9b80a09f9ed690af8b193fdc65b17062b7a7720e
       body: ''
