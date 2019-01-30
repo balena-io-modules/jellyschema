@@ -1,4 +1,3 @@
-use balena_temen::ast::Expression;
 use serde::de::Error;
 use serde_yaml::Mapping;
 use serde_yaml::Value;
@@ -14,8 +13,6 @@ use crate::dsl::schema::object_types::ObjectType;
 use crate::dsl::schema::object_types::RawObjectType;
 use crate::dsl::schema::Schema;
 use crate::dsl::schema::SchemaList;
-use crate::dsl::schema::when::dependencies_for_schema_list;
-use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Widget;
 
 pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {
@@ -50,12 +47,9 @@ pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError
     let schema = deserialize_schema::<serde_yaml::Error>(&schema)?;
 
     // this is recursive already, should get the whole tree for all children schemas
-    let dependencies = dependencies_for_schema_list(schema.children.as_ref(), DependencyGraph::empty())?;
-
     Ok(DocumentRoot {
         version,
         schema: Some(schema),
-        dependencies: Some(dependencies),
     })
 }
 
@@ -73,7 +67,6 @@ where
     let properties = properties(yaml_mapping)?;
     let dynamic = keys_values(yaml_mapping)?;
 
-    let when = when(yaml_mapping)?;
     let formula = formula(yaml_mapping)?;
 
     Ok(Schema {
@@ -81,7 +74,6 @@ where
         children: properties,
         dynamic,
         annotations,
-        when,
         formula,
     })
 }
@@ -100,24 +92,6 @@ where
                     .map_err(|e| Error::custom(format!("error parsing formula value expression: {}", e)))?;
                 Ok(Some(string))
             }
-        },
-    }
-}
-
-fn when<E>(yaml_mapping: &Mapping) -> Result<Option<Expression>, E>
-where
-    E: Error,
-{
-    let when = yaml_mapping.get(&Value::from("when"));
-    match when {
-        None => Ok(None),
-        Some(mapping) => match mapping {
-            Value::String(string) => {
-                Ok(Some(string.parse().map_err(|e| {
-                    Error::custom(format!("error parsing when expression: {}", e))
-                })?))
-            }
-            _ => Err(Error::custom(format!("unknown shape of `when`: {:#?}", mapping))),
         },
     }
 }

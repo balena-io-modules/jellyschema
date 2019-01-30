@@ -4,7 +4,6 @@ use std::collections::HashMap;
 use serde_derive::Serialize;
 
 use crate::dsl::schema::Schema;
-use crate::dsl::schema::when::DependencyGraph;
 use crate::dsl::schema::Widget;
 use crate::dsl::schema::KeysSchema;
 
@@ -16,7 +15,6 @@ pub struct JsonSchema<'a> {
     version: u64,
     schema_url: &'a str,
     root: Option<&'a Schema>,
-    dependencies: Option<&'a DependencyGraph>,
 }
 
 /// It's different than UiObject as the root is nameless in the output

@@ -21,7 +21,7 @@ impl<'a> Serialize for JsonSchema<'a> {
         map.serialize_entry("$$version", &self.version)?;
 
         if let Some(schema) = self.root {
-            serialize_schema(schema, self.dependencies, &mut map)?
+            serialize_schema(schema, &mut map)?
         }
 
         map.end()
@@ -34,7 +34,6 @@ impl<'a> From<&'a DocumentRoot> for JsonSchema<'a> {
             root: schema.schema.as_ref(),
             version: schema.version,
             schema_url: SCHEMA_URL,
-            dependencies: schema.dependencies.as_ref(),
         }
     }
 }

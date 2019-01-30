@@ -1,18 +1,15 @@
 //! Top-level constructs representing the configuration DSL language
 use std::collections::HashMap;
 
-use balena_temen::ast::Expression;
 use regex::Regex;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 use crate::dsl::schema::object_types::ObjectType;
-use crate::dsl::schema::when::DependencyGraph;
 
 pub mod deserialization;
 pub mod compiler;
 pub mod object_types;
-pub mod when;
 mod dynamic;
 
 /// Represents the root of the yaml DSL document
@@ -20,8 +17,6 @@ mod dynamic;
 pub struct DocumentRoot {
     pub version: u64,
     pub schema: Option<Schema>,
-    /// the whole dependency tree for all the subschemas. Recursively. Used for `when` conditions
-    pub dependencies: Option<DependencyGraph>,
 }
 
 /// A first-class collection of `NamedSchema`'s, has convenience methods exposed
@@ -48,7 +43,6 @@ pub struct Schema {
     pub children: Option<SchemaList>,
     /// this represents `keys` and `values` - defining dynamic objects
     pub dynamic: Option<Box<KeysValues>>,
-    pub when: Option<Expression>,
     /// unparsed formula, can't be evaluated by CDSL as we don't have data, just schema
     pub formula: Option<String>,
 }
@@ -110,45 +104,17 @@ impl SchemaList {
         self.entries().iter().map(|schema| schema.unpack()).collect()
     }
 
+    pub fn all_names(&self) -> Vec<&str> {
+        self.entries().iter().map(|schema| schema.name.as_str()).collect()
+    }
+
     pub fn entries(&self) -> &Vec<NamedSchema> {
         &self.entries
-    }
-
-    pub fn dependent_schemas(&self) -> Vec<&NamedSchema> {
-        self.entries
-            .iter()
-            .filter(|named_schema| named_schema.schema.when.is_some()) // TODO: see if this is enough
-            .collect()
-    }
-
-    pub fn independent_schemas(&self) -> Vec<&NamedSchema> {
-        self.entries
-            .iter()
-            .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
-            .collect()
-    }
-
-    /// schema name -> Schema
-    pub fn independent_as_map(&self) -> HashMap<&str, &Schema> {
-        self.independent_schemas()
-            .iter()
-            .map(|schema| schema.unpack())
-            .collect()
-    }
-
-    /// names of all schemas that do not depend on any other schema
-    pub fn independent_schema_names(&self) -> Vec<&str> {
-        self.entries
-            .iter()
-            .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
-            .map(|named_schema| named_schema.name.as_str())
-            .collect()
     }
 
     pub fn required_schema_names(&self) -> Vec<&str> {
         self.entries
             .iter()
-            .filter(|named_schema| named_schema.schema.when.is_none()) // TODO: see if this is enough
             .filter_map(|named_schema| {
                 let object_type = &named_schema.schema.object_type;
                 match object_type {
