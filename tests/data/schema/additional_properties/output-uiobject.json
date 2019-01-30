@@ -1,5 +1,16 @@
 {
     "property": {
-        "anotherSubproperty": {}
-    }
+        "anotherSubproperty": {
+            "ui:order": [
+                "final"
+            ]
+        },
+        "ui:order": [
+            "subproperty",
+            "anotherSubproperty"
+        ]
+    },
+    "ui:order": [
+        "property"
+    ]
 }

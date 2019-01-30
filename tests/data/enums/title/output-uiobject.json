@@ -1,1 +1,5 @@
-{}
+{
+    "ui:order": [
+        "longOne"
+    ]
+}

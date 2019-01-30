@@ -1,1 +1,6 @@
-{}
+{
+    "ui:order": [
+        "port",
+        "customport"
+    ]
+}

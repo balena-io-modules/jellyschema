@@ -58,6 +58,8 @@ struct UiObjectProperty {
     ui_options: Option<UiOptions>,
     #[serde(rename = "ui:readonly", skip_serializing_if = "Option::is_none")]
     readonly: Option<bool>,
+    #[serde(rename = "ui:order", skip_serializing_if = "Option::is_none")]
+    order: Option<Vec<String>>,
 }
 
 impl UiObjectProperty {

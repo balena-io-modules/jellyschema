@@ -1,8 +1,21 @@
 {
-    "advanced": {},
+    "advanced": {
+        "ui:order": [
+            "hostname",
+            "persistentLogging"
+        ]
+    },
     "network": {
         "passphrase": {
             "ui:widget": "password"
-        }
-    }
+        },
+        "ui:order": [
+            "ssid",
+            "passphrase"
+        ]
+    },
+    "ui:order": [
+        "network",
+        "advanced"
+    ]
 }

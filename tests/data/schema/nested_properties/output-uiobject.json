@@ -1,3 +1,10 @@
 {
-    "top": {}
+    "top": {
+        "ui:order": [
+            "second"
+        ]
+    },
+    "ui:order": [
+        "top"
+    ]
 }

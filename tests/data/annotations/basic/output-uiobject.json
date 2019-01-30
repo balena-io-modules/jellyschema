@@ -1,23 +1,23 @@
 {
-    "ui:description": "This is top-level description",
-    "ui:help": "Some top-level help",
-    "ui:warning": "OMG top.",
-    "justwarning": {
+    "alltogether": {
+        "ui:description": "Lorem ipsum dolor sit amet",
+        "ui:help": "Hello help",
         "ui:warning": "Warning!"
     },
-    "justhelp": {
-        "ui:help": "Hello help"
+    "hidden": {
+        "ui:widget": "hidden"
     },
     "justdescription": {
         "ui:description": "Lorem ipsum dolor sit amet"
     },
-    "alltogether": {
-        "ui:warning": "Warning!",
-        "ui:help": "Hello help",
-        "ui:description": "Lorem ipsum dolor sit amet"
+    "justhelp": {
+        "ui:help": "Hello help"
     },
-    "hidden": {
-        "ui:widget": "hidden"
+    "justwarning": {
+        "ui:warning": "Warning!"
+    },
+    "nonreadonly": {
+        "ui:readonly": false
     },
     "placeholder": {
         "ui:placeholder": "hello this is placeholder text"
@@ -25,13 +25,27 @@
     "readonly": {
         "ui:readonly": true
     },
-    "nonreadonly": {
-        "ui:readonly": false
-    },
-    "writeonly": {
-        "ui:widget": "password"
-    },
     "text": {
         "ui:widget": "textarea"
+    },
+    "ui:description": "This is top-level description",
+    "ui:help": "Some top-level help",
+    "ui:order": [
+        "justtitle",
+        "justhelp",
+        "justwarning",
+        "justdescription",
+        "alltogether",
+        "hidden",
+        "placeholder",
+        "readonly",
+        "nonreadonly",
+        "writeonly",
+        "nonwriteonly",
+        "text"
+    ],
+    "ui:warning": "OMG top.",
+    "writeonly": {
+        "ui:widget": "password"
     }
 }

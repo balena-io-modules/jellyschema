@@ -50,7 +50,11 @@ impl From<Schema> for UiObjectProperty {
         let readonly = readonly(&annotations);
         let keys_values = schema.dynamic.map(|keys_values| keys_values.keys);
 
-        let children = schema.children.map(|children| children.into());
+        let children = schema.children;
+        let children_ui_objects = children.clone().map(|children| children.into());
+        let order = children
+            .clone()
+            .map(|list| list.all_names().iter().map(|name| name.to_string()).collect());
 
         let ui_options = ui_options(&annotations);
 
@@ -60,10 +64,11 @@ impl From<Schema> for UiObjectProperty {
             description,
             placeholder,
             widget,
-            properties: children,
+            properties: children_ui_objects,
             keys: keys_values,
             ui_options,
             readonly,
+            order,
         }
     }
 }
