@@ -13,6 +13,11 @@
 
         let (json_schema, ui_object) = Generator::with(input_schema)?.generate();
 
+        if json_schema != expected_json_schema || ui_object != expected_ui_object {{
+            eprintln!("JSONSchema:\n {{}}", serde_json::to_string_pretty( &json_schema).unwrap());
+            eprintln!("UISchema:\n {{}}", serde_json::to_string_pretty( & ui_object).unwrap());
+        }}
+
         assert_eq!(expected_json_schema, json_schema, "Actual(right) json schema different than expected (left)");
         assert_eq!(expected_ui_object, ui_object, "Actual(right) ui object different than expected (left)");
 
