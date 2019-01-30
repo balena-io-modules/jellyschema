@@ -1,8 +1,20 @@
 {
     "network": {
-        "ui:collapsible": false
+        "ui:collapsible": false,
+        "ui:order": [
+            "ssid",
+            "passphrase"
+        ]
     },
     "advanced": {
-        "ui:collapsed": true
-    }
+        "ui:collapsed": true,
+        "ui:order": [
+            "hostname",
+            "persistentLogging"
+        ]
+    },
+    "ui:order": [
+        "network",
+        "advanced"
+    ]
 }

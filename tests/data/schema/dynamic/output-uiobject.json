@@ -2,6 +2,12 @@
     "extendedRules": {
         "ui:keys": {
             "ui:title": "Priority"
-        }
-    }
+        },
+        "ui:order": [
+            "name"
+        ]
+    },
+    "ui:order": [
+        "extendedRules"
+    ]
 }

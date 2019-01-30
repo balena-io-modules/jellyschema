@@ -1,1 +1,6 @@
-{}
+{
+    "ui:order": [
+        "profile-picture",
+        "documents"
+    ]
+}
