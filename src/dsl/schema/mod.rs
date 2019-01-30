@@ -62,6 +62,8 @@ pub struct Annotations {
     pub hidden: Option<bool>,
     #[serde(rename = "readOnly")]
     pub readonly: Option<bool>,
+    #[serde(rename = "writeOnly")]
+    pub writeonly: Option<bool>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -69,6 +71,7 @@ pub struct Annotations {
 pub enum Widget {
     Textarea,
     Hidden,
+    Password,
 }
 
 #[derive(Clone, Debug)]

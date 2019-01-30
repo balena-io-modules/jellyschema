@@ -14,6 +14,8 @@
         "placeholder",
         "readonly",
         "nonreadonly",
+        "writeonly",
+        "nonwriteonly",
         "text"
     ],
     "required": [
@@ -26,6 +28,8 @@
         "placeholder",
         "readonly",
         "nonreadonly",
+        "writeonly",
+        "nonwriteonly",
         "text"
     ],
     "properties": {
@@ -52,10 +56,20 @@
             "type": "string"
         },
         "readonly": {
-            "type": "string"
+            "type": "string",
+            "readOnly": true
         },
         "nonreadonly": {
-            "type": "string"
+            "type": "string",
+            "readOnly": false
+        },
+        "writeonly": {
+            "type": "string",
+            "writeOnly": true
+        },
+        "nonwriteonly": {
+            "type": "string",
+            "writeOnly": false
         },
         "text": {
             "type": "string"

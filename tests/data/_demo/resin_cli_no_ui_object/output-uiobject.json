@@ -1,4 +1,8 @@
 {
     "advanced": {},
-    "network": {}
+    "network": {
+        "passphrase": {
+            "ui:widget": "password"
+        }
+    }
 }

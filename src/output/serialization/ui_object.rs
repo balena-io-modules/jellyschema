@@ -13,6 +13,7 @@ use crate::dsl::schema::KeysSchema;
 use crate::output::UiOptions;
 use crate::dsl::schema::Annotations;
 use crate::dsl::schema::Widget;
+use crate::dsl::schema::object_types::RawObjectType;
 
 impl From<DocumentRoot> for UiObjectRoot {
     fn from(schema: DocumentRoot) -> UiObjectRoot {
@@ -42,9 +43,9 @@ impl From<SchemaList> for UiObject {
 
 impl From<Schema> for UiObjectProperty {
     fn from(schema: Schema) -> Self {
-        let annotations = schema.annotations;
+        let annotations = schema.annotations.clone();
         let (help, warning, description) = help_warning_description(&annotations);
-        let widget = widget(&annotations);
+        let widget = widget(&schema);
         let placeholder = placeholder(&annotations);
         let readonly = readonly(&annotations);
         let keys_values = schema.dynamic.map(|keys_values| keys_values.keys);
@@ -96,7 +97,14 @@ fn ui_options(annotations: &Annotations) -> Option<UiOptions> {
     }
 }
 
-fn widget(annotations: &Annotations) -> Option<Widget> {
+fn widget(schema: &Schema) -> Option<Widget> {
+    let annotations = &schema.annotations;
+    if let RawObjectType::Password(_) = schema.object_type.inner_raw() {
+        return Some(Widget::Password);
+    }
+    if annotations.writeonly.unwrap_or(false) {
+        return Some(Widget::Password);
+    }
     if annotations.hidden.unwrap_or(false) {
         return Some(Widget::Hidden);
     }
