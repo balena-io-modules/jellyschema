@@ -1,4 +1,17 @@
 - commits:
+    - subject: Rename JS file in the NPM package
+      hash: dd42e18633c5f5564f8268a20d2b69d0bc81515c
+      body: |
+        Just to make a difference between .wasm & .js.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.10.0
+  date: 2019-02-01T10:42:16.229Z
+- commits:
     - subject: 'Emit `ui:order` in addition to `$$order`'
       hash: 29ca779c894c5a4ad0de7dc9a646b5f68ccdea13
       body: ''
