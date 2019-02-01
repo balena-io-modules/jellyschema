@@ -1,4 +1,24 @@
 - commits:
+    - subject: Add basic fuzzer configuration.
+      hash: 6055c7a9f815f38c4dd13fbff43f620ecbef4d47
+      body: |
+        Add standard `cargo-fuzz` configuration with seeds.
+        This just tests if given random input the whole stack does not panic.
+        If there is `Err` it is considered ok.
+        Please see `docs/MAINTAINER.md` for documentation on running.
+        I've ran this for half an hour and it did not find any crashes.
+
+        The plan would be to have this, and then as the next step (next PR) add
+        a fuzzing target that would use the new validator library, to check if
+        there are no `Err` returned if the input yaml is a valid jellyschema -
+        here I suspect it will find some corener cases.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.10.1
+  date: 2019-02-01T13:26:55.434Z
+- commits:
     - subject: Rename JS file in the NPM package
       hash: dd42e18633c5f5564f8268a20d2b69d0bc81515c
       body: |
