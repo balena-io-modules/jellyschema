@@ -1,0 +1,25 @@
+
+[package]
+name = "balena-cdsl-fuzz"
+version = "0.0.1"
+authors = ["Automatically generated"]
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies.balena-cdsl]
+path = ".."
+[dependencies.libfuzzer-sys]
+git = "https://github.com/rust-fuzz/libfuzzer-sys.git"
+
+[dependencies.serde_yaml]
+version = "0.8"
+
+# Prevent this from interfering with workspaces
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "any_input"
+path = "fuzz_targets/any_input.rs"
