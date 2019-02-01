@@ -1,4 +1,24 @@
 - commits:
+    - subject: Fix running fuzzer from scratch.
+      hash: 4819439d727f107222fde40a1e3c19e50612d68f
+      body: |
+        I wanted to leave running the fuzzer over the weekend on my fuzzing
+        machine.
+        It turned out that running fuzzer on a fresh checkout did not work out
+        of the box - fixed that.
+
+        to reproduce original problem:
+        ```
+        git clean -fdx
+        ./fuzz/run-fuzzer.sh
+        ```
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.10.2
+  date: 2019-02-01T15:33:23.902Z
+- commits:
     - subject: Add basic fuzzer configuration.
       hash: 6055c7a9f815f38c4dd13fbff43f620ecbef4d47
       body: |
