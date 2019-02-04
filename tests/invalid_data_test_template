@@ -9,5 +9,5 @@
         }}
 
         let error = Generator::with(input_schema.unwrap());
-        assert!(error.is_err());
+        assert!(error.is_err(), "expected {path} to not be parsed correctly");
     }}

@@ -27,8 +27,11 @@ fn main() -> Result<(), Error> {
         for data_directory in data_directories {
             let data_directory = data_directory?;
             let files = read_dir(&data_directory.path())?;
-            if files.into_iter().map(|entry| entry.unwrap().file_name().into_string()).
-                any(|file_name| file_name.unwrap() == "output-error") {
+            if files
+                .into_iter()
+                .map(|entry| entry.unwrap().file_name().into_string())
+                .any(|file_name| file_name.unwrap() == "output-error")
+            {
                 write_test(&mut test_file, &data_directory, "./tests/invalid_data_test_template")?;
             } else {
                 write_test(&mut test_file, &data_directory, "./tests/valid_data_test_template")?;
