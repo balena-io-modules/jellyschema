@@ -1,4 +1,24 @@
 - commits:
+    - subject: Add unhappy-path tests.
+      hash: c65effc493b93ff681210ca7ce41f6b907d00083
+      body: >
+        Add a new type of example-based tests where we expect an error, e.g.
+        invalid schema tests.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+    - subject: Rename uiobject to uischema in test file names.
+      hash: f708b412fc3a47969e4bfc2e49fc239bd984f61f
+      body: |
+        To make it consistent with the terminology used in rjsf.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.10.3
+  date: 2019-02-04T12:45:16.153Z
+- commits:
     - subject: Fix running fuzzer from scratch.
       hash: 4819439d727f107222fde40a1e3c19e50612d68f
       body: |
