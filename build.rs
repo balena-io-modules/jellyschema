@@ -6,6 +6,10 @@ use std::io;
 use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
+use std::io::Read;
+use std::collections::HashMap;
+
+use strfmt::strfmt;
 
 fn main() -> Result<(), Error> {
     let out_dir = env::var("OUT_DIR")?;
@@ -21,7 +25,17 @@ fn main() -> Result<(), Error> {
         start_module(&mut test_file, &file_name(&category_directory)?)?;
 
         for data_directory in data_directories {
-            write_test(&mut test_file, &data_directory?)?;
+            let data_directory = data_directory?;
+            let files = read_dir(&data_directory.path())?;
+            if files
+                .into_iter()
+                .map(|entry| entry.unwrap().file_name().into_string())
+                .any(|file_name| file_name.unwrap() == "output-error")
+            {
+                write_test(&mut test_file, &data_directory, "./tests/invalid_data_test_template")?;
+            } else {
+                write_test(&mut test_file, &data_directory, "./tests/valid_data_test_template")?;
+            }
         }
 
         end_module(&mut test_file)?;
@@ -85,16 +99,22 @@ fn file_name(directory: &PathBuf) -> Result<String, Error> {
     Ok(result.to_string())
 }
 
-fn write_test(test_file: &mut File, directory: &DirEntry) -> Result<(), Error> {
+fn write_test(test_file: &mut File, directory: &DirEntry, template_path: &str) -> Result<(), Error> {
     let directory = directory.path().canonicalize()?;
     let path = directory.display();
     let name = format!("{}", file_name(&directory)?);
 
-    write!(
-        test_file,
-        include_str!("./tests/test_template"),
-        name = name,
-        path = path
-    )?;
+    let mut template_file = File::open(template_path)?;
+    let mut template = String::new();
+    template_file.read_to_string(&mut template)?;
+
+    let mut vars = HashMap::new();
+    vars.insert("name".to_string(), name);
+    vars.insert("path".to_string(), path.to_string());
+
+    let rendered_contents = strfmt(&template, &vars).expect("Cannot format template");
+
+    test_file.write_all(rendered_contents.as_bytes())?;
+
     Ok(())
 }
