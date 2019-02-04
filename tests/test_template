@@ -7,19 +7,19 @@
         let expected_json_schema : serde_json::Value = serde_json::from_str(
             include_str!("{path}/output-json-schema.json")).
             unwrap();
-        let expected_ui_object : serde_json::Value  = serde_json::from_str(
-            include_str!("{path}/output-uiobject.json")).
+        let expected_ui_schema : serde_json::Value  = serde_json::from_str(
+            include_str!("{path}/output-uischema.json")).
             unwrap();
 
-        let (json_schema, ui_object) = Generator::with(input_schema)?.generate();
+        let (json_schema, ui_schema) = Generator::with(input_schema)?.generate();
 
-        if json_schema != expected_json_schema || ui_object != expected_ui_object {{
-            eprintln!("JSONSchema:\n {{}}", serde_json::to_string_pretty( &json_schema).unwrap());
-            eprintln!("UISchema:\n {{}}", serde_json::to_string_pretty( & ui_object).unwrap());
+        if json_schema != expected_json_schema || ui_schema != expected_ui_schema {{
+            eprintln!("JSONSchema:\n {{}}", serde_json::to_string_pretty(&json_schema).unwrap());
+            eprintln!("UISchema:\n {{}}", serde_json::to_string_pretty(&ui_schema).unwrap());
         }}
 
         assert_eq!(expected_json_schema, json_schema, "Actual(right) json schema different than expected (left)");
-        assert_eq!(expected_ui_object, ui_object, "Actual(right) ui object different than expected (left)");
+        assert_eq!(expected_ui_schema, ui_schema, "Actual(right) ui object different than expected (left)");
 
         Ok(())
     }}
