@@ -36,6 +36,9 @@ version = "0.8"
 version= "0.3"
 features = ["serde_yaml"]
 
+[build-dependencies.strfmt]
+version = "0.1"
+
 [dev-dependencies.pretty_assertions]
 version = "0.5"
 

@@ -13,14 +13,31 @@ Most of the testing is example-based, with examples stored in `tests/data`.
 This data is used to generate regular unit tests during the build process.
 There are 2 levels of subdirectories there.
 The first level indicates a test group name - this will be translated into a test module name and then there is a directory inside of that - that would indicate a unit test name.
-The test directories each contain:
+The test directories each can contain:
+
+Either:
 
 ```
-input-schema.yml - this is jellyschema input
-output-json-schema.json - this is JSONSchema that should be produced from that input jellyschema
-output-uischema.json - this is UISchema that should be produced from that input jellyschema
+input-schema.yml
+output-json-schema.json
+output-uischema.json
 ```
 
+or:
+
+```
+input-schema.yml
+output-error
+```
+
+Meaning of each file by its name:
+* `input-schema.yml` - this is jellyschema input
+* `output-json-schema.json` - this is JSONSchema that should be produced from that input jellyschema
+* `output-uischema.json` - this is UISchema that should be produced from that input jellyschema
+* `output-error` - an empty marker file signalling that the input-schema should produce error when we're trying to generate output schemas from it
+
+Note:
+We expect the code to never panic so the test with `output-error` checks for `Err` present, but if it panics instead it's gonna be marked as failed.
 
 ## Fuzzing
 Fuzz tests are not included in the CI runs as they typically take a long time to run and the timing is quite unpredictable.  
