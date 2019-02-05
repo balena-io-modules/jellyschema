@@ -1,4 +1,16 @@
 - commits:
+    - subject: Generate wasm bindings conditionally
+      hash: f98e73a462a4ba46f2f045c554694d20175a68b2
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.10.4
+  date: 2019-02-05T07:46:14.702Z
+- commits:
     - subject: Add unhappy-path tests.
       hash: c65effc493b93ff681210ca7ce41f6b907d00083
       body: >
