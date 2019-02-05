@@ -15,42 +15,16 @@ use crate::dsl::schema::Schema;
 use crate::dsl::schema::SchemaList;
 use crate::dsl::schema::Widget;
 
+const DEFAULT_VERSION: u64 = 1;
+
 pub fn deserialize_root(schema: &Value) -> Result<DocumentRoot, CompilationError> {
-    let maybe_root = schema.as_mapping();
-    const DEFAULT_VERSION: u64 = 1;
-    let version = match maybe_root {
-        Some(mapping) => Ok({
-            let version = mapping.get(&Value::from("version"));
-
-            match version {
-                Some(version) => Some(
-                    version
-                        .as_u64()
-                        .ok_or_else(|| CompilationError::with_message("version must be a positive integer"))?,
-                ),
-                None => None,
-            }
-        }),
-        None => Err(CompilationError::with_message(
-            "root level schema needs to be a yaml mapping",
-        )),
-    }?
-    .unwrap_or(DEFAULT_VERSION);
-
-    if version != DEFAULT_VERSION {
-        return Err(CompilationError::with_message(&format!(
-            "invalid version number '{}' specified",
-            version
-        )));
-    }
-
     let schema = deserialize_schema::<serde_yaml::Error>(&schema)?;
+    let schema = match schema.version {
+        None => schema.with_version(DEFAULT_VERSION),
+        Some(_) => schema,
+    };
 
-    // this is recursive already, should get the whole tree for all children schemas
-    Ok(DocumentRoot {
-        version,
-        schema: Some(schema),
-    })
+    Ok(DocumentRoot(schema))
 }
 
 pub fn deserialize_schema<E>(value: &Value) -> Result<Schema, E>
@@ -60,6 +34,9 @@ where
     let yaml_mapping = value
         .as_mapping()
         .ok_or_else(|| Error::custom(format!("schema is not a yaml mapping - {:#?}", value)))?;
+
+    let version = version(&yaml_mapping)?;
+
     let type_information = type_information(&yaml_mapping)?;
 
     let annotations = annotations(value)?;
@@ -70,12 +47,39 @@ where
     let formula = formula(yaml_mapping)?;
 
     Ok(Schema {
+        version,
         object_type: type_information,
         children: properties,
         dynamic,
         annotations,
         formula,
     })
+}
+
+fn version<E>(yaml_mapping: &Mapping) -> Result<Option<u64>, E>
+where
+    E: Error,
+{
+    let version = yaml_mapping.get(&Value::from("version"));
+
+    let version = version
+        .map(|version| {
+            version
+                .as_u64()
+                .ok_or_else(|| Error::custom("version must be a positive integer"))
+        })
+        .map_or(Ok(None), |version| version.map(Some))?;
+
+    if let Some(version) = version {
+        if version != DEFAULT_VERSION {
+            return Err(Error::custom(&format!(
+                "invalid version number '{:#?}' specified",
+                version
+            )));
+        }
+    }
+
+    Ok(version)
 }
 
 fn formula<E>(yaml_mapping: &Mapping) -> Result<Option<String>, E>

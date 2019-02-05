@@ -14,10 +14,7 @@ mod dynamic;
 
 /// Represents the root of the yaml DSL document
 #[derive(Clone, Debug)]
-pub struct DocumentRoot {
-    pub version: u64,
-    pub schema: Option<Schema>,
-}
+pub struct DocumentRoot(Schema);
 
 /// A first-class collection of `NamedSchema`'s, has convenience methods exposed
 #[derive(Clone, Debug)]
@@ -37,6 +34,7 @@ pub struct NamedSchema {
 /// Everything that a schema at any level can represent, see schema and subschema in the spec
 #[derive(Clone, Debug)]
 pub struct Schema {
+    pub version: Option<u64>,
     pub object_type: ObjectType,
     pub annotations: Annotations,
     /// children of a schema are all schemas defined inside of this schema
@@ -90,6 +88,21 @@ impl NamedSchema {
     /// Unpacks named schema into (name, schema)
     pub fn unpack(&self) -> (&str, &Schema) {
         (self.name.as_ref(), &self.schema)
+    }
+}
+
+impl Schema {
+    pub fn with_version(self, version: u64) -> Schema {
+        Schema {
+            version: Some(version),
+            ..self
+        }
+    }
+}
+
+impl DocumentRoot {
+    pub fn schema(self) -> Schema {
+        self.0
     }
 }
 

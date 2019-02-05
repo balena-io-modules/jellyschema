@@ -18,21 +18,17 @@ impl<'a> Serialize for JsonSchema<'a> {
     {
         let mut map = serializer.serialize_map(None)?;
         map.serialize_entry("$schema", &self.schema_url)?;
-        map.serialize_entry("$$version", &self.version)?;
 
-        if let Some(schema) = self.root {
-            serialize_schema(schema, &mut map)?
-        }
+        serialize_schema(&self.root, &mut map)?;
 
         map.end()
     }
 }
 
-impl<'a> From<&'a DocumentRoot> for JsonSchema<'a> {
-    fn from(schema: &'a DocumentRoot) -> Self {
+impl<'a> From<DocumentRoot> for JsonSchema<'a> {
+    fn from(root: DocumentRoot) -> Self {
         JsonSchema {
-            root: schema.schema.as_ref(),
-            version: schema.version,
+            root: root.schema(),
             schema_url: SCHEMA_URL,
         }
     }

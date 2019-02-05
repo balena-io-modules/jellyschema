@@ -38,11 +38,11 @@ where
     E: Error,
     S: SerializeMap<Ok = O, Error = E>,
 {
-    for title in &schema.annotations.title {
+    serialize_object_type(&schema.object_type, map)?;
+
+    if let Some(title) = &schema.annotations.title {
         map.serialize_entry("title", &title)?;
     }
-
-    serialize_object_type(&schema.object_type, map)?;
 
     if let Some(children) = &schema.children {
         serialize_schema_list(children, map)?;
@@ -63,5 +63,10 @@ where
     if let Some(formula) = &schema.formula {
         map.serialize_entry("$$formula", &formula)?;
     }
+
+    if let Some(version) = &schema.version {
+        map.serialize_entry("$$version", &version)?;
+    }
+
     Ok(())
 }
