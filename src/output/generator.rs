@@ -29,7 +29,7 @@ impl Generator {
     /// Generates JSON Schema & UI Object
     pub fn generate(self) -> (serde_json::Value, serde_json::Value) {
         let source_schema = self.compiled_schema.compiled();
-        let json_schema = JsonSchema::from(&source_schema);
+        let json_schema = JsonSchema::from(source_schema.clone());
         let ui_object = UiObjectRoot::from(source_schema.clone());
         let serialized_json_schema =
             serde_json::to_value(json_schema).expect("Internal error: inconsistent schema: json schema");

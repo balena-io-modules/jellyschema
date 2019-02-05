@@ -12,9 +12,8 @@ mod serialization;
 
 /// JSON Schema wrapper
 pub struct JsonSchema<'a> {
-    version: u64,
     schema_url: &'a str,
-    root: Option<&'a Schema>,
+    root: Schema,
 }
 
 /// It's different than UiObject as the root is nameless in the output
@@ -24,12 +23,6 @@ pub struct UiObjectRoot(Option<UiObjectProperty>);
 /// UI Object wrapper
 #[derive(Clone, Debug, Serialize)]
 pub struct UiObject(HashMap<String, UiObjectProperty>);
-
-impl UiObject {
-    pub fn is_empty(&self) -> bool {
-        self.0.is_empty()
-    }
-}
 
 #[derive(Clone, Debug, PartialEq, Serialize)]
 struct UiOptions {
@@ -84,6 +77,12 @@ impl UiObjectRoot {
             None => true,
             Some(property) => property.is_empty(),
         }
+    }
+}
+
+impl UiObject {
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
     }
 }
 

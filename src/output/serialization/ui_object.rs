@@ -16,8 +16,8 @@ use crate::dsl::schema::Widget;
 use crate::dsl::schema::object_types::RawObjectType;
 
 impl From<DocumentRoot> for UiObjectRoot {
-    fn from(schema: DocumentRoot) -> UiObjectRoot {
-        UiObjectRoot(schema.schema.map(|schema| schema.into()))
+    fn from(root: DocumentRoot) -> Self {
+        UiObjectRoot(Some(root.schema().into()))
     }
 }
 
@@ -29,7 +29,7 @@ impl From<SchemaList> for UiObject {
             .filter_map(|entry| {
                 let property: UiObjectProperty = entry.schema.clone().into();
                 if !property.is_empty() {
-                    Some((entry.name.clone(), entry.schema.clone().into()))
+                    Some((entry.name.clone(), property))
                 } else {
                     None
                 }
