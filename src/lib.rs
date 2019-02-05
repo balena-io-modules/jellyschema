@@ -38,5 +38,5 @@
 //! [Semantic Versioning]: https://semver.org/
 pub mod dsl;
 pub mod output;
-#[cfg(target_arch = "wasm32")]
+#[cfg(all(target_arch = "wasm32", not(feature = "disable-wasm-bindings")))]
 mod wasm;
