@@ -1,4 +1,21 @@
 - commits:
+    - subject: '`version` keyword available and passed through on every schema level.'
+      hash: 21cc6e35124bdac277c12fa9b81a49eaf6da4e02
+      body: |
+        * if version is not specified on the root level, we default the version
+        to 1 and emit it at the root level
+        * if there is no version specified at the non-root level - we don't emit
+        anything, assuming that the version at the root level is current
+        * if there is a version specified at the non-root level we pass it
+        through
+        * the only valid version specifier remains `1`
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.10.5
+  date: 2019-02-05T15:34:48.348Z
+- commits:
     - subject: Generate wasm bindings conditionally
       hash: f98e73a462a4ba46f2f045c554694d20175a68b2
       body: ''
