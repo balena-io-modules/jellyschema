@@ -1,4 +1,16 @@
 - commits:
+    - subject: Rename & merge reconfix functionality
+      hash: 924a58229e1ae39b7a48595349e0205b46b6015e
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.11.0
+  date: 2019-02-07T11:41:34.039Z
+- commits:
     - subject: '`version` keyword available and passed through on every schema level.'
       hash: 21cc6e35124bdac277c12fa9b81a49eaf6da4e02
       body: |
