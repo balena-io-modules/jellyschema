@@ -1,5 +1,5 @@
 {
-    "name": "balena-configuration-dsl-browser-example",
+    "name": "jellyschema-browser-example",
     "version": "0.0.1",
     "main": "index.js",
     "scripts": {
@@ -8,7 +8,7 @@
     },
     "author": "Cyryl Płotnicki <cyryl@balena.io>, Robert Vojta <robert@balena.io>",
     "dependencies": {
-        "balena-cdsl": "0"
+        "jellyschema": "0"
     },
     "devDependencies": {
         "webpack": "^4.16.3",

@@ -1,97 +1,23 @@
 //! A module containing output generator for the JSON Schema & UI Object
-use std::collections::HashMap;
+use serde_json::Value;
 
-use serde_derive::Serialize;
+use crate::{
+    output::serialization::{JsonSchema, UiSchema},
+    schema::Schema,
+};
 
-use crate::dsl::schema::Schema;
-use crate::dsl::schema::Widget;
-use crate::dsl::schema::KeysSchema;
-
-pub mod generator;
 mod serialization;
 
-/// JSON Schema wrapper
-pub struct JsonSchema<'a> {
-    schema_url: &'a str,
-    root: Schema,
+fn generate_json_schema(schema: &Schema) -> Value {
+    let json_schema: JsonSchema = JsonSchema::with_default_schema_url(schema);
+    serde_json::to_value(json_schema).expect("Internal error: inconsistent schema: json schema")
 }
 
-/// It's different than UiObject as the root is nameless in the output
-#[derive(Clone, Debug, Serialize)]
-pub struct UiObjectRoot(Option<UiObjectProperty>);
-
-/// UI Object wrapper
-#[derive(Clone, Debug, Serialize)]
-pub struct UiObject(HashMap<String, UiObjectProperty>);
-
-#[derive(Clone, Debug, PartialEq, Serialize)]
-struct UiOptions {
-    removable: bool,
-    addable: bool,
-    orderable: bool,
+fn generate_ui_schema(schema: &Schema) -> Value {
+    let ui_schema: UiSchema = UiSchema::new(schema);
+    serde_json::to_value(ui_schema).expect("Internal error: inconsistent schema: ui schema")
 }
 
-#[derive(Clone, Debug, Serialize)]
-struct UiObjectProperty {
-    #[serde(rename = "ui:help", skip_serializing_if = "Option::is_none")]
-    help: Option<String>,
-    #[serde(rename = "ui:warning", skip_serializing_if = "Option::is_none")]
-    warning: Option<String>,
-    #[serde(rename = "ui:description", skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    #[serde(rename = "ui:placeholder", skip_serializing_if = "Option::is_none")]
-    placeholder: Option<String>,
-    #[serde(rename = "ui:widget", skip_serializing_if = "Option::is_none")]
-    widget: Option<Widget>,
-    #[serde(flatten)]
-    properties: Option<UiObject>,
-    #[serde(flatten)]
-    keys: Option<KeysSchema>,
-    #[serde(rename = "ui:options", skip_serializing_if = "Option::is_none")]
-    ui_options: Option<UiOptions>,
-    #[serde(rename = "ui:readonly", skip_serializing_if = "Option::is_none")]
-    readonly: Option<bool>,
-    #[serde(rename = "ui:order", skip_serializing_if = "Option::is_none")]
-    order: Option<Vec<String>>,
-}
-
-impl UiObjectProperty {
-    /// Checks if an UI Object is empty
-    // FIXME: this is hard to maintain - need to remember to add things here
-    pub fn is_empty(&self) -> bool {
-        self.help.is_none()
-            && self.warning.is_none()
-            && self.description.is_none()
-            && self.widget.is_none()
-            && self.properties.is_none()
-            && self.keys.is_none()
-            && self.ui_options.is_none()
-            && self.placeholder.is_none()
-            && self.readonly.is_none()
-    }
-}
-
-impl UiObjectRoot {
-    pub fn is_empty(&self) -> bool {
-        match &self.0 {
-            None => true,
-            Some(property) => property.is_empty(),
-        }
-    }
-}
-
-impl UiObject {
-    pub fn is_empty(&self) -> bool {
-        self.0.is_empty()
-    }
-}
-
-impl Default for UiOptions {
-    fn default() -> Self {
-        UiOptions {
-            removable: true,
-            addable: true,
-            orderable: true,
-        }
-    }
+pub fn generate_json_ui_schema(schema: &Schema) -> (Value, Value) {
+    (generate_json_schema(schema), generate_ui_schema(schema))
 }

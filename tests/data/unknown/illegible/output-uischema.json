@@ -1,8 +1,0 @@
-{
-    "property": {
-        "ui:widget": "textarea"
-    },
-    "ui:order": [
-        "property"
-    ]
-}

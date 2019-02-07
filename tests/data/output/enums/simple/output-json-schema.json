@@ -1,0 +1,98 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "$$order": [
+        "string",
+        "boolean",
+        "hostname",
+        "port"
+    ],
+    "required": [
+        "string",
+        "boolean",
+        "hostname",
+        "port"
+    ],
+    "title": "Enum test",
+    "properties": {
+        "string": {
+            "type": "string",
+            "oneOf": [
+                {
+                    "title": "fincm3",
+                    "enum": [
+                        "fincm3"
+                    ]
+                },
+                {
+                    "title": "raspberrypi3",
+                    "enum": [
+                        "raspberrypi3"
+                    ]
+                },
+                {
+                    "title": "raspberrypi2",
+                    "enum": [
+                        "raspberrypi2"
+                    ]
+                }
+            ]
+        },
+        "boolean": {
+            "type": "boolean",
+            "oneOf": [
+                {
+                    "title": "yes",
+                    "enum": [
+                        true
+                    ]
+                },
+                {
+                    "title": "no",
+                    "enum": [
+                        false
+                    ]
+                }
+            ]
+        },
+        "hostname": {
+            "type": "string",
+            "format": "hostname",
+            "oneOf": [
+                {
+                    "title": "www.example.com",
+                    "enum": [
+                        "www.example.com"
+                    ]
+                },
+                {
+                    "title": "example.com",
+                    "enum": [
+                        "example.com"
+                    ]
+                }
+            ]
+        },
+        "port": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 65535,
+            "oneOf": [
+                {
+                    "title": "http",
+                    "enum": [
+                        80
+                    ]
+                },
+                {
+                    "title": "https",
+                    "enum": [
+                        443
+                    ]
+                }
+            ]
+        }
+    }
+}

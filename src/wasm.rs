@@ -1,69 +1,127 @@
-use std::collections::HashMap;
-
-// https://github.com/rustwasm/console_error_panic_hook#readme
-pub use console_error_panic_hook::set_once as set_panic_hook;
+use console_error_panic_hook::set_once as set_panic_hook_once;
+use serde_json::{json, Value};
+use std::str::FromStr;
 use wasm_bindgen::prelude::*;
 
-use crate::output::generator::Generator;
+use crate::{
+    output::generate_json_ui_schema,
+    schema::Schema,
+    validator::{ValidationError, ValidationState, Validator},
+};
 
-/// Evaluates the whole JSON
 #[wasm_bindgen]
-pub fn generate_ui(yaml_text: JsValue) -> Result<JsValue, JsValue> {
-    // use console.log for nice errors from Rust-land
-    console_error_panic_hook::set_once();
-
-    let yaml_text = yaml_text
-        .as_string()
-        .ok_or_else(|| JsValue::from("yaml given is not a string"))?;
-    let schema = serde_yaml::from_str(&yaml_text).map_err(|e| JsValue::from(format!("{:#?}", e)))?;
-
-    let (json_schema, ui_object) = Generator::with(schema)
-        .map_err(|e| JsValue::from(format!("{:#?}", e)))?
-        .generate();
-
-    let mut result = HashMap::new();
-    result.insert("json_schema", json_schema);
-    result.insert("ui_object", ui_object);
-
-    let result = JsValue::from_serde(&result).map_err(|e| JsValue::from(format!("{:#?}", e)))?;
-
-    Ok(result)
+pub struct JellySchema {
+    schema: Schema,
+    json_ui_schema: Option<(Value, Value)>,
+    last_validation_state: ValidationState,
 }
 
-#[cfg(test)]
-mod tests {
-    use serde_json::json;
-    use wasm_bindgen::prelude::*;
-    use wasm_bindgen_test::*;
+#[wasm_bindgen]
+#[allow(non_snake_case)]
+impl JellySchema {
+    /// Instantiates new JellySchema object
+    ///
+    /// # Arguments
+    ///
+    /// * `schema` - JellySchema as a string or an object
+    ///
+    /// # Throws
+    ///
+    /// Constructor throws in case of invalid `schema` argument value.
+    #[wasm_bindgen(constructor)]
+    pub fn constructor(schema: &JsValue) -> Result<JellySchema, JsValue> {
+        set_panic_hook_once();
 
-    use crate::wasm::generate_ui;
+        let schema: Schema = if schema.is_string() {
+            Schema::from_str(&schema.as_string().unwrap()).map_err(|e| JsValue::from(format!("{}", e)))?
+        } else {
+            schema.into_serde().map_err(|e| JsValue::from(format!("{}", e)))?
+        };
 
-    wasm_bindgen_test_configure!(run_in_browser);
-
-    #[wasm_bindgen_test]
-    fn run_in_browser() {
-        let yaml = JsValue::from(
-            r#"
-            version: 1
-            title: Empty schema
-        "#,
-        );
-
-        let expected_result = json!(
-        {
-            "json_schema": {
-                "$$version": 1,
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "title": "Empty schema",
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ui_object": {}
-        }
-        );
-
-        let generated_ui: serde_json::Value = generate_ui(yaml).unwrap().into_serde().unwrap();
-
-        assert_eq!(generated_ui, expected_result);
+        Ok(JellySchema {
+            schema,
+            json_ui_schema: None,
+            last_validation_state: ValidationState::new(),
+        })
     }
+
+    /// Validates data against JellySchema
+    ///
+    /// # Arguments
+    ///
+    /// * `data` - A JSON object
+    pub fn validate(&mut self, data: &JsValue) -> Result<bool, JsValue> {
+        match data.into_serde() {
+            Ok(data) => {
+                self.last_validation_state = self.schema.validate(Some(&data));
+                Ok(self.last_validation_state.is_valid())
+            }
+            Err(e) => {
+                self.last_validation_state =
+                    ValidationError::new("", "", "", format!("unable to deserialize given data: {}", e)).into();
+                Ok(false)
+            }
+        }
+    }
+
+    /// Generates JSON Schema & UI Schema object
+    ///
+    /// ```js
+    /// {
+    ///     "jsonSchema": {...},
+    ///     "uiSchema": {...}
+    /// }
+    /// ```
+    ///
+    /// # Throws
+    ///
+    /// In case of internal error only (serialization).
+    pub fn jsonAndUiSchema(&mut self) -> Result<JsValue, JsValue> {
+        if self.json_ui_schema.is_none() {
+            self.json_ui_schema = Some(generate_json_ui_schema(&self.schema));
+        }
+
+        let schemas = self.json_ui_schema.as_ref().unwrap();
+
+        JsValue::from_serde(&json!({
+            "jsonSchema": schemas.0,
+            "uiSchema": schemas.1,
+        }))
+        .map_err(|e| JsValue::from_str(&format!("{}", e)))
+    }
+
+    /// Returns last validation errors
+    ///
+    /// # Throws
+    ///
+    /// In case of internal error only (serialization).
+    pub fn errors(&self) -> Result<JsValue, JsValue> {
+        JsValue::from_serde(&json!(self.last_validation_state.errors()))
+            .map_err(|e| JsValue::from_str(&format!("{}", e)))
+    }
+}
+
+/// Generates JSON and UI schema object
+///
+/// ```js
+/// {
+///     "jsonSchema": {...},
+///     "uiSchema": {...}
+/// }
+/// ```
+///
+/// # Arguments
+///
+/// * `schema` - Jelly Schema as an object or a string
+///
+/// # Throws
+///
+/// If the input schema is invalid or in case of internal error (serialization).
+#[wasm_bindgen]
+#[allow(non_snake_case)]
+pub fn generateJsonAndUiSchema(schema: &JsValue) -> Result<JsValue, JsValue> {
+    // This is okay for now, but in the future, when the `constructor`
+    // will be much more expensive (doing lot of other things), we will have to
+    // replace it with direct calls to `generate_json_ui_schema`, etc.
+    JellySchema::constructor(schema)?.jsonAndUiSchema()
 }

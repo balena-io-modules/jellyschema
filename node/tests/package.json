@@ -4,7 +4,7 @@
         "test": "jest --env node"
     },
     "dependencies": {
-        "balena-cdsl": "file:../../target/npm/pkg"
+        "jellyschema": "file:../../target/npm/pkg"
     },
     "devDependencies": {
         "jest": "^23.6.0"
