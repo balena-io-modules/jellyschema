@@ -12,4 +12,4 @@ properties:
     formula: host ~ `.` ~ domain
 - priority:
     type: integer
-    formula: "-7"
+    formula: -7

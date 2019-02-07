@@ -48,7 +48,11 @@ pub struct Schema {
     r#default: Option<Value>,
     #[serde(default, rename = "enum", skip_serializing_if = "Vec::is_empty")]
     r#enum: Vec<EnumEntry>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        default,
+        deserialize_with = "deserialize_as_optional_string",
+        skip_serializing_if = "Option::is_none"
+    )]
     formula: Option<String>,
     #[serde(default, rename = "readOnly")]
     read_only: bool,
@@ -340,6 +344,20 @@ where
 {
     let s: String = serde::de::Deserialize::deserialize(deserializer)?;
     S::from_str(&s).map_err(serde::de::Error::custom)
+}
+
+fn deserialize_as_optional_string<'de, D>(deserializer: D) -> Result<Option<String>, D::Error>
+where
+    D: serde::de::Deserializer<'de>,
+{
+    let s: String = match serde::de::Deserialize::deserialize(deserializer)? {
+        Value::Bool(x) => format!("{}", x),
+        Value::Number(x) => format!("{}", x),
+        Value::String(x) => x.clone(),
+        _ => return Err(serde::de::Error::custom("unable to deserialize as string")),
+    };
+
+    Ok(Some(s))
 }
 
 fn deserialize_option_from_str<'de, S, D>(deserializer: D) -> Result<Option<S>, D::Error>
