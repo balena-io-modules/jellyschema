@@ -1,6 +1,6 @@
 
 [package]
-name = "balena-cdsl-fuzz"
+name = "jellyschema-fuzz"
 version = "0.0.1"
 authors = ["Automatically generated"]
 publish = false
@@ -8,8 +8,9 @@ publish = false
 [package.metadata]
 cargo-fuzz = true
 
-[dependencies.balena-cdsl]
+[dependencies.jellyschema]
 path = ".."
+
 [dependencies.libfuzzer-sys]
 git = "https://github.com/rust-fuzz/libfuzzer-sys.git"
 

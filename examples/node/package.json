@@ -1,9 +1,9 @@
 {
-    "name": "balena-temen-node-example",
+    "name": "jellyschema-node-example",
     "scripts": {
         "start": "node index.js"
     },
     "dependencies": {
-        "balena-cdsl": "0"
+        "jellyschema": "0"
     }
 }

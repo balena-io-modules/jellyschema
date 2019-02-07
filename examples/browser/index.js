@@ -1,4 +1,4 @@
-import * as cdsl from "balena-cdsl";
+import * as jels from "jellyschema";
 
 const initialValue = `
 title: demo
@@ -36,7 +36,8 @@ $source.value = initialValue;
 const evaluate = () => {
     try {
         const value = $source.value;
-        const result = cdsl.generate_ui(value);
+        var schema = new jels.JellySchema(value);
+        const result = schema.jsonAndUiSchema();
         $result.innerText = stringify(result)
     } catch (error) {
         console.error(error)

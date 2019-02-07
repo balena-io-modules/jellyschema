@@ -18,8 +18,9 @@
 //! ## Generate JSON Schema & UI Object
 //!
 //! ```
-//! use balena_cdsl::output::generator::Generator;
-//! use serde_yaml::*;
+//! use jellyschema::output::generate_json_ui_schema;
+//! use jellyschema::schema::Schema;
+//! use serde_yaml;
 //!
 //! let dsl = r#"
 //!   version: 1
@@ -29,14 +30,18 @@
 //!         help: You should type your name here
 //! "#;
 //!
-//! let input_schema: serde_yaml::Value = serde_yaml::from_str(dsl).unwrap();
+//! let input_schema: Schema = serde_yaml::from_str(dsl).unwrap();
 //!
-//! let (json_schema, ui_object) = Generator::with(input_schema).unwrap().generate();
+//! let (json_schema, ui_object) = generate_json_ui_schema(&input_schema);
 //! ```
 //!
 //! [balena]: https://www.balena.io
 //! [Semantic Versioning]: https://semver.org/
-pub mod dsl;
+pub mod error;
+pub mod schema;
+pub(crate) mod utils;
+pub mod validator;
+
 pub mod output;
 #[cfg(all(target_arch = "wasm32", not(feature = "disable-wasm-bindings")))]
 mod wasm;

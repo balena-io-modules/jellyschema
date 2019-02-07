@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$$version": 1,
+    "type": "object",
+    "additionalProperties": false,
+    "title": "Emit version in subschema if provided",
+    "$$order": [
+        "name"
+    ],
+    "required": [
+        "name"
+    ],
+    "properties": {
+        "name": {
+            "type": "string",
+            "$$version": 1
+        }
+    }
+}

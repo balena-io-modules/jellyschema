@@ -1,4 +1,4 @@
-const cdsl = require('balena-cdsl');
+const jels = require('jellyschema');
 
 const initialValue = `
 title: demo
@@ -18,4 +18,6 @@ properties:
             minLength: 8
 `;
 
-console.log(cdsl.generate_ui(initialValue));
+var schema = new jels.JellySchema(initialValue);
+const result = schema.jsonAndUiSchema();
+console.log(JSON.stringify(result, null, 2));

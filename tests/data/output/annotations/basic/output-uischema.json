@@ -1,0 +1,48 @@
+{
+    "alltogether": {
+        "ui:description": "Lorem ipsum dolor sit amet",
+        "ui:help": "Hello help",
+        "ui:warning": "Warning!"
+    },
+    "hidden": {
+        "ui:widget": "hidden"
+    },
+    "justdescription": {
+        "ui:description": "Lorem ipsum dolor sit amet"
+    },
+    "justhelp": {
+        "ui:help": "Hello help"
+    },
+    "justwarning": {
+        "ui:warning": "Warning!"
+    },
+    "placeholder": {
+        "ui:placeholder": "hello this is placeholder text"
+    },
+    "readonly": {
+        "ui:readonly": true
+    },
+    "text": {
+        "ui:widget": "textarea"
+    },
+    "ui:description": "This is top-level description",
+    "ui:help": "Some top-level help",
+    "ui:order": [
+        "justtitle",
+        "justhelp",
+        "justwarning",
+        "justdescription",
+        "alltogether",
+        "hidden",
+        "placeholder",
+        "readonly",
+        "nonreadonly",
+        "writeonly",
+        "nonwriteonly",
+        "text"
+    ],
+    "ui:warning": "OMG top.",
+    "writeonly": {
+        "ui:widget": "password"
+    }
+}

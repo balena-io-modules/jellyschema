@@ -1,9 +1,9 @@
-# balena cdsl
+# Jelly Schema
 
-[![Build Status](https://travis-ci.org/balena-io-modules/balena-cdsl.svg?branch=master)](https://travis-ci.org/balena-io-modules/balena-cdsl)
-[![Current Release](https://img.shields.io/github/tag/balena-io-modules/balena-cdsl.svg?style=flat-square)](https://github.com/balena-io-modules/balena-cdsl/tags)
-[![License](https://img.shields.io/github/license/balena-io-modules/balena-cdsl.svg?style=flat-square)](https://github.com/balena-io-modules/balena-cdsl/blob/master/LICENSE)
-[![Issues](https://img.shields.io/github/issues/balena-io-modules/balena-cdsl.svg?style=flat-square)](https://github.com/balena-io-modules/balena-cdsl/issues)
+[![Build Status](https://travis-ci.org/balena-io-modules/jellyschema.svg?branch=master)](https://travis-ci.org/balena-io-modules/jellyschema)
+[![Current Release](https://img.shields.io/github/tag/balena-io-modules/jellyschema.svg?style=flat-square)](https://github.com/balena-io-modules/jellyschema/tags)
+[![License](https://img.shields.io/github/license/balena-io-modules/jellyschema.svg?style=flat-square)](https://github.com/balena-io-modules/jellyschema/blob/master/LICENSE)
+[![Issues](https://img.shields.io/github/issues/balena-io-modules/jellyschema.svg?style=flat-square)](https://github.com/balena-io-modules/jellyschema/issues)
 
 <div align="center">
   <sub>an open source :satellite: project by <a href="https://www.balena.io">balena.io</a></sub>
@@ -22,7 +22,7 @@ This crate will become a simple configuration DSL parser and nothing else.
 
 ## Goal
 
-`balena-cdsl` crate is one small piece of the [balena.io] configuration project. This project has
+`jellyschema` crate is one small piece of the [balena.io] configuration project. This project has
 no public / open specification yet, but we're working on it and it will be public once finished.
 
 ## Supported platforms
@@ -46,7 +46,7 @@ Add as a dependency to your `Cargo.toml`:
 
 ```
 [dependencies]
-balena-cdsl = "0"
+jellyschema = "0"
 ```
 
 Evaluate simple JSON:
@@ -64,13 +64,13 @@ let (json_schema, ui_object) = Generator::with(input_schema)?.generate();
 Install via npm
 
 ```
-npm install --save balena-cdsl
+npm install --save jellyschema
 ```
 
 Generate simple JSON Schema & UI Object Schema:
 
 ```js
-const cdsl = require('balena-cdsl');
+const jellyschema = require('jellyschema');
 
 const initialValue = `
 title: demo
@@ -90,7 +90,12 @@ properties:
             minLength: 8
 `;
 
-console.log(cdsl.generate_ui(initialValue));
+var schema = new jels.JellySchema(initialValue);
+const result = schema.jsonAndUiSchema();
+console.log(JSON.stringify(result, null, 2));
+
+console.log(schema.validate({network: { ssid: 'foo', passphrase: 123 }}));
+console.log(schema.errors());
 ```
 
 An example of using this module in nodeJS is available in the `examples/node` folder:
@@ -118,15 +123,15 @@ will be happy to help.
 
 ## License
 
-`balena-cdsl` is open source software, and may be redistributed under the terms specified in
+`jellyschema` is open source software, and may be redistributed under the terms specified in
 the [license].
 
 [balena.io]: https://www.balena.io/
 [contact us]: https://forums.balena.io/
-[raise an issue]: https://github.com/balena-io-modules/balena-cdsl/issues/new
-[API documentation]: https://docs.rs/balena-cdsl/latest/balena_cdsl/
+[raise an issue]: https://github.com/balena-io-modules/jellyschema/issues/new
+[API documentation]: https://docs.rs/jellyschema/latest/jellyschema/
 [license]: ./LICENSE
-[Rust crate]: https://crates.io/crates/balena-cdsl
-[NPM package]: https://www.npmjs.com/package/balena-cdsl
+[Rust crate]: https://crates.io/crates/jellyschema
+[NPM package]: https://www.npmjs.com/package/jellyschema
 [Changelog]: ./CHANGELOG.md
 [Maintainer documentation]: ./docs/MAINTAINER.md

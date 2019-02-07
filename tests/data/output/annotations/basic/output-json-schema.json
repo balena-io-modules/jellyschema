@@ -1,0 +1,76 @@
+{
+    "$$version": 1,
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "title": "UISchema annotations",
+    "$$order": [
+        "justtitle",
+        "justhelp",
+        "justwarning",
+        "justdescription",
+        "alltogether",
+        "hidden",
+        "placeholder",
+        "readonly",
+        "nonreadonly",
+        "writeonly",
+        "nonwriteonly",
+        "text"
+    ],
+    "required": [
+        "justtitle",
+        "justhelp",
+        "justwarning",
+        "justdescription",
+        "alltogether",
+        "hidden",
+        "placeholder",
+        "readonly",
+        "nonreadonly",
+        "writeonly",
+        "nonwriteonly",
+        "text"
+    ],
+    "properties": {
+        "justtitle": {
+            "type": "string",
+            "title": "Just title"
+        },
+        "justhelp": {
+            "type": "string"
+        },
+        "justwarning": {
+            "type": "string"
+        },
+        "justdescription": {
+            "type": "string"
+        },
+        "alltogether": {
+            "type": "string"
+        },
+        "hidden": {
+            "type": "string"
+        },
+        "placeholder": {
+            "type": "string"
+        },
+        "readonly": {
+            "type": "string",
+            "readOnly": true
+        },
+        "nonreadonly": {
+            "type": "string"
+        },
+        "writeonly": {
+            "type": "string",
+            "writeOnly": true
+        },
+        "nonwriteonly": {
+            "type": "string"
+        },
+        "text": {
+            "type": "string"
+        }
+    }
+}

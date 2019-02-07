@@ -1,5 +1,5 @@
 
-## Hello and welcome to CDSL, maintainer !
+## Hello and welcome to JellySchema, maintainer !
 
 This talks about how to run this project locally and how to make changes to it.
  
@@ -49,7 +49,7 @@ This will use seed jellyschema files from `fuzz/seeds` to jumpstart the process.
 You can cancel the fuzzing at any time by pressing `ctrl-c`. If you then run the fuzzer again, it will start where it left off - the temporary state is saved to `fuzz/corpus`  
 
 ### Fuzzing targets
-It is only possible to fuzz one target at the time, the default target is `any_input` - that tests whether random input will crash the CDSL (make it panic).
+It is only possible to fuzz one target at the time, the default target is `any_input` - that tests whether random input will crash the JellySchema (make it panic).
 TODO: add a fuzzing target where we make sure there is no `Err` when the yaml validates as jellyschema.
 
 [cargo fuzz]: https://fuzz.rs/book/cargo-fuzz/guide.html

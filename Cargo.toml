@@ -1,12 +1,12 @@
 [package]
-name = "balena-cdsl"
+name = "jellyschema"
 version = "0.10.5"
 authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
 build = "build.rs"
 maintenance = { status = "experimental" }
 license = "Apache-2.0"
-repository = "https://github.com/balena-io-modules/balena-cdsl/"
+repository = "https://github.com/balena-io-modules/jellyschema/"
 description = "Configuration DSL"
 categories = ["config", "encoding", "wasm"]
 readme = "README.md"
@@ -18,8 +18,22 @@ crate-type = ["lib", "cdylib"]
 default = []
 disable-wasm-bindings = []
 
-[dependencies.heck]
-version = "0.3"
+[dependencies.base64]
+version = "0"
+
+[dependencies.balena-temen]
+# 0.5.1 introduces disable-wasm-bindings features
+version = "~0.5.1"
+features = ["disable-wasm-bindings"]
+
+[dependencies.chrono]
+version = "0"
+
+[dependencies.lazy_static]
+version = "1"
+
+[dev-dependencies.pretty_assertions]
+version = "0.5"
 
 [dependencies.regex]
 version = "1.0"
@@ -36,15 +50,15 @@ version = "1.0"
 [dependencies.serde_yaml]
 version = "0.8"
 
+[build-dependencies.strfmt]
+version = "0.1"
+
 [dependencies.yaml-merge-keys]
 version= "0.3"
 features = ["serde_yaml"]
 
-[build-dependencies.strfmt]
-version = "0.1"
-
-[dev-dependencies.pretty_assertions]
-version = "0.5"
+[dependencies.uuid]
+version = "0.7"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies.wasm-bindgen]
 version = "0.2"
