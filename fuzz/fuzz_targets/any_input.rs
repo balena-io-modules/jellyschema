@@ -3,6 +3,7 @@
 extern crate jellyschema;
 extern crate serde_yaml;
 
+use std::str::FromStr;
 use jellyschema::{
     schema::Schema,
     output::generate_json_ui_schema
