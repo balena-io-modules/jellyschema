@@ -9,16 +9,13 @@
   <sub>an open source :satellite: project by <a href="https://www.balena.io">balena.io</a></sub>
 </div>
 
-A configuration DSL.
-
 Provides facilities to:
 
-* transform configuration DSL into the JSON Schema & UI Object Schema with custom extensions
-* parse configuration DSL
+* transform Jelly Schema into the JSON Schema & UI Schema objects with custom extensions
+* parse Jelly Schema
+* validate JSON data against Jelly Schema
 
-Current crate status is _experimental_. It's because the API is evolving, we're not fully using
-it yet and we will probably move the transformation functionality to another crate in the future.
-This crate will become a simple configuration DSL parser and nothing else.
+Current crate status is **experimental**.
 
 ## Goal
 
