@@ -3,7 +3,7 @@
     fn {name}() {{
         let schema : Result<Schema, _> = Schema::from_str(include_str!("{path}"));
         if let Ok(schema) = schema {{
-            jellyschema::output::generate_json_ui_schema(&schema);
+            generate_json_ui_schema(&schema);
             assert!(false, "expected to fail");
         }}
     }}

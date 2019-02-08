@@ -90,7 +90,7 @@ fn start_module(test_file: &mut File, name: &str) -> Result<(), Error> {
 mod {name} {{
     use jellyschema::schema::Schema;
     use jellyschema::error::Error;
-    use jellyschema::output::generate_json_ui_schema;
+    use jellyschema::generator::generate_json_ui_schema;
     use pretty_assertions::assert_eq;
     use serde_json;
     use serde_yaml;
@@ -133,7 +133,7 @@ fn validator_tests_matcher(path: &PathBuf) -> bool {
     }
 }
 
-fn output_tests_matcher(path: &PathBuf) -> bool {
+fn generator_tests_matcher(path: &PathBuf) -> bool {
     match path.file_name() {
         Some(name) => name == "input-schema.yaml",
         _ => false,
@@ -156,18 +156,18 @@ fn main() -> Result<(), Error> {
         validator_tests_matcher,
     )?;
     generate_tests(
-        "output_invalid_tests.rs",
-        "oi",
-        "./tests/output/invalid",
-        "./tests/output/invalid-test-template",
-        output_tests_matcher,
+        "generator_invalid_tests.rs",
+        "gi",
+        "./tests/generator/invalid",
+        "./tests/generator/invalid-test-template",
+        generator_tests_matcher,
     )?;
     generate_tests(
-        "output_valid_tests.rs",
-        "ov",
-        "./tests/output/valid",
-        "./tests/output/valid-test-template",
-        output_tests_matcher,
+        "generator_valid_tests.rs",
+        "gb",
+        "./tests/generator/valid",
+        "./tests/generator/valid-test-template",
+        generator_tests_matcher,
     )?;
     Ok(())
 }

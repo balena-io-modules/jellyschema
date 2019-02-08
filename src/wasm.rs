@@ -4,7 +4,7 @@ use std::str::FromStr;
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    output::generate_json_ui_schema,
+    generator::generate_json_ui_schema,
     schema::Schema,
     validator::{ValidationError, ValidationState, Validator},
 };

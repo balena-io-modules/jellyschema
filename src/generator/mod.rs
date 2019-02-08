@@ -2,7 +2,7 @@
 use serde_json::Value;
 
 use crate::{
-    output::serialization::{JsonSchema, UiSchema},
+    generator::serialization::{JsonSchema, UiSchema},
     schema::Schema,
 };
 
