@@ -14,7 +14,7 @@ nvm use
 source "${HOME}/.cargo/env"
 
 echo "Setting rustup override for this project"
-rustup override set `cat rust-toolchain`
+rustup override set $(cat rust-toolchain)
 
 TARGET_DIR="target/npm"
 # Browser specific NPM package

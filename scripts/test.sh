@@ -10,7 +10,7 @@ nvm use
 source "${HOME}/.cargo/env"
 
 echo "Setting rustup override for this project"
-rustup override set `cat rust-toolchain`
+rustup override set $(cat rust-toolchain)
 
 TESTS_DIRECTORY=tests
 
@@ -39,7 +39,7 @@ if [ -z "$CI" ]; then
 fi
 cargo package ${CARGO_PACKAGE_ARGS}
 
-$HERE/build-wasm.sh
+"$HERE/build-wasm.sh"
 
 echo "Testing browser NPM package..."
 wasm-pack test --chrome --firefox --headless
