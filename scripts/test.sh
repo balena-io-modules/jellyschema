@@ -15,10 +15,10 @@ rustup override set $(cat rust-toolchain)
 TESTS_DIRECTORY=tests
 
 echo "Linting yaml schemas"
-find "$TESTS_DIRECTORY" -iname *.yaml -not -path "*/fuzzer/*" -exec yamllint {} +
+find "${TESTS_DIRECTORY}" -iname *.yaml -not -path "*/fuzzer/*" -exec yamllint {} +
 
 echo "Linting JSONSchemas"
-find "$TESTS_DIRECTORY" -type f -iname "output-json-schema.json" -print0 | while IFS= read -r -d $'\0' file; do
+find "${TESTS_DIRECTORY}" -type f -iname "output-json-schema.json" -print0 | while IFS= read -r -d $'\0' file; do
     ajv compile -s "$file" --format='false'
 done
 
@@ -33,13 +33,13 @@ cargo test
 
 echo "Trying to package Rust crate..."
 CARGO_PACKAGE_ARGS=''
-if [ -z "$CI" ]; then
+if [ -z "${CI}" ]; then
     # Allow to test uncommitted changes locally
     CARGO_PACKAGE_ARGS='--allow-dirty'
 fi
 cargo package ${CARGO_PACKAGE_ARGS}
 
-"$HERE/build-wasm.sh"
+"${HERE}/build-wasm.sh"
 
 echo "Testing browser NPM package..."
 wasm-pack test --chrome --firefox --headless
