@@ -6,6 +6,6 @@ We do not need to test actual functionality as it is tested in the Rust code.
 
 ## Run tests
 
-* Build isomorphic NPM package with `ci/build-wasm.sh` script
+* Build isomorphic NPM package with `scripts/build-wasm.sh` script
 * Install dependencies with `npm install`
 * Run tests with `npm test`
