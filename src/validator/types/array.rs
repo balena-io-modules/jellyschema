@@ -34,7 +34,7 @@ impl<'a> From<&'a Value> for ValueWrapper<'a> {
 
 impl<'a, 'b> PartialEq<ValueWrapper<'a>> for ValueWrapper<'b> {
     fn eq(&self, other: &ValueWrapper<'a>) -> bool {
-        crate::utils::value::eq(self.value_ref(), other.value_ref())
+        self.value_ref() == other.value_ref()
     }
 }
 
