@@ -1,3 +1,4 @@
+#[allow(clippy:all)]
 // generated via `build.rs`, one test per directory in tests/data
 include!(concat!(env!("OUT_DIR"), "/validator_data_tests.rs"));
 include!(concat!(env!("OUT_DIR"), "/validator_errors_tests.rs"));
