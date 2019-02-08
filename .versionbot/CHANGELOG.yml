@@ -1,4 +1,20 @@
 - commits:
+    - subject: Ensure the correct Rust version when running locally and on CI.
+      hash: daef17a7dc422518e83b814efbf10dcd7005421c
+      body: |
+        * As we encourage the scripts to be runnable locally as well as on CI -
+        renamed the `ci` directory to `scripts`
+        * Install script should be safer to run locally now - it only sets the
+        default global compiler version on CI
+        * Each script sets its own rustup override so that we make sure the
+        build and tests are run with the correct Rust version
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.11.2
+  date: 2019-02-08T11:16:29.650Z
+- commits:
     - subject: Cleanup after reconfix functionality merge
       hash: 061e754573a20185c98539fc717dc7bfb1d3ce66
       body: ''
