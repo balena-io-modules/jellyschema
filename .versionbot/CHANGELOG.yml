@@ -1,4 +1,16 @@
 - commits:
+    - subject: Cleanup after reconfix functionality merge
+      hash: 061e754573a20185c98539fc717dc7bfb1d3ce66
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.11.1
+  date: 2019-02-08T08:58:09.987Z
+- commits:
     - subject: Rename & merge reconfix functionality
       hash: 924a58229e1ae39b7a48595349e0205b46b6015e
       body: ''
