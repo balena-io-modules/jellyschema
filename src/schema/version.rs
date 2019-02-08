@@ -1,5 +1,5 @@
 use serde::{de, ser};
-use serde_yaml::Number;
+use serde_json::Number;
 
 #[derive(Debug, PartialEq)]
 pub struct Version {

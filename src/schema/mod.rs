@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use regex::Regex;
 use serde_derive::Deserialize;
-pub use serde_yaml::{Number, Value};
+use serde_json::{Number, Value};
 use yaml_merge_keys::merge_keys_serde;
 
 // Reexport everything except mapping, which is a public module
@@ -28,6 +28,14 @@ mod r#type;
 mod unique_items;
 mod version;
 
+/// JellySchema structure
+///
+/// # WARNING
+///
+/// JellySchema is YAML based. Althought, we're deserializing everything into
+/// `serde_json` structures like `Value`, `Number` or Rust types. The reason is
+/// that we're generating JSON values from the JellySchema. And this allows us
+/// to catch missing JSON features (when compared with YAML) during deserialization.
 #[derive(Debug, Deserialize)]
 pub struct Schema {
     #[serde(default)]

@@ -1,5 +1,5 @@
 use serde::de;
-use serde_yaml::Value;
+use serde_json::Value;
 
 #[derive(Debug, PartialEq)]
 pub enum FileName {
@@ -32,9 +32,8 @@ impl<'de> de::Deserialize<'de> for FileName {
     {
         let value = Value::deserialize(deserializer)?;
         match value {
-            Value::Mapping(ref mapping) => {
-                let eval_key = Value::String("formula".to_string());
-                if let Some(value) = mapping.get(&eval_key) {
+            Value::Object(ref obj) => {
+                if let Some(value) = obj.get("formula") {
                     if let Some(s) = value.as_str() {
                         Ok(FileName::Formula(s.to_string()))
                     } else {

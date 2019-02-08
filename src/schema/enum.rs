@@ -1,5 +1,5 @@
 use serde::de;
-use serde_yaml::Value;
+use serde_json::Value;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct EnumEntry {
@@ -34,11 +34,10 @@ impl<'de> de::Deserialize<'de> for EnumEntry {
         let v = Value::deserialize(deserializer)?;
         match v {
             Value::Bool(_) | Value::Number(_) | Value::String(_) => Ok(EnumEntry { title: None, value: v }),
-            Value::Null | Value::Sequence(_) => Err(de::Error::custom("title is required for null or sequence value")),
-            Value::Mapping(mut m) => {
-                let title_keyword = Value::String("title".to_string());
+            Value::Null | Value::Array(_) => Err(de::Error::custom("title is required for null or sequence value")),
+            Value::Object(mut m) => {
                 let title = m
-                    .remove(&title_keyword)
+                    .remove("title")
                     .ok_or_else(|| de::Error::custom("missing title keyword"))?;
 
                 let title = match title {
@@ -46,9 +45,8 @@ impl<'de> de::Deserialize<'de> for EnumEntry {
                     _ => return Err(de::Error::custom("title is not a string")),
                 };
 
-                let value_keyword = Value::String("value".to_string());
                 let value = m
-                    .remove(&value_keyword)
+                    .remove("value")
                     .ok_or_else(|| de::Error::custom("missing value keyword"))?;
 
                 Ok(EnumEntry {
