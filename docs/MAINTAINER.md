@@ -3,9 +3,9 @@
 
 This talks about how to run this project locally and how to make changes to it.
  
-You can just run `./ci/install.sh` to get all dependencies going. This will install Rust and Node via NVM - please review the script before running, to see if this is what you want on your machine.
+You can just run `./scripts/install.sh` to get all dependencies going. This will install Rust and Node via NVM - please review the script before running, to see if this is what you want on your machine.
 
-To make sure everything is working run `./ci/test.sh` - this will launch all the Rust tests and then package npm package and run node tests on it.
+To make sure everything is working run `./scripts/test.sh` - this will launch all the Rust tests and then package npm package and run node tests on it.
 
 ## Tests
 

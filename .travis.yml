@@ -1,14 +1,14 @@
 language: generic
 
 install:
-  - ci/install.sh
+  - scripts/install.sh
 
 script:
-  - ci/test.sh
+  - scripts/test.sh
 
 deploy:
   provider: script
-  script: ci/deploy.sh
+  script: scripts/deploy.sh
   skip_cleanup: true
   on:
     tags: true
