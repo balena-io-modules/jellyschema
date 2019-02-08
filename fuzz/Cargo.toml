@@ -22,5 +22,5 @@ version = "0.8"
 members = ["."]
 
 [[bin]]
-name = "any_input"
-path = "fuzz_targets/any_input.rs"
+name = "generator"
+path = "fuzz_targets/generator.rs"

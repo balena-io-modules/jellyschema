@@ -1,7 +1,8 @@
 // generated via `build.rs`, one test per directory in tests/data
-include!(concat!(env!("OUT_DIR"), "/output_tests.rs"));
 include!(concat!(env!("OUT_DIR"), "/validator_data_tests.rs"));
-include!(concat!(env!("OUT_DIR"), "/validator_error_tests.rs"));
+include!(concat!(env!("OUT_DIR"), "/validator_errors_tests.rs"));
+include!(concat!(env!("OUT_DIR"), "/generator_invalid_tests.rs"));
+include!(concat!(env!("OUT_DIR"), "/generator_valid_tests.rs"));
 
 // TODO: add quickcheck tests for system properties
 // list:

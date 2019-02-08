@@ -4,7 +4,7 @@ use serde::de;
 use serde_derive::Deserialize;
 use uuid::Uuid;
 
-use crate::utils::deref::OptionDeref;
+use crate::deref::OptionDeref;
 
 /// Target type
 #[derive(Debug, Copy, Clone, PartialEq, Deserialize)]

@@ -18,7 +18,7 @@
 //! ## Generate JSON Schema & UI Object
 //!
 //! ```
-//! use jellyschema::output::generate_json_ui_schema;
+//! use jellyschema::generator::generate_json_ui_schema;
 //! use jellyschema::schema::Schema;
 //! use serde_yaml;
 //!
@@ -37,11 +37,11 @@
 //!
 //! [balena]: https://www.balena.io
 //! [Semantic Versioning]: https://semver.org/
+pub(crate) mod deref;
 pub mod error;
 pub mod schema;
-pub(crate) mod utils;
 pub mod validator;
 
-pub mod output;
+pub mod generator;
 #[cfg(all(target_arch = "wasm32", not(feature = "disable-wasm-bindings")))]
 mod wasm;

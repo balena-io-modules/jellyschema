@@ -1,9 +1,6 @@
 use serde_json::{self, Value};
 
-use crate::{
-    schema::{PrimitiveType, Schema},
-    utils::value,
-};
+use crate::schema::{PrimitiveType, Schema};
 
 pub use error::ValidationError;
 use scope::ScopedSchema;
@@ -49,7 +46,7 @@ fn validate_optional(scope: &ScopedSchema, data: Option<&Value>) -> ValidationSt
 
 fn validate_const(scope: &ScopedSchema, data: &Value) -> ValidationState {
     match scope.schema().r#const() {
-        Some(constant) if value::ne(constant, data) => scope.error("const", "value does not match").into(),
+        Some(constant) if constant != data => scope.error("const", "value does not match").into(),
         _ => ValidationState::new(),
     }
 }
@@ -63,7 +60,7 @@ fn validate_enum(scope: &ScopedSchema, data: &Value) -> ValidationState {
 
     let valid_count = enum_entries
         .iter()
-        .fold(0, |acc, item| acc + value::eq(item.value(), data) as usize);
+        .fold(0, |acc, item| acc + (item.value() == data) as usize);
 
     match valid_count {
         1 => ValidationState::new(),

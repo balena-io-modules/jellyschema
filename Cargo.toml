@@ -50,13 +50,6 @@ version = "1.0"
 [dependencies.serde_yaml]
 version = "0.8"
 
-[build-dependencies.strfmt]
-version = "0.1"
-
-[dependencies.yaml-merge-keys]
-version= "0.3"
-features = ["serde_yaml"]
-
 [dependencies.uuid]
 version = "0.7"
 
@@ -69,3 +62,6 @@ version = "0.1"
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies.wasm-bindgen-test]
 version = "0.2"
+
+[build-dependencies.strfmt]
+version = "0.1"

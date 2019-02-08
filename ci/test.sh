@@ -10,7 +10,7 @@ source "${HOME}/.cargo/env"
 TESTS_DIRECTORY=tests
 
 echo "Linting yaml schemas"
-find "$TESTS_DIRECTORY" -iname *.yml -exec yamllint {} +
+find "$TESTS_DIRECTORY" -iname *.yaml -not -path "*/fuzzer/*" -exec yamllint {} +
 
 echo "Linting JSONSchemas"
 find "$TESTS_DIRECTORY" -type f -iname "output-json-schema.json" -print0 | while IFS= read -r -d $'\0' file; do

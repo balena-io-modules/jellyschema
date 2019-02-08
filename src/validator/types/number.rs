@@ -1,5 +1,5 @@
+use serde_json::Number;
 use serde_json::Value;
-use serde_yaml::Number;
 
 use crate::validator::{scope::ScopedSchema, state::ValidationState};
 

@@ -4,8 +4,7 @@ use std::str::FromStr;
 
 use regex::Regex;
 use serde_derive::Deserialize;
-pub use serde_yaml::{Number, Value};
-use yaml_merge_keys::merge_keys_serde;
+use serde_json::{Number, Value};
 
 // Reexport everything except mapping, which is a public module
 pub use self::{
@@ -16,10 +15,7 @@ pub use self::{
     version::Version,
 };
 
-use crate::{
-    error::{Error, ResultExt},
-    utils::deref::OptionDeref,
-};
+use crate::{deref::OptionDeref, error::Error};
 
 mod r#enum;
 pub mod mapping;
@@ -28,6 +24,14 @@ mod r#type;
 mod unique_items;
 mod version;
 
+/// JellySchema structure
+///
+/// # WARNING
+///
+/// JellySchema is YAML based. Althought, we're deserializing everything into
+/// `serde_json` structures like `Value`, `Number` or Rust types. The reason is
+/// that we're generating JSON values from the JellySchema. And this allows us
+/// to catch missing JSON features (when compared with YAML) during deserialization.
 #[derive(Debug, Deserialize)]
 pub struct Schema {
     #[serde(default)]
@@ -324,13 +328,7 @@ impl FromStr for Schema {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Schema, Error> {
-        let value: serde_yaml::Value = serde_yaml::from_str(s)
-            .map_err(|_| Error::with_message("unable to parse yaml"))
-            .context("input", s.to_string())?;
-
-        let merged_value = merge_keys_serde(value).map_err(|_| Error::with_message("unable to merge yaml keys"))?;
-
-        let schema: Schema = serde_yaml::from_value(merged_value)
+        let schema: Schema = serde_yaml::from_str(s)
             .map_err(|_| Error::with_message("unable to create schema from yaml with merged keys"))?;
         Ok(schema)
     }

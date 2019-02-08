@@ -1,0 +1,32 @@
+
+    #[test]
+    fn {name}() -> Result<(), Error> {{
+        let input_schema: Schema = Schema::from_str(
+            include_str!("{path}")).
+            unwrap();
+
+        let mut path = PathBuf::from("{path}");
+        path.set_file_name("output-json-schema.json");
+        let expected_json_schema: serde_json::Value = serde_json::from_str(
+            &fs::read_to_string(path.to_str().expect("unable to convert path to str"))
+                .expect("unable to read output-json-schema.json")
+            ).expect("unable to parse output-json-schema.json");
+
+        path.set_file_name("output-ui-schema.json");
+        let expected_ui_schema: serde_json::Value = serde_json::from_str(
+            &fs::read_to_string(path.to_str().expect("unable to convert path to str"))
+                .expect("unable to read output-ui-schema.json")
+            ).expect("unable to parse output-ui-schema.json");
+
+        let (json_schema, ui_schema) = generate_json_ui_schema(&input_schema);
+
+        if json_schema != expected_json_schema || ui_schema != expected_ui_schema {{
+            eprintln!("JSONSchema:\n {{}}", serde_json::to_string_pretty(&json_schema).unwrap());
+            eprintln!("UISchema:\n {{}}", serde_json::to_string_pretty(&ui_schema).unwrap());
+        }}
+
+        assert_eq!(expected_json_schema, json_schema, "Actual(right) json schema different than expected (left)");
+        assert_eq!(expected_ui_schema, ui_schema, "Actual(right) ui object different than expected (left)");
+
+        Ok(())
+    }}

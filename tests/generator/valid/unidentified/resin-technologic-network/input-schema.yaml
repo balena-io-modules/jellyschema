@@ -1,0 +1,44 @@
+version: 1
+title: ResinOS Technologic TS-4900 Configuration
+properties:
+  - board:
+      title: CPU Cores
+      warning: |-
+        Please make sure to select the correct number of CPU Cores for your device.
+        **Failing to do so will brick your device**.
+      properties:
+        - cores:
+            type: integer
+            default: 1
+            enum:
+              - value: 1
+                title: Single
+              - value: 4
+                title: Quad
+  - network:
+      title: Network Connection
+      properties:
+        - networks:
+            type: array
+            items:
+              title: WiFi Network
+              properties:
+                - ssid:
+                    title: Network SSID
+                    type: string
+                - psk:
+                    title: Network password
+                    type: password
+              warning: |-
+                In order to have usable WiFi connectivity, make sure you have attached
+                a WiFi antenna to your WiFi module.
+  - advanced:
+      title: Advanced
+      collapsed: true
+      properties:
+        - appUpdatePollInterval:
+            title: Application update poll interval
+            help: Check for updates every X minutes
+            type: integer
+            min: 10
+            default: 10
