@@ -5,9 +5,9 @@ set -o pipefail
 
 RUSTUP_COMMAND="curl https://sh.rustup.rs -sSf | sh -s -- -y"
 if [ ! -z "${CI}" ]; then
-    default_compiler=`cat rust-toolchain`
-    echo "Setting the default compiler to ${default_compiler}"
-    RUSTUP_COMMAND="$RUSTUP_COMMAND --default-toolchain ${default_compiler}"
+    DEFAULT_COMPILER=`cat rust-toolchain`
+    echo "Setting the default compiler to ${DEFAULT_COMPILER}"
+    RUSTUP_COMMAND="$RUSTUP_COMMAND --default-toolchain ${DEFAULT_COMPILER}"
 fi
 echo "Installing Rust toolchain..."
 eval "${RUSTUP_COMMAND}"
