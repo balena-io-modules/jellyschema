@@ -5,7 +5,6 @@ use std::str::FromStr;
 use regex::Regex;
 use serde_derive::Deserialize;
 use serde_json::{Number, Value};
-use yaml_merge_keys::merge_keys_serde;
 
 // Reexport everything except mapping, which is a public module
 pub use self::{
@@ -16,10 +15,7 @@ pub use self::{
     version::Version,
 };
 
-use crate::{
-    deref::OptionDeref,
-    error::{Error, ResultExt},
-};
+use crate::{deref::OptionDeref, error::Error};
 
 mod r#enum;
 pub mod mapping;
@@ -332,13 +328,7 @@ impl FromStr for Schema {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Schema, Error> {
-        let value: serde_yaml::Value = serde_yaml::from_str(s)
-            .map_err(|_| Error::with_message("unable to parse yaml"))
-            .context("input", s.to_string())?;
-
-        let merged_value = merge_keys_serde(value).map_err(|_| Error::with_message("unable to merge yaml keys"))?;
-
-        let schema: Schema = serde_yaml::from_value(merged_value)
+        let schema: Schema = serde_yaml::from_str(s)
             .map_err(|_| Error::with_message("unable to create schema from yaml with merged keys"))?;
         Ok(schema)
     }

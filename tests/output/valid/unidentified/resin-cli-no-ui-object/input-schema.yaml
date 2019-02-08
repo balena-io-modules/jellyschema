@@ -1,22 +1,19 @@
 title: resin-cli demo
 version: 1
-definitions:
-  bootPartition: &BOOT_PARTITION
-    partition: 1
 mapping:
   targets:
     config_json:
       type: file
       format: json
       location:
-        << : *BOOT_PARTITION
         path: /config.json
+        partition: 1
     resin_wifi:
       type: file
       format: ini
       location:
-        << : *BOOT_PARTITION
         path: /system-connections/resin-wifi
+        partition: 1
 properties:
   - network:
       title: Network

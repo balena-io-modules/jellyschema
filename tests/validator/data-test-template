@@ -3,13 +3,10 @@
         let mut content: serde_yaml::Value = serde_yaml::from_str(include_str!("{path}")).unwrap();
         let mapping = content.as_mapping_mut().unwrap();
 
-        let schema_str: String = mapping
+        let schema: Schema = mapping
             .remove(&serde_yaml::Value::String("schema".to_string()))
             .ok_or_else(|| serde::de::Error::custom("missing 'schema' key"))
-            .and_then(|x| serde_yaml::to_string(&x).map_err(|_| serde::de::Error::custom("unable to convert schema to a string")))?;
-
-        let schema = Schema::from_str(&schema_str)
-            .map_err(|_| serde::de::Error::custom("unable to construct schema from a string"))?;
+            .and_then(serde_yaml::from_value)?;
 
         let mut tests: serde_yaml::Value = mapping
             .remove(&serde_yaml::Value::String("tests".to_string()))
