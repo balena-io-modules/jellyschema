@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use serde_derive::Deserialize;
 use serde_yaml::Value;
 
-use crate::utils::deref::OptionDeref;
+use crate::deref::OptionDeref;
 
 pub use self::{
     filename::FileName,

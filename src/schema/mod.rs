@@ -17,8 +17,8 @@ pub use self::{
 };
 
 use crate::{
+    deref::OptionDeref,
     error::{Error, ResultExt},
-    utils::deref::OptionDeref,
 };
 
 mod r#enum;
