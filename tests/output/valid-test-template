@@ -12,7 +12,7 @@
                 .expect("unable to read output-json-schema.json")
             ).expect("unable to parse output-json-schema.json");
 
-        path.set_file_name("output-uischema.json");
+        path.set_file_name("output-ui-schema.json");
         let expected_ui_schema: serde_json::Value = serde_json::from_str(
             &fs::read_to_string(path.to_str().expect("unable to convert path to str"))
                 .expect("unable to read output-ui-schema.json")
