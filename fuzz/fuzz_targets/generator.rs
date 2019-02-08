@@ -6,7 +6,7 @@ extern crate serde_yaml;
 use std::str::FromStr;
 use jellyschema::{
     schema::Schema,
-    output::generate_json_ui_schema
+    generator::generate_json_ui_schema
 };
 
 // this is a fuzz target that makes sure that we do not crash given arbitrary data

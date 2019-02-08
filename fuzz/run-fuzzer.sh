@@ -12,4 +12,4 @@ cd "$PARENT"
 mkdir -p "$HERE/corpus"
 rustup override set nightly
 # run `any_input` target using `seeds` as a start point and put new corpus state into `corpus`
-cargo fuzz run any_input "$HERE/corpus" "$HERE/seeds" -j 6 --all-features
+cargo fuzz run generator "$HERE/corpus" "$HERE/seeds" -j 6 --all-features
