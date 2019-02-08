@@ -2,14 +2,21 @@
     #[test]
     fn {name}() -> Result<(), Error> {{
         let input_schema: Schema = Schema::from_str(
-            include_str!("{path}/input-schema.yaml")).
+            include_str!("{path}")).
             unwrap();
+
+        let mut path = PathBuf::from("{path}");
+        path.set_file_name("output-json-schema.json");
         let expected_json_schema: serde_json::Value = serde_json::from_str(
-            include_str!("{path}/output-json-schema.json")).
-            unwrap();
-        let expected_ui_schema: serde_json::Value  = serde_json::from_str(
-            include_str!("{path}/output-uischema.json")).
-            unwrap();
+            &fs::read_to_string(path.to_str().expect("unable to convert path to str"))
+                .expect("unable to read output-json-schema.json")
+            ).expect("unable to parse output-json-schema.json");
+
+        path.set_file_name("output-uischema.json");
+        let expected_ui_schema: serde_json::Value = serde_json::from_str(
+            &fs::read_to_string(path.to_str().expect("unable to convert path to str"))
+                .expect("unable to read output-ui-schema.json")
+            ).expect("unable to parse output-ui-schema.json");
 
         let (json_schema, ui_schema) = generate_json_ui_schema(&input_schema);
 
