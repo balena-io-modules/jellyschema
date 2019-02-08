@@ -39,8 +39,8 @@
 //! [Semantic Versioning]: https://semver.org/
 pub mod error;
 pub mod schema;
-pub(crate) mod utils;
 pub mod validator;
+pub(crate) mod deref;
 
 pub mod output;
 #[cfg(all(target_arch = "wasm32", not(feature = "disable-wasm-bindings")))]
