@@ -42,7 +42,12 @@ fn generate_tests(destination: &str, module: &str, path: &str, template: &str, m
     Ok(())
 }
 
-fn generate_tests_module(mut test_file: &mut File, dir: &PathBuf, template: &str, matcher: Matcher) -> Result<(), Error> {
+fn generate_tests_module(
+    mut test_file: &mut File,
+    dir: &PathBuf,
+    template: &str,
+    matcher: Matcher,
+) -> Result<(), Error> {
     let module_name = normalize_file_stem(dir)?;
     start_module(&mut test_file, &module_name)?;
 
@@ -131,7 +136,7 @@ fn validator_tests_matcher(path: &PathBuf) -> bool {
 fn output_tests_matcher(path: &PathBuf) -> bool {
     match path.file_name() {
         Some(name) => name == "input-schema.yaml",
-        _ => false
+        _ => false,
     }
 }
 
@@ -141,28 +146,28 @@ fn main() -> Result<(), Error> {
         "vd",
         "./tests/validator/data",
         "./tests/validator/data-test-template",
-        validator_tests_matcher
+        validator_tests_matcher,
     )?;
     generate_tests(
         "validator_errors_tests.rs",
         "ve",
         "./tests/validator/errors",
         "./tests/validator/errors-test-template",
-        validator_tests_matcher
+        validator_tests_matcher,
     )?;
     generate_tests(
         "output_invalid_tests.rs",
         "oi",
         "./tests/output/invalid",
         "./tests/output/invalid-test-template",
-        output_tests_matcher
+        output_tests_matcher,
     )?;
     generate_tests(
         "output_valid_tests.rs",
         "ov",
         "./tests/output/valid",
         "./tests/output/valid-test-template",
-        output_tests_matcher
+        output_tests_matcher,
     )?;
     Ok(())
 }
