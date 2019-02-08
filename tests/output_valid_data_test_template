@@ -2,7 +2,7 @@
     #[test]
     fn {name}() -> Result<(), Error> {{
         let input_schema: Schema = Schema::from_str(
-            include_str!("{path}/input-schema.yml")).
+            include_str!("{path}/input-schema.yaml")).
             unwrap();
         let expected_json_schema: serde_json::Value = serde_json::from_str(
             include_str!("{path}/output-json-schema.json")).
