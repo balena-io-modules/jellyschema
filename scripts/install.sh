@@ -3,14 +3,14 @@
 set -e
 set -o pipefail
 
-rustup_commandline="curl https://sh.rustup.rs -sSf | sh -s -- -y"
+RUSTUP_COMMAND="curl https://sh.rustup.rs -sSf | sh -s -- -y"
 if [ ! -z $CI ]; then
     default_compiler=`cat rust-toolchain`
     echo "Setting the default compiler to $default_compiler"
-    rustup_commandline="$rustup_commandline --default-toolchain $default_compiler"
+    RUSTUP_COMMAND="$RUSTUP_COMMAND --default-toolchain $default_compiler"
 fi
 echo "Installing Rust toolchain..."
-eval $rustup_commandline
+eval $RUSTUP_COMMAND
 
 source "${HOME}/.cargo/env"
 rustup component add clippy
