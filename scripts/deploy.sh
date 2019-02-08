@@ -19,7 +19,7 @@ cargo publish
 echo "Authenticating to npmjs.org registry..."
 echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
 
-"$HERE/build-wasm.sh"
+"${HERE}/build-wasm.sh"
 
 echo "Publishing NPM package..."
 npm publish --access public target/npm/pkg
