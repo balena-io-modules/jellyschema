@@ -30,17 +30,19 @@ impl From<env::VarError> for Error {
     }
 }
 
-fn generate_tests(destination: &str, module: &str, path: &str, template: &str) -> Result<(), Error> {
+type Matcher = fn(&PathBuf) -> bool;
+
+fn generate_tests(destination: &str, module: &str, path: &str, template: &str, matcher: Matcher) -> Result<(), Error> {
     let out_dir = env::var("OUT_DIR")?;
     let destination = Path::new(&out_dir).join(destination);
     let mut test_file = File::create(&destination)?;
     start_module(&mut test_file, module)?;
-    generate_tests_module(&mut test_file, &PathBuf::from_str(path).unwrap(), template)?;
+    generate_tests_module(&mut test_file, &PathBuf::from_str(path).unwrap(), template, matcher)?;
     end_module(&mut test_file)?;
     Ok(())
 }
 
-fn generate_tests_module(mut test_file: &mut File, dir: &PathBuf, template: &str) -> Result<(), Error> {
+fn generate_tests_module(mut test_file: &mut File, dir: &PathBuf, template: &str, matcher: Matcher) -> Result<(), Error> {
     let module_name = normalize_file_stem(dir)?;
     start_module(&mut test_file, &module_name)?;
 
@@ -49,12 +51,11 @@ fn generate_tests_module(mut test_file: &mut File, dir: &PathBuf, template: &str
         let path = entry.path().canonicalize()?;
 
         if path.is_dir() {
-            generate_tests_module(test_file, &path, template)?;
+            generate_tests_module(test_file, &path, template, matcher)?;
         } else {
-            match path.extension() {
-                Some(ext) if ext == "yaml" => generate_test(test_file, &path, template)?,
-                _ => {}
-            };
+            if matcher(&path) {
+                generate_test(test_file, &path, template)?;
+            }
         }
     }
 
@@ -120,30 +121,48 @@ fn normalize_file_stem(path: &PathBuf) -> Result<String, Error> {
     Ok(result.to_string())
 }
 
+fn validator_tests_matcher(path: &PathBuf) -> bool {
+    match path.extension() {
+        Some(ext) => ext == "yaml",
+        _ => false,
+    }
+}
+
+fn output_tests_matcher(path: &PathBuf) -> bool {
+    match path.file_name() {
+        Some(name) => name == "input-schema.yaml",
+        _ => false
+    }
+}
+
 fn main() -> Result<(), Error> {
     generate_tests(
         "validator_data_tests.rs",
         "vd",
         "./tests/validator/data",
         "./tests/validator/data-test-template",
+        validator_tests_matcher
     )?;
     generate_tests(
         "validator_errors_tests.rs",
         "ve",
         "./tests/validator/errors",
         "./tests/validator/errors-test-template",
+        validator_tests_matcher
     )?;
     generate_tests(
         "output_invalid_tests.rs",
         "oi",
         "./tests/output/invalid",
         "./tests/output/invalid-test-template",
+        output_tests_matcher
     )?;
     generate_tests(
         "output_valid_tests.rs",
         "ov",
         "./tests/output/valid",
         "./tests/output/valid-test-template",
+        output_tests_matcher
     )?;
     Ok(())
 }
