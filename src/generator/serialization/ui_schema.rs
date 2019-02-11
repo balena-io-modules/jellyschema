@@ -109,11 +109,30 @@ fn serialize_properties(schema: &Schema, map: &mut Map<String, Value>) {
     }
 }
 
+fn serialize_array_items(schema: &Schema, map: &mut Map<String, Value>) {
+    if schema.items().is_empty() {
+        return;
+    }
+
+    if schema.items().len() > 1 {
+        // FIXME How it should look like?
+        return;
+    }
+
+    let mut result: Map<String, Value> = Map::new();
+    serialize_ui_schema_into_map(schema.items().first().unwrap(), &mut result);
+
+    if !result.is_empty() {
+        map.insert("items".to_string(), json!(result));
+    }
+}
+
 fn serialize_ui_schema_into_map(schema: &Schema, map: &mut Map<String, Value>) {
     serialize_annotations(schema, map);
     serialize_properties(schema, map);
     serialize_widget(schema, map);
     serialize_ui_options(schema, map);
+    serialize_array_items(schema, map);
 
     if schema.read_only() {
         map.insert("ui:readonly".to_string(), json!(true));

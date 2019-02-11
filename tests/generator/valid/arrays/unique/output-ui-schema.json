@@ -2,5 +2,27 @@
     "ui:order": [
         "uniqueWifiNetworks",
         "uniqueSsidWifiNetworks"
-    ]
+    ],
+    "uniqueWifiNetworks": {
+        "items": {
+            "passphrase": {
+                "ui:widget": "password"
+            },
+            "ui:order": [
+                "ssid",
+                "passphrase"
+            ]
+        }
+    },
+    "uniqueSsidWifiNetworks": {
+        "items": {
+            "passphrase": {
+                "ui:widget": "password"
+            },
+            "ui:order": [
+                "ssid",
+                "passphrase"
+            ]
+        }
+    }
 }
