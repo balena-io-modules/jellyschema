@@ -16,7 +16,19 @@
     "network": {
         "ui:order": [
             "networks"
-        ]
+        ],
+        "networks": {
+            "items": {
+                "psk": {
+                    "ui:widget": "password"
+                },
+                "ui:order": [
+                    "ssid",
+                    "psk"
+                ],
+                "ui:warning": "In order to have usable WiFi connectivity, make sure you have attached\na WiFi antenna to your WiFi module."
+            }
+        }
     },
     "ui:order": [
         "board",

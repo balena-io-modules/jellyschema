@@ -2,5 +2,12 @@
     "ui:order": [
         "profile-picture",
         "documents"
-    ]
+    ],
+    "documents": {
+        "items": {
+            "ui:order": [
+                "contents"
+            ]
+        }
+    }
 }
