@@ -328,8 +328,7 @@ impl FromStr for Schema {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Schema, Error> {
-        let schema: Schema = serde_yaml::from_str(s)
-            .map_err(|_| Error::with_message("unable to create schema from yaml with merged keys"))?;
+        let schema: Schema = serde_yaml::from_str(s)?;
         Ok(schema)
     }
 }
