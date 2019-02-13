@@ -1,4 +1,16 @@
 - commits:
+    - subject: Report serde errors
+      hash: 1db7be442bd9dc831e25880904e6ef1bdd0e368e
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.11.4
+  date: 2019-02-12T16:02:30.249Z
+- commits:
     - subject: Emit UI Schema for array.items
       hash: c0b11ac5a860fb59673ea3740a6db1b969e5910b
       body: ''
