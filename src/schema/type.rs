@@ -113,7 +113,7 @@ impl FromStr for PrimitiveType {
             DNSMASQ_ADDRESS_KEYWORD => Ok(PrimitiveType::DNSMasqAddress),
             CHRONY_ADDRESS_KEYWORD => Ok(PrimitiveType::ChronyAddress),
             IPTABLES_ADDRESS_KEYWORD => Ok(PrimitiveType::IPTablesAddress),
-            _ => Err(Error::with_message("invalid primitive object type")),
+            _ => Err(Error::message(format!("invalid primitive type: \"{}\"", s))),
         }
     }
 }
