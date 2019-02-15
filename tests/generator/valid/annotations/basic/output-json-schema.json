@@ -4,6 +4,7 @@
     "type": "object",
     "additionalProperties": false,
     "title": "UISchema annotations",
+    "description": "This is top-level description",
     "$$order": [
         "justtitle",
         "justhelp",
@@ -44,10 +45,12 @@
             "type": "string"
         },
         "justdescription": {
-            "type": "string"
+            "type": "string",
+            "description": "Lorem ipsum dolor sit amet"
         },
         "alltogether": {
-            "type": "string"
+            "type": "string",
+            "description": "Lorem ipsum dolor sit amet"
         },
         "hidden": {
             "type": "string"

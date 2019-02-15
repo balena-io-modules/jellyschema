@@ -4,7 +4,6 @@
             "bottom": {
                 "ui:help": "you have reached the bottom"
             },
-            "ui:description": "half way through",
             "ui:order": [
                 "bottom"
             ]

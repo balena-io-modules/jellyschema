@@ -108,6 +108,10 @@ where
         map.serialize_entry("title", title)?;
     }
 
+    if let Some(description) = schema.description() {
+        map.serialize_entry("description", description)?;
+    }
+
     Ok(())
 }
 

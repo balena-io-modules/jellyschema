@@ -14,7 +14,8 @@
         "hostname": {
             "type": "string",
             "format": "hostname",
-            "title": "Hostname"
+            "title": "Hostname",
+            "description": "Hostname is a name of your machine."
         }
     }
 }

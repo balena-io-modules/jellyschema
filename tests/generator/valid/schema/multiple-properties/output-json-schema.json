@@ -16,12 +16,14 @@
         "source_hostname": {
             "type": "string",
             "format": "hostname",
-            "title": "Source Hostname"
+            "title": "Source Hostname",
+            "description": "Hostname is a name of your machine."
         },
         "destination_hostname": {
             "type": "string",
             "format": "hostname",
-            "title": "Destination Hostname"
+            "title": "Destination Hostname",
+            "description": "Hostname is a name of your machine."
         }
     }
 }

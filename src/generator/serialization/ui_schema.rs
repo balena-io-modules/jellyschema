@@ -70,10 +70,6 @@ fn serialize_annotations(schema: &Schema, map: &mut Map<String, Value>) {
         map.insert("ui:help".to_string(), Value::String(help.to_string()));
     }
 
-    if let Some(description) = schema.description() {
-        map.insert("ui:description".to_string(), Value::String(description.to_string()));
-    }
-
     if let Some(warning) = schema.warning() {
         map.insert("ui:warning".to_string(), Value::String(warning.to_string()));
     }
