@@ -1,4 +1,14 @@
 - commits:
+    - subject: Rename the demo examples directory
+      hash: 1262c3ea899ac6f2c510a50ccb9174a209686204
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.11.7
+  date: 2019-02-26T12:17:58.728Z
+- commits:
     - subject: Add support for `collapsed` and `collapsible`
       hash: e9247be8f3ca92ffb6ffb331ee0bf6b394743cef
       body: ''
