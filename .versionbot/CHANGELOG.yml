@@ -1,4 +1,14 @@
 - commits:
+    - subject: Add support for `collapsed` and `collapsible`
+      hash: e9247be8f3ca92ffb6ffb331ee0bf6b394743cef
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.11.6
+  date: 2019-02-26T11:28:13.219Z
+- commits:
     - subject: 'Emit description in JSON schema, not UI schema'
       hash: 765e584a8dfe8bf379b388027a7a1b48a1866217
       body: ''
