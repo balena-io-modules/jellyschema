@@ -1,0 +1,67 @@
+{
+  "$$order": [
+    "collapsed",
+    "noncollapsible",
+    "default"
+  ],
+  "$$version": 1,
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "collapsed": {
+      "$$order": [
+        "hidden"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hidden": {
+          "title": "Should be inside the collapsed group by default",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hidden"
+      ],
+      "type": "object"
+    },
+    "default": {
+      "$$order": [
+        "default"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "default"
+      ],
+      "type": "object"
+    },
+    "noncollapsible": {
+      "$$order": [
+        "visible"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "visible": {
+          "title": "Should be inside a fully visible, noncollapsible group",
+          "type": "string"
+        }
+      },
+     "required": [
+        "visible"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "collapsed",
+    "noncollapsible",
+    "default"
+  ],
+  "title": "Collapsed and collapsible",
+  "type": "object"
+}
+

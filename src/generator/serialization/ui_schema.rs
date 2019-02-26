@@ -77,6 +77,14 @@ fn serialize_annotations(schema: &Schema, map: &mut Map<String, Value>) {
     if let Some(placeholder) = schema.placeholder() {
         map.insert("ui:placeholder".to_string(), Value::String(placeholder.to_string()));
     }
+
+    if let Some(true) = schema.collapsed() {
+        map.insert("ui:collapsed".to_string(), Value::Bool(true));
+    }
+
+    if let Some(false) = schema.collapsible() {
+        map.insert("ui:collapsible".to_string(), Value::Bool(false));
+    }
 }
 
 fn serialize_properties(schema: &Schema, map: &mut Map<String, Value>) {
@@ -96,7 +104,7 @@ fn serialize_properties(schema: &Schema, map: &mut Map<String, Value>) {
 
     map.extend(properties);
 
-    if let Some(title) = schema.keys().and_then(|x| x.title()) {
+    if let Some(title) = schema.keys().and_then(crate::schema::Schema::title) {
         map.insert("ui:keys".to_string(), json!({ "ui:title": title }));
     }
 
