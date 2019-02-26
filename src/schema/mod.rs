@@ -93,6 +93,10 @@ pub struct Schema {
     warning: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    collapsible: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    collapsed: Option<bool>,
     //
     // Array validation keywords
     //
@@ -246,6 +250,14 @@ impl Schema {
 
     pub fn description(&self) -> Option<&str> {
         self.description.as_deref()
+    }
+
+    pub fn collapsed(&self) -> Option<bool> {
+        self.collapsed
+    }
+
+    pub fn collapsible(&self) -> Option<bool> {
+        self.collapsible
     }
 }
 

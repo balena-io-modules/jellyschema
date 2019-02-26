@@ -1,5 +1,6 @@
 {
     "advanced": {
+        "ui:collapsed": true,
         "appUpdatePollInterval": {
             "ui:help": "Check for updates every X minutes"
         },
