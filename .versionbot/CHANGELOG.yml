@@ -1,4 +1,16 @@
 - commits:
+    - subject: 'Emit description in JSON schema, not UI schema'
+      hash: 765e584a8dfe8bf379b388027a7a1b48a1866217
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.11.5
+  date: 2019-02-15T17:37:59.351Z
+- commits:
     - subject: Report serde errors
       hash: 1db7be442bd9dc831e25880904e6ef1bdd0e368e
       body: ''
