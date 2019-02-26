@@ -1,14 +1,10 @@
 {
     "alltogether": {
-        "ui:description": "Lorem ipsum dolor sit amet",
         "ui:help": "Hello help",
         "ui:warning": "Warning!"
     },
     "hidden": {
         "ui:widget": "hidden"
-    },
-    "justdescription": {
-        "ui:description": "Lorem ipsum dolor sit amet"
     },
     "justhelp": {
         "ui:help": "Hello help"
@@ -25,7 +21,6 @@
     "text": {
         "ui:widget": "textarea"
     },
-    "ui:description": "This is top-level description",
     "ui:help": "Some top-level help",
     "ui:order": [
         "justtitle",

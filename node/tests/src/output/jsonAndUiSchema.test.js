@@ -24,7 +24,8 @@ test('stateful JSON & UI schema generation', () => {
             properties: {
                 name: {
                     title: "Name",
-                    type: "string"
+                    type: "string",
+                    description: "Your full name"
                 }
             },
             required: [
@@ -34,9 +35,6 @@ test('stateful JSON & UI schema generation', () => {
             type: "object"
         },
         uiSchema: {
-            name: {
-                "ui:description": "Your full name"
-            },
             "ui:order": [
                 "name"
             ]
@@ -70,7 +68,8 @@ test('stateless JSON & UI schema generation', () => {
             properties: {
                 name: {
                     title: "Name",
-                    type: "string"
+                    type: "string",
+                    description: "Your full name"
                 }
             },
             required: [
@@ -80,9 +79,6 @@ test('stateless JSON & UI schema generation', () => {
             type: "object"
         },
         uiSchema: {
-            name: {
-                "ui:description": "Your full name"
-            },
             "ui:order": [
                 "name"
             ]

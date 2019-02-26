@@ -12,7 +12,8 @@
             "type": "string",
             "format": "hostname",
             "title": "Hostname",
-            "default": "example.com"
+            "default": "example.com",
+            "description": "Hostname is a name of your machine."
         }
     }
 }

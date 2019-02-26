@@ -23,6 +23,7 @@
             "title": "top",
             "properties": {
                 "middle": {
+                    "description": "half way through",
                     "$$order": [
                         "bottom"
                     ],
