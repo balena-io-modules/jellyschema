@@ -78,12 +78,12 @@ fn serialize_annotations(schema: &Schema, map: &mut Map<String, Value>) {
         map.insert("ui:placeholder".to_string(), Value::String(placeholder.to_string()));
     }
 
-    if let Some(collapsed) = schema.collapsed() {
-        map.insert("ui:collapsed".to_string(), Value::Bool(collapsed));
+    if let Some(true) = schema.collapsed() {
+        map.insert("ui:collapsed".to_string(), Value::Bool(true));
     }
 
-    if let Some(collapsible) = schema.collapsible() {
-        map.insert("ui:collapsible".to_string(), Value::Bool(collapsible));
+    if let Some(false) = schema.collapsible() {
+        map.insert("ui:collapsible".to_string(), Value::Bool(false));
     }
 }
 
