@@ -1,6 +1,6 @@
 [package]
 name = "jellyschema"
-version = "0.11.7"
+version = "0.11.8"
 authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
 edition = "2018"
 build = "build.rs"

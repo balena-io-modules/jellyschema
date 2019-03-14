@@ -1,4 +1,16 @@
 - commits:
+    - subject: Introduce fill_default_values
+      hash: 28ff34e5baf68ce745562eb7372cf54b6c339cd8
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.11.8
+  date: 2019-03-14T11:52:39.189Z
+- commits:
     - subject: Rename the demo examples directory
       hash: 1262c3ea899ac6f2c510a50ccb9174a209686204
       body: ''
