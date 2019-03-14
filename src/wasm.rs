@@ -4,6 +4,7 @@ use std::str::FromStr;
 use wasm_bindgen::prelude::*;
 
 use crate::{
+    filler::fill_default_values,
     generator::generate_json_ui_schema,
     schema::Schema,
     validator::{ValidationError, ValidationState, Validator},
@@ -43,6 +44,19 @@ impl JellySchema {
             json_ui_schema: None,
             last_validation_state: ValidationState::new(),
         })
+    }
+
+    /// Fills missing `default` values
+    ///
+    /// # Arguments
+    ///
+    /// * `data` - JSON value (string, object, array, ...)
+    /// * `include_optional` - if `false` only required properties are filled in otherwise
+    ///                        optional properties are filled too
+    pub fn fillDefaultValues(&self, data: &JsValue, include_optional: bool) -> Result<JsValue, JsValue> {
+        let mut value = data.into_serde().map_err(|e| JsValue::from_str(&format!("{}", e)))?;
+        fill_default_values(&self.schema, &mut value, include_optional);
+        JsValue::from_serde(&value).map_err(|e| JsValue::from_str(&format!("{}", e)))
     }
 
     /// Validates data against JellySchema
@@ -124,4 +138,10 @@ pub fn generateJsonAndUiSchema(schema: &JsValue) -> Result<JsValue, JsValue> {
     // will be much more expensive (doing lot of other things), we will have to
     // replace it with direct calls to `generate_json_ui_schema`, etc.
     JellySchema::constructor(schema)?.jsonAndUiSchema()
+}
+
+#[wasm_bindgen]
+#[allow(non_snake_case)]
+pub fn fillDefaultValues(schema: &JsValue, data: &JsValue, include_optional: bool) -> Result<JsValue, JsValue> {
+    JellySchema::constructor(schema)?.fillDefaultValues(data, include_optional)
 }

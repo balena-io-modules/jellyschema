@@ -39,6 +39,7 @@
 //! [Semantic Versioning]: https://semver.org/
 pub(crate) mod deref;
 pub mod error;
+pub mod filler;
 pub mod schema;
 pub mod validator;
 
