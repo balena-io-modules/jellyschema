@@ -13,47 +13,55 @@ fn is_empty_object(value: &Value) -> bool {
     }
 }
 
+fn fill_object_defaults(schema: &Schema, data: &mut Value, include_optional: bool) {
+    if data.is_null() {
+        std::mem::replace(data, json!({}));
+    }
+
+    if let Some(data) = data.as_object_mut() {
+        for property in schema.properties() {
+            let name = property.name();
+
+            if let Some(mut value) = data.get_mut(name) {
+                fill_defaults(property.schema(), &mut value, include_optional);
+            } else {
+                // Fill defaults, but if the resulting object is empty, do not include it
+                let mut value = Value::Null;
+                fill_defaults(property.schema(), &mut value, include_optional);
+                if !value.is_null() && !is_empty_object(&value) {
+                    data.insert(name.to_string(), value);
+                }
+            }
+        }
+    }
+}
+
+fn fill_array_defaults(schema: &Schema, data: &mut Value, include_optional: bool) {
+    if data.is_array() && schema.items().len() == 1 {
+        // What we should do in case of multiple schemas? Partial object match?
+        let schema = schema.items().first().unwrap();
+
+        for mut item in data.as_array_mut().unwrap() {
+            fill_defaults(&schema, &mut item, include_optional);
+        }
+    }
+}
+
+fn fill_primitive_defaults(schema: &Schema, data: &mut Value, include_optional: bool) {
+    let required = schema.r#type().is_required();
+
+    if let Some(default_value) = schema.r#default() {
+        if data.is_null() && (include_optional || required) {
+            std::mem::replace(data, default_value.clone());
+        }
+    }
+}
+
 fn fill_defaults(schema: &Schema, data: &mut Value, include_optional: bool) {
     match (schema.r#type().primitive_type(), schema.r#type().is_required()) {
-        (PrimitiveType::Object, _) => {
-            if data.is_null() {
-                std::mem::replace(data, json!({}));
-            }
-
-            if let Some(data) = data.as_object_mut() {
-                for property in schema.properties() {
-                    let name = property.name();
-
-                    if let Some(mut value) = data.get_mut(name) {
-                        fill_defaults(property.schema(), &mut value, include_optional);
-                    } else {
-                        // Fill defaults, but if the resulting object is empty, do not include it
-                        let mut value = Value::Null;
-                        fill_defaults(property.schema(), &mut value, include_optional);
-                        if !value.is_null() && !is_empty_object(&value) {
-                            data.insert(name.to_string(), value);
-                        }
-                    }
-                }
-            }
-        }
-        (PrimitiveType::Array, _) => {
-            if data.is_array() && schema.items().len() == 1 {
-                // What we should do in case of multiple schemas? Partial object match?
-                let schema = schema.items().first().unwrap();
-
-                for mut item in data.as_array_mut().unwrap() {
-                    fill_defaults(&schema, &mut item, include_optional);
-                }
-            }
-        }
-        (_, required) => {
-            if let Some(default_value) = schema.r#default() {
-                if data.is_null() && (include_optional || required) {
-                    std::mem::replace(data, default_value.clone());
-                }
-            }
-        }
+        (PrimitiveType::Object, _) => fill_object_defaults(schema, data, include_optional),
+        (PrimitiveType::Array, _) => fill_array_defaults(schema, data, include_optional),
+        _ => fill_primitive_defaults(schema, data, include_optional),
     };
 }
 
