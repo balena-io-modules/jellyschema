@@ -161,7 +161,7 @@ mod tests {
     }
 
     #[test]
-    fn fills_required_root_string() {
+    fn fill_required_root_string() {
         let schema = r##"
             type: string
             default: foo
