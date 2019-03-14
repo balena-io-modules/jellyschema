@@ -74,6 +74,17 @@ fn fill_defaults(schema: &Schema, data: &mut Value, include_optional: bool) {
 /// * `include_optional` - if `false` only required properties are filled
 pub fn fill_default_values(schema: &Schema, data: &mut Value, include_optional: bool) {
     fill_defaults(schema, data, include_optional);
+    if data.is_null() {
+        match schema.r#type().primitive_type() {
+            PrimitiveType::Object => {
+                std::mem::replace(data, json!({}));
+            }
+            PrimitiveType::Array => {
+                std::mem::replace(data, json!([]));
+            }
+            _ => {}
+        }
+    }
 }
 
 #[cfg(test)]
@@ -91,6 +102,30 @@ mod tests {
         let mut input = input;
         fill_default_values(&schema.parse::<Schema>().unwrap(), &mut input, false);
         input
+    }
+
+    #[test]
+    fn ensure_root_object_is_created() {
+        let schema = r##"
+            properties:
+                - foo:
+                    type: string
+        "##;
+        let input = Value::Null;
+        let result = json!({});
+        assert_eq!(fill_required(schema, input), result);
+    }
+
+    #[test]
+    fn ensure_root_array_is_created() {
+        let schema = r##"
+            type: array
+            items:
+                type: string
+        "##;
+        let input = Value::Null;
+        let result = json!([]);
+        assert_eq!(fill_required(schema, input), result);
     }
 
     #[test]
