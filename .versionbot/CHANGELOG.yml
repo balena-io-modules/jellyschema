@@ -1,4 +1,16 @@
 - commits:
+    - subject: Set project type to rust-public-crate-wasm
+      hash: 1083ecd97a3005964e3552fe94737a0fc3eddf34
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Giovanni Garufi <giovanni@balena.io>
+        signed-off-by: Giovanni Garufi <giovanni@balena.io>
+      author: Giovanni Garufi
+  version: 0.11.9
+  date: 2019-03-18T11:48:23.984Z
+- commits:
     - subject: Introduce fill_default_values
       hash: 28ff34e5baf68ce745562eb7372cf54b6c339cd8
       body: ''
