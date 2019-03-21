@@ -1,4 +1,18 @@
 - commits:
+    - subject: Update to newest version of webpack
+      hash: 692c4ed6639d818dc880584087279a1fe63540a6
+      body: >
+        Updated all dependencies in the browser example project to avoid it
+
+        being affected by wasm loading issue -
+        https://github.com/webpack/webpack/issues/8781
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Cyryl Płotnicki
+  version: 0.11.10
+  date: 2019-03-21T12:57:56.735Z
+- commits:
     - subject: Set project type to rust-public-crate-wasm
       hash: 1083ecd97a3005964e3552fe94737a0fc3eddf34
       body: ''
