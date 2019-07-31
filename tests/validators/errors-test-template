@@ -9,7 +9,7 @@ fn {name}() -> Result<(), serde_yaml::Error> {{
     let schema: Schema = mapping
         .remove(&serde_yaml::Value::String("schema".to_string()))
         .ok_or_else(|| serde::de::Error::custom("missing 'schema' key"))
-        .and_then(|x| serde_yaml::from_value(x))
+        .and_then(serde_yaml::from_value)
         .and_then(|s| {{
             scope
                 .compile_from_value(s)
