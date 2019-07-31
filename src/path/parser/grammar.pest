@@ -1,0 +1,26 @@
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+
+integer = @{ "-" ? ~ ASCII_DIGIT + }
+
+positive_integer = @{ ASCII_DIGIT + }
+
+single_quoted_string  = @{ "\'" ~ (!("\'") ~ ANY)* ~ "\'"}
+
+// https://goessner.net/articles/JsonPath/index.html#e2
+string = @{ single_quoted_string }
+
+all_chars = _{'a'..'z' | 'A'..'Z' | "_" | '0'..'9'}
+
+identifier = @{
+        ( ('a'..'z' | 'A'..'Z' | "_") ~ all_chars{,63} )
+}
+
+square_brackets = _{
+    "[" ~ (positive_integer | string ) ~ "]"
+}
+
+path = ${
+    ( ("." ~ ( identifier | positive_integer ) ) | square_brackets )*
+}
+
+content = { SOI ~ "$" ~ path ~ EOI }

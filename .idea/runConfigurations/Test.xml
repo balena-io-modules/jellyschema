@@ -1,8 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
     <option name="channel" value="DEFAULT" />
-    <option name="command" value="test" />
+    <option name="command" value="test --test" />
+    <option name="allFeatures" value="false" />
     <option name="nocapture" value="true" />
+    <option name="emulateTerminal" value="false" />
     <option name="backtrace" value="FULL" />
     <option name="workingDirectory" value="file://$PROJECT_DIR$" />
     <envs />

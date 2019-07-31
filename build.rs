@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::{
     collections::HashMap,
     env,
@@ -88,10 +90,8 @@ fn start_module(test_file: &mut File, name: &str) -> Result<(), Error> {
         r#"
 #[allow(unused_imports)]
 mod {name} {{
-    use jellyschema::schema::Schema;
-    use jellyschema::error::Error;
-    use jellyschema::generator::generate_json_ui_schema;
-    use pretty_assertions::assert_eq;
+    use jellyschema::keywords::{{ErrorKind, Error}};
+    use jellyschema::{{Scope, Schema}};
     use serde_json;
     use serde_yaml;
     use std::str::FromStr;
@@ -133,41 +133,49 @@ fn validator_tests_matcher(path: &PathBuf) -> bool {
     }
 }
 
-fn generator_tests_matcher(path: &PathBuf) -> bool {
+fn data_type_validator_tests_matcher(path: &PathBuf) -> bool {
     match path.file_name() {
-        Some(name) => name == "input-schema.yaml",
+        Some(name) => name == "validation.yaml",
         _ => false,
     }
 }
 
 fn main() -> Result<(), Error> {
     generate_tests(
-        "validator_data_tests.rs",
+        "validators_data_tests.rs",
         "vd",
-        "./tests/validator/data",
-        "./tests/validator/data-test-template",
+        "./tests/validators/data",
+        "./tests/validators/data-test-template",
         validator_tests_matcher,
     )?;
     generate_tests(
-        "validator_errors_tests.rs",
+        "validators_errors_tests.rs",
         "ve",
-        "./tests/validator/errors",
-        "./tests/validator/errors-test-template",
+        "./tests/validators/errors",
+        "./tests/validators/errors-test-template",
         validator_tests_matcher,
     )?;
     generate_tests(
-        "generator_invalid_tests.rs",
-        "gi",
-        "./tests/generator/invalid",
-        "./tests/generator/invalid-test-template",
-        generator_tests_matcher,
+        "data_types_validator_tests.rs",
+        "dt",
+        "./src",
+        "./tests/data-types/data-type-validator-test-template",
+        data_type_validator_tests_matcher,
     )?;
-    generate_tests(
-        "generator_valid_tests.rs",
-        "gb",
-        "./tests/generator/valid",
-        "./tests/generator/valid-test-template",
-        generator_tests_matcher,
-    )?;
+
+    //    generate_tests(
+    //        "generator_invalid_tests.rs",
+    //        "gi",
+    //        "./tests/generator/invalid",
+    //        "./tests/generator/invalid-test-template",
+    //        generator_tests_matcher,
+    //    )?;
+    //    generate_tests(
+    //        "generator_valid_tests.rs",
+    //        "gb",
+    //        "./tests/generator/valid",
+    //        "./tests/generator/valid-test-template",
+    //        generator_tests_matcher,
+    //    )?;
     Ok(())
 }

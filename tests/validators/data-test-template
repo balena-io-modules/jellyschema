@@ -1,0 +1,66 @@
+#[test]
+fn {name}() -> Result<(), String> {{
+    let scope = Scope::default();
+
+    let mut content: serde_yaml::Value = serde_yaml::from_str(include_str!("{path}")).unwrap();
+    let mapping = content.as_mapping_mut().unwrap();
+
+    let schema: Schema = mapping
+        .remove(&serde_yaml::Value::String("schema".to_string()))
+        .ok_or_else(|| "missing schema key".to_string())
+        .and_then(|x| serde_yaml::from_value(x).map_err(|_| "unable to deserialize".to_string()))
+        .and_then(|s| {{
+            scope
+                .compile_from_value(s)
+                .map_err(|_| "unable to compile schema".to_string())
+        }})?;
+
+    let mut tests: serde_yaml::Value = mapping
+        .remove(&serde_yaml::Value::String("tests".to_string()))
+        .ok_or_else(|| "missing tests key".to_string())?;
+
+    let tests = tests
+        .as_sequence_mut()
+        .ok_or_else(|| "invalid 'tests' key, array expected".to_string())?;
+
+    for test in tests.iter_mut() {{
+        let test = test.as_mapping_mut().unwrap();
+
+        let data: serde_json::Value = test
+            .remove(&serde_yaml::Value::String("data".to_string()))
+            .ok_or_else(|| "missing data key".to_string())
+            .and_then(|x| serde_yaml::from_value(x).map_err(|_| "unable to deserialize".to_string()))?;
+
+        let should_be_valid: bool = test
+            .remove(&serde_yaml::Value::String("valid".to_string()))
+            .ok_or_else(|| "missing valid key".to_string())
+            .and_then(|x| x.as_bool().ok_or_else(|| "invalid valid key".to_string()))?;
+
+        let description: String = test
+            .remove(&serde_yaml::Value::String("description".to_string()))
+            .ok_or_else(|| "".to_string())
+            .and_then(|x| {{
+                x.as_str()
+                    .map(|x| x.to_string())
+                    .ok_or_else(|| "invalid desccription".to_string())
+            }})?;
+
+        let state = schema.validate(&data);
+        if should_be_valid != state.is_valid() {{
+            panic!(
+                r##"assertion failed: `(should_be_valid == is_valid)`
+should_be_valid: `{{}}`,
+is_valid: `{{}}`
+description: `{{}}`
+errors: `{{:?}}`
+data: `{{:?}}`"##,
+                should_be_valid,
+                state.is_valid(),
+                description,
+                state.errors(),
+                data
+            );
+        }}
+    }}
+    Ok(())
+}}

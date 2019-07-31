@@ -1,6 +1,0 @@
-title: Emit version in subschema if provided
-version: 1
-properties:
-  - name:
-      type: string
-      version: 1

@@ -1,8 +1,0 @@
-{
-    "ui:order": [
-        "string",
-        "boolean",
-        "hostname",
-        "port"
-    ]
-}
