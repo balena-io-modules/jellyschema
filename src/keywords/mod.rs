@@ -64,7 +64,7 @@ pub trait WalkContextExt {
     fn compilation_error<S: Into<String>, T>(&self, keyword: &'static str, message: S) -> Result<T>;
 }
 
-impl<'a> WalkContextExt for WalkContext<'a> {
+impl WalkContextExt for WalkContext {
     fn compilation_error<S: Into<String>, T>(&self, keyword: &'static str, message: S) -> Result<T> {
         Err(ErrorKind::CompileSchemaError(self.json_path(), keyword, message.into()).into())
     }

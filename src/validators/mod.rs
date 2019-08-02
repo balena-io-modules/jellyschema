@@ -91,7 +91,7 @@ pub trait WalkContextExt {
     fn validation_error<S: Into<String>>(&self, keyword: &'static str, message: S) -> ValidateDataError;
 }
 
-impl<'a> WalkContextExt for WalkContext<'a> {
+impl WalkContextExt for WalkContext {
     fn validation_error<S: Into<String>>(&self, keyword: &'static str, message: S) -> ValidateDataError {
         ValidateDataError {
             data_path: self.json_path(),

@@ -25,8 +25,6 @@
 #[macro_use]
 mod macros;
 
-use std::borrow::Cow;
-
 pub use serde_json::Value;
 
 use crate::data_types::{BoxedDataType, DataTypeMap};
@@ -248,17 +246,17 @@ impl Schema {
 
 /// Schema / data path.
 #[derive(Debug, Clone)]
-pub struct WalkContext<'a> {
-    path: Cow<'a, Path>,
+pub struct WalkContext {
+    path: Path,
 }
 
-impl<'a> Default for WalkContext<'a> {
+impl Default for WalkContext {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<'a> WalkContext<'a> {
+impl WalkContext {
     /// Create new context with empty path.
     ///
     /// # Example
@@ -269,9 +267,9 @@ impl<'a> WalkContext<'a> {
     /// let ctx = WalkContext::new();
     /// assert_eq!(ctx.json_path(), "$".to_string());
     /// ```
-    pub fn new() -> WalkContext<'a> {
+    pub fn new() -> WalkContext {
         let path = Path::new();
-        WalkContext { path: Cow::Owned(path) }
+        WalkContext { path }
     }
 
     /// Push new path item at the end.
@@ -284,12 +282,12 @@ impl<'a> WalkContext<'a> {
     /// let ctx = WalkContext::new().push("foo").push("bar").push(2);
     /// assert_eq!(ctx.json_path(), "$['foo']['bar'][2]".to_string());
     /// ```
-    pub fn push<T>(&self, index: T) -> WalkContext<'a>
+    pub fn push<T>(&self, index: T) -> WalkContext
     where
         T: Into<PathItem>,
     {
-        let mut path = self.path.to_owned();
-        path.to_mut().push(index);
+        let mut path = self.path.clone();
+        path.push(index);
         WalkContext { path }
     }
 
