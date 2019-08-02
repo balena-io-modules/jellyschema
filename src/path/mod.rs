@@ -87,11 +87,6 @@ impl Path {
         self.items.push(item.into());
     }
 
-    /// Remove the last path item.
-    pub fn pop(&mut self) -> Option<PathItem> {
-        self.items.pop()
-    }
-
     /// Iterate over path items.
     pub fn iter(&self) -> PathIterator {
         PathIterator::new(self)
@@ -147,13 +142,6 @@ mod tests {
     }
 
     #[test]
-    fn pop_unable_to_pop_root() {
-        let mut p = Path::new();
-        assert_eq!(p.pop(), None);
-        assert_eq!(&format!("{}", p), "$");
-    }
-
-    #[test]
     fn push_string() {
         let mut p = Path::new();
         p.push("foo");
@@ -177,21 +165,6 @@ mod tests {
         p.push("bar");
         p.push(4);
         assert_eq!(&format!("{}", p), "$['foo'][2]['bar'][4]");
-    }
-
-    #[test]
-    fn pop() {
-        let mut p = Path::new();
-        p.push("foo");
-        p.push(2);
-        p.push("bar");
-        p.push(4);
-        assert_eq!(&format!("{}", p), "$['foo'][2]['bar'][4]");
-        assert_eq!(p.pop(), Some(PathItem::Number(4)));
-        assert_eq!(p.pop(), Some(PathItem::Name("bar".to_string())));
-        assert_eq!(p.pop(), Some(PathItem::Number(2)));
-        assert_eq!(p.pop(), Some(PathItem::Name("foo".to_string())));
-        assert_eq!(p.pop(), None);
     }
 
     #[test]
