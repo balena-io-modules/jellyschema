@@ -60,6 +60,10 @@ impl fmt::Display for PathItem {
 /// Path.
 #[derive(Debug, Hash, Clone)]
 pub struct Path {
+    // This structure is cloned a lot, but it's a small one in most cases.
+    // We should probably optimise `Path` internal structure when cloning
+    // (share path items), but it's hard to say if it will help or not
+    // without benches. No optimisation now.
     items: Vec<PathItem>,
 }
 
