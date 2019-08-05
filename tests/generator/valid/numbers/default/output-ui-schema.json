@@ -1,7 +1,0 @@
-{
-    "ui:order": [
-        "number",
-        "integer",
-        "port"
-    ]
-}

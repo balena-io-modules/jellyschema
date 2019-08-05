@@ -1,8 +1,0 @@
-version: 1
-title: Numeric validation
-properties:
-- multiplesOfTen:
-    type: integer
-    multipleOf: 10
-    min: 10
-    exclusiveMax: 100

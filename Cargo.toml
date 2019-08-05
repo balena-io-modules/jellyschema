@@ -1,13 +1,12 @@
 [package]
 name = "jellyschema"
 version = "0.11.10"
-authors = ["Robert Vojta <robert@balena.io>", "Cyryl Płotnicki <cyryl@balena.io>"]
+authors = ["Robert Vojta <robert@balena.io>"]
 edition = "2018"
 build = "build.rs"
-maintenance = { status = "experimental" }
 license = "Apache-2.0"
 repository = "https://github.com/balena-io-modules/jellyschema/"
-description = "Configuration DSL"
+description = "Jelly Schema"
 categories = ["config", "encoding", "wasm"]
 readme = "README.md"
 
@@ -21,10 +20,11 @@ disable-wasm-bindings = []
 [dependencies.base64]
 version = "0"
 
-[dependencies.balena-temen]
-# 0.5.1 introduces disable-wasm-bindings features
-version = "~0.5.1"
-features = ["disable-wasm-bindings"]
+[dependencies.error-chain]
+version = "0.1"
+
+[dependencies.float-cmp]
+version = "0.5.0"
 
 [dependencies.chrono]
 version = "0"
@@ -32,17 +32,18 @@ version = "0"
 [dependencies.lazy_static]
 version = "1"
 
-[dev-dependencies.pretty_assertions]
-version = "0.5"
+[dependencies.pest]
+version = "2"
+
+[dependencies.pest_derive]
+version = "2"
 
 [dependencies.regex]
 version = "1.0"
 
 [dependencies.serde]
 version = "1.0"
-
-[dependencies.serde_derive]
-version = "1.0"
+features = ["derive"]
 
 [dependencies.serde_json]
 version = "1.0"
@@ -50,8 +51,13 @@ version = "1.0"
 [dependencies.serde_yaml]
 version = "0.8"
 
-[dependencies.uuid]
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies.uuid]
 version = "0.7"
+features = ["v4"]
+
+[target.'cfg(target_arch = "wasm32")'.dependencies.uuid]
+version = "0.7"
+features = ["v4", "wasm-bindgen"]
 
 [target.'cfg(target_arch = "wasm32")'.dependencies.wasm-bindgen]
 version = "0.2"

@@ -1,0 +1,45 @@
+schema:
+  type: uuidv4
+tests:
+  - valid: true
+    description: Must be valid if hyphenated UUIDv4 is provided
+    data: 33a5788b-f2f9-4385-9002-a17c2dc172ac
+  - valid: true
+    description: Must be valid if hyphenated upper cased UUIDv4 is provided
+    data: 33A5788B-F2F9-4385-9002-A17C2DC172AC
+  - valid: true
+    description: Must be valid if UUIDv4 is provided
+    data: 33a5788bf2f943859002a17c2dc172ac
+  - valid: true
+    description: Must be valid if upper cased UUIDv4 is provided
+    data: 33A5788BF2F943859002A17C2DC172AC
+  - valid: false
+    description: Must be invalid if malformed UUID is provided
+    data: 33a5788b-f2f9-4385-9002-a17c2dc172
+  - valid: false
+    description: Must be invalid if UUIDv1 is provided
+    data: 0ae535ac-b1d2-11e9-a2a3-2a2ae2dbcce4
+  #
+  # Other types must not be accepted
+  #
+  - valid: false
+    description: Must be invalid if integer is provided
+    data: 10
+  - valid: false
+    description: Must be invalid if float is provided
+    data: 10.5
+  - valid: false
+    description: Must be invalid if boolean value is provided
+    data: true
+  - valid: false
+    description: Must be invalid if null is provided
+    data: ~
+  - valid: false
+    description: Must be invalid if array is provided
+    data:
+      - foo
+      - bar
+  - valid: false
+    description: Must be invalid if object is provided
+    data:
+      foo: bar

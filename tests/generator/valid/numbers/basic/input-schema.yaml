@@ -1,7 +1,0 @@
-version: 1
-title: Numbers and integers
-properties:
-- number:
-    type: number
-- integer:
-    type: integer
