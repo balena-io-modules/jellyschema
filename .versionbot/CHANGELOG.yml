@@ -1,4 +1,27 @@
 - commits:
+    - subject: Fix clippy
+      hash: 7554e23f31009f636bca310dbfafbfa5d708612d
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+    - subject: Jelly Schema 0.12
+      hash: 2d0dd8f199fb89f1014e0c22809306390e824832
+      body: |
+        Reimplementation with separated data types, keyword compilers
+        and validators.
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Robert Vojta <robert@balena.io>
+        signed-off-by: Robert Vojta <robert@balena.io>
+      author: Robert Vojta
+  version: 0.12.0
+  date: 2019-08-05T06:32:52.386Z
+- commits:
     - subject: Update to newest version of webpack
       hash: 692c4ed6639d818dc880584087279a1fe63540a6
       body: >
